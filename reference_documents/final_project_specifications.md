@@ -21,8 +21,9 @@ Use of OpenCode or ClaudeCode is highly encouraged, however, you are 100% respon
 The project is scored out of **1000 points**.
 
 # **35 Final Project Specifications** Code
+
 | Category | What we're looking for | Points |
-|---|---|---:|
+|---------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
 | Problem definition & motivation | The problem is clearly stated, scoped, and worth solving | 100 |
 | Multi-agent design justification | A convincing argument for *why* this needs multiple agents (not a single prompt or script); clear agent roles and responsibilities | 150 |
 | UML class diagrams | Accurate class diagrams for the agents and their collaborators | 100 |
@@ -32,4 +33,4 @@ The project is scored out of **1000 points**.
 | Code quality & in-line comments | Readable, well-structured code with descriptive comments | 100 |
 | Showcase demo | A clear, well-organized live demo and walkthrough at your showcase table | 75 |
 | Q&A / depth of understanding | Correct, detailed answers about how your code actually works | 75 |
-| **Total** | | **1000** |
+| **Total** |  | **1000** |
