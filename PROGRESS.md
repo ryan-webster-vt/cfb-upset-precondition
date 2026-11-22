@@ -3,11 +3,13 @@
 **Persistent state for implementation.** Read `IMPLEMENTATION_PLAN.md` first; this file records
 what is actually done, what is next, what is blocked, and why decisions were made.
 **Plan version:** 1.3 (2026-11-22)
-**Status:** `P0 COMPLETE` (2026-11-22) — probe, scaffold, contracts, deterministic
-screen/stub scorer, and the Streamlit walking skeleton are implemented and verified offline.
-Capability matrix: **36 PASS · 1 PARTIAL · 5 SKIP · 0 FAIL**, regenerated in the canonical
-`ads_5984` conda env (Python 3.12.13, incl. `chromadb==1.1.1`).
-Pre-flight and live capability capture are recorded in §5; generated evidence is in
+**Status:** `P1 COMPLETE` (2026-11-22) — the full contract catalogue, SQLite schema +
+repositories, evidence snapshots, fixture-backed adapters, trace/budget, leakage policy, and
+verification tests are implemented. `P0 COMPLETE` (2026-11-22) remains the baseline.
+P1 gate: **301 passed · 9 skipped** in the canonical `ads_5984` env (Python 3.12.13,
+`chromadb==1.1.1`); `ruff` + `black --check` clean; `store.db --init/--verify` → `status: OK`.
+Capability matrix: **36 PASS · 1 PARTIAL · 5 SKIP · 0 FAIL**, regenerated during P0 in the same
+env. Pre-flight and live capability capture are recorded in §5; generated evidence is in
 `docs/CAPABILITIES.md`.
 **Feature freeze:** 2026-12-01 · **Showcase:** 2026-12-03 17:00
 
@@ -37,7 +39,7 @@ Pre-flight and live capability capture are recorded in §5; generated evidence i
 | Phase | Scope | Status | Gate evidence |
 | --- | --- | --- | --- |
 | P0 | Probe, scaffold, walking skeleton | `[x]` | capability matrix + fixture e2e |
-| P1 | Contracts, SQLite, adapters, provenance | `[ ]` | migrations + contract tests |
+| P1 | Contracts, SQLite, adapters, provenance | `[x]` | 0001 schema init/verify + 301 tests + adapter parity |
 | P2 | Historical corpus ingestion | `[ ]` | ≥3k games (~700/season), 0 leaked fields, coverage report |
 | P3 | Leakage-safe features, favourite, splits | `[ ]` | leakage audit + availability report |
 | P4 | Precondition research + spec store | `[ ]` | ≥12 operational specs, 1 call/candidate |
@@ -68,20 +70,26 @@ Pre-flight and live capability capture are recorded in §5; generated evidence i
 
 ## 3. Resume here
 
-**Next action:** start **P1.1** — expand the contract catalogue (remaining tables/enums typed,
-`extra="forbid"`, timezone validators) — then **P1.2** SQLite migrations. Read
-`IMPLEMENTATION_PLAN.md` §4.7 before writing a migration. Do not start P2 until the P1 gate passes.
+**Next action:** start **P2.1** — build the `Data-Orchestrator` season/week enumeration and
+`Historical-Stats Worker` summary path on the existing ESPN/CFBD adapters, repositories, and
+leakage policy. Do not start P3 until the P2 corpus gate passes.
 
-**P1 order:**
-1. P1.1 full contract catalogue + schema export; keep the P0 contracts unchanged.
-2. P1.2 migrations for every §4.7 table/index, then P1.3 repositories.
-3. P1.4 `teams`/`venues` seed (CFBD `/venues`; checked-in CSV fallback for the 5.6% missing
-   lat/lon, 55.6% missing elevation, and 57.4% missing timezone).
-4. P1.5 evidence snapshots, P1.6 ESPN/CFBD adapters from the captured fixtures.
-5. P1.7 weather/geocode, P1.8 search/fetch, P1.9 research, P1.10 LLM, P1.11 Chroma
-   (the package is already present in `ads_5984`; only the adapter remains), P1.12 trace/budget,
-   P1.13 leakage, P1.14 parity.
-6. Re-run `make check` and record the P1 gate evidence before P2.
+**P1 close-out facts to carry forward:**
+- `python -m cfb_upset.store.db --init` applies `0001`; `--verify` prints every §4.7 table count
+  and `status: OK`. All DB access goes through `cfb_upset.store.repositories`.
+- `cfb_upset.adapters.transport.Transport` has `HttpTransport` (P0 retry/breaker) and
+  `FixtureTransport` (offline replay). Every adapter test is fixture-backed; live tests live in
+  `tests/live/` and skip unless `RUN_LIVE=1`.
+- `domain.leakage` is the only admission gate: `admit` / `is_admitted` / `derive_known_at`.
+  Strict comparison means a closing line stamped exactly at kickoff is excluded.
+- Evidence snapshots are gzip + SHA-256 under `data/evidence/<hash>.txt.gz`; SQLite stores the
+  hash and relative pointer and `EvidenceStore.verify` re-hashes the decompressed bytes.
+- Chroma collections are tagged `{model, dim, instruction_template, normalized}` and every
+  vector width is asserted; Chroma tests skip cleanly when `chromadb` is absent.
+- Weather historical runs record a conservative lead upper bound (≤ `WEATHER_LEAD_HOURS_MAX`,
+  hard-clamped to 6 h) because the stitched archive exposes no issue time (AD-032).
+- `precondition_spec.rationale` is an additive column beyond the §4.7 list, so a `PreconditionSpec`
+  round-trips without dropping its explanation (AD-031).
 
 **P0 facts to carry forward:**
 - The app runs fully offline from `cfb_upset.fixtures.demo`; `streamlit run app.py` → Analyze
@@ -96,9 +104,11 @@ Pre-flight and live capability capture are recorded in §5; generated evidence i
 - `docs/CAPABILITIES.md` is the generated matrix; `docs/capabilities.json` is its machine view.
 - `.env` is populated and git-ignored. Never print or commit it.
 
-**Working state:** P0 code and tests are complete; no DB, corpus, real specs, or external
-adapters yet. `docs/contracts/` holds 11 exported schemas. P0 was committed as `64de1e2`; the
-environment-correction docs/tests are the follow-up commit.
+**Working state:** P1 code and tests are complete but not yet committed; P0 remains the last
+committed baseline (`64de1e2` plus the environment-correction follow-up). `docs/contracts/` holds
+34 exported schemas. `data/cfb.db` is created on demand; no corpus, real specs, or live research
+provider exists yet. B3 (no MCP endpoint) still applies to live Deep Research; the seeded provider
+is the offline path.
 
 ---
 
@@ -136,6 +146,9 @@ environment-correction docs/tests are the follow-up commit.
 | AD-028 | 2026-11-22 | **P0 scorer is an explicit stub:** `probability = min(0.95, base_rate + 0.06 × matched_count)`, `confidence = min(0.90, 0.35 + 0.12 × matched_count)`, `model_version = "stub-p0-rule-count"`, backend recorded as `calibrated_rules`. The rationale says it is not a trained probability. P8 replaces the internals, not the `UpsetScore`/`RankedAlert` contract. | The walking skeleton needs a deterministic, testable score to prove the vertical slice; a train/validate claim without calibration would violate R19 and the project's provenance rules. | R14, R19 | plan |
 | AD-029 | 2026-11-22 | **Probe and fixture redaction masks only exact secret keys and secret-shaped suffixes**, never usage counters. No `Authorization` header is written to any fixture; `docs/CAPABILITIES.md` and `docs/capabilities.json` carry status codes, counts, field names, widths, and model ids only. | The first redaction pass masked `input_tokens`/`output_tokens`, which destroys the P8 budget evidence. The corrected predicate keeps `input_tokens`/`output_tokens`/`token_ids` while masking `api_key`, `authorization`, `access_token`, `*_api_key`, and `*_secret`. A key scan over `docs/`, `tests/`, `cfb_upset/`, `scripts/`, and `README.md` found no credential. | R1, R22 | plan |
 | AD-030 | 2026-11-22 | **Canonical development environment is the `ads_5984` conda env** (`/opt/anaconda3/envs/ads_5984/bin/python`, Python 3.12.13). It already contains `chromadb==1.1.1`, Streamlit 1.60, and every P0 dependency. The base Anaconda Python 3.13.5 also runs the offline tests but lacks `chromadb`; using it produced a false P0 FAIL. All final probe/test evidence is regenerated under `ads_5984`. | The Midterm project used the same env and `chromadb`; the P0 probe must inspect the interpreter that will run the app. Hard-coding an absolute path in `Makefile` would not travel, so the documented workflow is `conda activate ads_5984` before `make check`/`make probe`. | R1, R8, R22 | owner (env) / plan |
+| AD-031 | 2026-11-22 | **Additive `precondition_spec.rationale` column.** The §4.7 table list is preserved; one nullable/defaulted text column is added so a `PreconditionSpec` stored and reloaded by `SpecsRepository` keeps its rationale. | `PreconditionSpec.rationale` is required by the P1 contract but absent from the §4.7 column list; dropping it on write would make the repository lossy and break a contract round-trip. | R8, R9, R27 | plan |
+| AD-032 | 2026-11-22 | **Historical weather lead is recorded as an upper bound.** `WeatherAdapter.fetch_historical` sets `known_at = kickoff − lead_hours` with `lead_hours = min(requested, WEATHER_LEAD_HOURS_MAX, 6)`. The stitched Open-Meteo historical-forecast archive exposes no forecast issue time, so the adapter never claims a smaller lead than it can prove. Indoor venues short-circuit with `unavailable_reason` instead of inventing weather. | Preserves the AD-022 decision while making the provenance conservative: any admitted historical weather was knowable no later than the recorded `known_at`, and observed/reanalysis weather is never fetched. | R10, R24 | plan |
+| AD-033 | 2026-11-22 | **Adapters depend on a tiny `Transport` protocol.** `HttpTransport` wraps the P0 `HttpClient` (timeouts, retries, breaker); `FixtureTransport` replays captured JSON/HTML and records calls, returning a synthetic 404 for unmatched routes. Tests never touch the network; `tests/live/` is opt-in via `RUN_LIVE=1`. | Fixture parity is an explicit P1 acceptance criterion. One transport seam keeps retry logic in one place and makes an adapter test fail at the parse boundary rather than hang. | R1, R22, R25 | plan |
 
 ---
 
@@ -191,21 +204,21 @@ user_concurrent` in two of three probes; the live 503 hold is still intentionall
 - [x] P0 GATE: capability matrix complete; `make test` green; no secrets; reproducibility check
 
 ### P1 — Foundations
-- [ ] P1.1 Full Pydantic contract catalogue, `extra="forbid"`, enums, timezone validators
-- [ ] P1.2 SQLite migrations implementing §4.7 (all tables + indexes)
-- [ ] P1.3 Repositories per aggregate; no raw SQL outside `store/`
-- [ ] P1.4 `teams`/`venues` seed from CFBD `/venues` (lat/lon/altitude/dome/tz) with a checked-in CSV fallback
-- [ ] P1.5 Evidence snapshot store (gzip + sha256) and `evidence_links`
-- [ ] P1.6 ESPN adapter (scoreboard, summary, core odds, rankings, groups) + CFBD adapter (`/lines`, `/venues`) with fixtures
-- [ ] P1.7 Weather + geocode adapters with fixtures (record actual forecast lead)
-- [ ] P1.8 Search + Fetch adapters: whitelist, text extraction, snapshot, mock transport
-- [ ] P1.9 Deep Research adapter (MCP JSON-RPC + seeded provider)
-- [ ] P1.10 LLM adapter: JSON-only, retries, token ledger, redaction
-- [ ] P1.11 Embeddings + Chroma adapters: Ollama `qwen3-embedding:8b` (4096, primary) and ARC `Qwen3-Embedding-4B` (2560, optional); hashing embedder for tests; assert width == `EMBED_DIM`; tag collection metadata `{model, dim, instruction_template, normalized}`; never mix spaces
-- [ ] P1.12 `trace.py` (JSONL + `agent_events`) and `budget.py`
-- [ ] P1.13 `domain/leakage.py` admission policy as data + violation logging
-- [ ] P1.14 Contract rejection + adapter parity tests
-- [ ] P1 GATE: migrations verified; adapters pass offline tests; leakage unit test raises
+- [x] P1.1 Full Pydantic contract catalogue, `extra="forbid"`, enums, timezone validators
+- [x] P1.2 SQLite migrations implementing §4.7 (all tables + indexes)
+- [x] P1.3 Repositories per aggregate; no raw SQL outside `store/`
+- [x] P1.4 `teams`/`venues` seed from CFBD `/venues` (lat/lon/altitude/dome/tz) with a checked-in CSV fallback
+- [x] P1.5 Evidence snapshot store (gzip + sha256) and `evidence_links`
+- [x] P1.6 ESPN adapter (scoreboard, summary, core odds, rankings, groups) + CFBD adapter (`/lines`, `/venues`) with fixtures
+- [x] P1.7 Weather + geocode adapters with fixtures (record actual forecast lead)
+- [x] P1.8 Search + Fetch adapters: whitelist, text extraction, snapshot, mock transport
+- [x] P1.9 Deep Research adapter (MCP JSON-RPC + seeded provider)
+- [x] P1.10 LLM adapter: JSON-only, retries, token ledger, redaction
+- [x] P1.11 Embeddings + Chroma adapters: Ollama `qwen3-embedding:8b` (4096, primary) and ARC `Qwen3-Embedding-4B` (2560, optional); hashing embedder for tests; assert width == `EMBED_DIM`; tag collection metadata `{model, dim, instruction_template, normalized}`; never mix spaces
+- [x] P1.12 `trace.py` (JSONL + `agent_events`) and `budget.py`
+- [x] P1.13 `domain/leakage.py` admission policy as data + violation logging
+- [x] P1.14 Contract rejection + adapter parity tests
+- [x] P1 GATE: migrations verified; adapters pass offline tests; leakage unit test raises — `301 passed, 9 skipped`; `ruff`/`black` clean; `0001` init/verify OK
 
 ### P2 — Historical corpus ingestion
 - [ ] P2.1 FBS-vs-FBS enumeration via scoreboard + group 80
@@ -337,6 +350,7 @@ user_concurrent` in two of three probes; the live 503 hold is still intentionall
 | 4 | 2026-11-22 | planning | **Pre-flight + live contract capture.** `.env` supplied and verified; ARC `/models` (14 ids), `systemone` `noul`/`choice`/`score` captured with fixtures, determinism ×3, `/chat/completions` 404; Ollama 4096-d + ARC 2560-d embeddings; CFBD/Open-Meteo reachable; ARC has no OpenAPI schema; Python/dep/disk inventory; chose Ollama 8B as primary embedder; updated F1/F3, D8/D16, §4.9.1/§4.9.2, P0.1/P1.11/P6.9, Appendix A/B, blockers, AD-023–AD-025 | commands/evidence in `IMPLEMENTATION_PLAN.md` App. A and §5 above; no code written | **switch agents**, then P0.1 |
 | 5 | 2026-11-22 | P0 | **Phase 0 implemented and gated.** Scaffold, settings/logging/ids/errors, tolerant HTTP adapter, Pydantic contracts + 11 schemas, deterministic rule DSL/screen, explicit stub scorer + total ranking, in-memory trace, fixture slate, Streamlit skeleton, probe and docs. Fixed probe redaction (`input_tokens` preserved), ESPN rankings (site endpoint → 2 polls), ARC chat (`content=None` + 256-token reasoning budget). Added golden `systemone`/embedding/ESPN/CFBD/weather fixtures and a contract README. Wrote 152 offline tests incl. AppTest e2e. | `python scripts/probe.py --write` → **34 PASS / 2 PARTIAL / 5 SKIP / 1 FAIL (chromadb, P1.11)**; `make test-cov` → **152 passed**, `rules.py` 97%, `screen.py` 100%; `make lint` / `make schemas` green; AppTest → 2 alerts + 3 agents; 3-run deterministic payload hash `c2981f97…`; `git check-ignore .env` exit 0; credential scan clean | **start P1.1**, then P1.2 migrations; no P1 code yet |
 | 6 | 2026-11-22 | P0 correction | **Environment correction.** `chromadb` was reported missing only because the probe ran in base Anaconda Python 3.13.5. The canonical `ads_5984` conda env already has `chromadb==1.1.1` (Python 3.12.13, Streamlit 1.60). Installed the missing dev formatter (`black 25.12`) in that env, regenerated the matrix there, and synced docs/requirements/AD-030. | `/opt/anaconda3/envs/ads_5984/bin/python scripts/probe.py --write` → **36 PASS / 1 PARTIAL / 5 SKIP / 0 FAIL**, incl. `chromadb import PASS` and a reproduced `429`; env pytest → **160 passed**; env ruff/black clean; env coverage `rules.py` 97%, `screen.py` 100% | commit correction; start P1.1 |
+| 7 | 2026-11-22 | P1 | **Phase 1 implemented and gated.** Added the full contract catalogue (history/research/labels/tools + monitor/scoring extensions; 34 exported schemas); `0001_init.sql` for every §4.7 table/index plus `precondition_spec.rationale`; typed repositories; content-addressed gzip/SHA-256 evidence store; CFBD/ESPN venue and team seed with checked-in fallback CSV; leakage policy as data; fixture-backed ESPN/CFBD/weather/geocode/search/fetch/Deep Research/LLM/embeddings/Chroma adapters behind a `Transport` seam; JSONL + SQLite trace sinks and run budgets; contract-rejection, leakage, trace/budget, adapter, parity, and live-skipped tests. Fixed CFBD provider matching so `ESPN_BET` matches `ESPN Bet`. | `python -m pytest` → **301 passed, 9 skipped** (live suite); `ruff check` clean; `black --check` → 83 files unchanged; `python -m cfb_upset.store.db --init` → `applied migrations: 0001`, `--verify` → all table counts + `status: OK`; `python -m cfb_upset.contracts.export` → **34 schemas**; Chroma round-trip passes with the 256-d hashing embedder in `ads_5984` | commit P1; start P2.1 |
 
 **Template**
 ```

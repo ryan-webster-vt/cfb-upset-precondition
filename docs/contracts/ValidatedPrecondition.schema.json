@@ -1,0 +1,143 @@
+{
+  "$defs": {
+    "Citation": {
+      "additionalProperties": false,
+      "description": "A resolvable source supporting a claim or a rule.",
+      "properties": {
+        "citation_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Citation Id"
+        },
+        "published_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Published At"
+        },
+        "quote": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Quote"
+        },
+        "source": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source"
+        },
+        "title": {
+          "minLength": 1,
+          "title": "Title",
+          "type": "string"
+        },
+        "url": {
+          "minLength": 1,
+          "title": "Url",
+          "type": "string"
+        }
+      },
+      "required": [
+        "title",
+        "url"
+      ],
+      "title": "Citation",
+      "type": "object"
+    },
+    "PreconditionStatus": {
+      "enum": [
+        "validated",
+        "provisional",
+        "rejected"
+      ],
+      "title": "PreconditionStatus",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "description": "A promoted (or rejected) spec with its statistical evidence.",
+  "properties": {
+    "acceptance": {
+      "additionalProperties": true,
+      "title": "Acceptance",
+      "type": "object"
+    },
+    "citations": {
+      "items": {
+        "$ref": "#/$defs/Citation"
+      },
+      "title": "Citations",
+      "type": "array"
+    },
+    "effect": {
+      "additionalProperties": true,
+      "title": "Effect",
+      "type": "object"
+    },
+    "reason": {
+      "minLength": 1,
+      "title": "Reason",
+      "type": "string"
+    },
+    "spec_id": {
+      "minLength": 1,
+      "title": "Spec Id",
+      "type": "string"
+    },
+    "spec_version": {
+      "minimum": 1,
+      "title": "Spec Version",
+      "type": "integer"
+    },
+    "status": {
+      "$ref": "#/$defs/PreconditionStatus"
+    },
+    "updated_at": {
+      "format": "date-time",
+      "title": "Updated At",
+      "type": "string"
+    },
+    "valid_from": {
+      "format": "date-time",
+      "title": "Valid From",
+      "type": "string"
+    }
+  },
+  "required": [
+    "spec_id",
+    "spec_version",
+    "status",
+    "valid_from",
+    "reason",
+    "updated_at"
+  ],
+  "title": "ValidatedPrecondition",
+  "type": "object"
+}

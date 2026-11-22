@@ -1,0 +1,41 @@
+{
+  "additionalProperties": false,
+  "description": "A record that failed validation, preserved with the exact errors.",
+  "properties": {
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "errors": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Errors",
+      "type": "array"
+    },
+    "payload": {
+      "additionalProperties": true,
+      "title": "Payload",
+      "type": "object"
+    },
+    "record_id": {
+      "minLength": 1,
+      "title": "Record Id",
+      "type": "string"
+    },
+    "source": {
+      "default": "espn",
+      "title": "Source",
+      "type": "string"
+    }
+  },
+  "required": [
+    "record_id",
+    "errors",
+    "created_at"
+  ],
+  "title": "QuarantineRecord",
+  "type": "object"
+}

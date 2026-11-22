@@ -15,6 +15,7 @@
       "type": "string"
     },
     "payload": {
+      "additionalProperties": true,
       "title": "Payload",
       "type": "object"
     },

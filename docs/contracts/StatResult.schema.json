@@ -1,0 +1,149 @@
+{
+  "$defs": {
+    "DatasetSplit": {
+      "description": "Chronological splits mandated by R25/R31.",
+      "enum": [
+        "dev",
+        "validation",
+        "test"
+      ],
+      "title": "DatasetSplit",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Effect size, interval, and multiplicity-adjusted significance.",
+  "properties": {
+    "ci_high": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Ci High"
+    },
+    "ci_low": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Ci Low"
+    },
+    "computed_at": {
+      "format": "date-time",
+      "title": "Computed At",
+      "type": "string"
+    },
+    "diagnostics": {
+      "additionalProperties": true,
+      "title": "Diagnostics",
+      "type": "object"
+    },
+    "method": {
+      "minLength": 1,
+      "title": "Method",
+      "type": "string"
+    },
+    "n": {
+      "minimum": 0,
+      "title": "N",
+      "type": "integer"
+    },
+    "odds_ratio": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Odds Ratio"
+    },
+    "p_value": {
+      "anyOf": [
+        {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "P Value"
+    },
+    "positives": {
+      "minimum": 0,
+      "title": "Positives",
+      "type": "integer"
+    },
+    "q_value": {
+      "anyOf": [
+        {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Q Value"
+    },
+    "risk_diff": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Risk Diff"
+    },
+    "spec_id": {
+      "minLength": 1,
+      "title": "Spec Id",
+      "type": "string"
+    },
+    "spec_version": {
+      "minimum": 1,
+      "title": "Spec Version",
+      "type": "integer"
+    },
+    "split": {
+      "$ref": "#/$defs/DatasetSplit"
+    },
+    "stat_id": {
+      "minLength": 1,
+      "title": "Stat Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "stat_id",
+    "spec_id",
+    "spec_version",
+    "split",
+    "n",
+    "positives",
+    "method",
+    "computed_at"
+  ],
+  "title": "StatResult",
+  "type": "object"
+}

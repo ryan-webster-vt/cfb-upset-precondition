@@ -1,0 +1,61 @@
+{
+  "$defs": {
+    "PreconditionStatus": {
+      "enum": [
+        "validated",
+        "provisional",
+        "rejected"
+      ],
+      "title": "PreconditionStatus",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "description": "The orchestrator's decision about one spec version.",
+  "properties": {
+    "approved_by": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Approved By"
+    },
+    "decided_at": {
+      "format": "date-time",
+      "title": "Decided At",
+      "type": "string"
+    },
+    "reason": {
+      "minLength": 1,
+      "title": "Reason",
+      "type": "string"
+    },
+    "spec_id": {
+      "minLength": 1,
+      "title": "Spec Id",
+      "type": "string"
+    },
+    "status": {
+      "$ref": "#/$defs/PreconditionStatus"
+    },
+    "version": {
+      "minimum": 1,
+      "title": "Version",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "spec_id",
+    "version",
+    "status",
+    "reason",
+    "decided_at"
+  ],
+  "title": "SpecPromotion",
+  "type": "object"
+}

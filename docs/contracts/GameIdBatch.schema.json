@@ -1,0 +1,53 @@
+{
+  "additionalProperties": false,
+  "description": "A unit of work assigned to one Historical-Stats Worker.",
+  "properties": {
+    "batch_id": {
+      "minLength": 1,
+      "title": "Batch Id",
+      "type": "string"
+    },
+    "game_ids": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Game Ids",
+      "type": "array"
+    },
+    "season": {
+      "anyOf": [
+        {
+          "maximum": 3000,
+          "minimum": 1869,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Season"
+    },
+    "week": {
+      "anyOf": [
+        {
+          "maximum": 30,
+          "minimum": 0,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Week"
+    }
+  },
+  "required": [
+    "batch_id",
+    "game_ids"
+  ],
+  "title": "GameIdBatch",
+  "type": "object"
+}

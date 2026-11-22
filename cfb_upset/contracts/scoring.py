@@ -74,3 +74,33 @@ class RunResult(StrictModel):
     reason: str | None = None
     started_at: UTCDateTime
     finished_at: UTCDateTime
+
+
+class ScoreRequest(StrictModel):
+    """Everything the Upset-Scorer is allowed to see for one game.
+
+    Post-kickoff evidence is removed by the monitor payload builder before this
+    model is constructed; the request itself contains only admitted values.
+    """
+
+    request_id: str = Field(min_length=1)
+    game: SlateGame
+    matched_specs: list[MatchedSpec] = Field(default_factory=list)
+    market_prob: float | None = Field(default=None, ge=0.0, le=1.0)
+    evidence_ids: list[str] = Field(default_factory=list)
+    context: dict[str, Any] = Field(default_factory=dict)
+    created_at: UTCDateTime
+
+
+class CacheEntry(StrictModel):
+    """A replayable analysis-cache record with a versioned key."""
+
+    cache_key: str = Field(min_length=1)
+    game_id: str = Field(min_length=1)
+    spec_set_hash: str = Field(min_length=1)
+    evidence_hash: str = Field(min_length=1)
+    scorer_version: str = Field(min_length=1)
+    embedding_version: str = Field(min_length=1)
+    result_json: dict[str, Any] = Field(default_factory=dict)
+    created_at: UTCDateTime
+    expires_at: UTCDateTime | None = None

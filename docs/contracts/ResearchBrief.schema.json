@@ -1,0 +1,55 @@
+{
+  "additionalProperties": false,
+  "description": "The question sent to Deep Research (one per candidate precondition).",
+  "properties": {
+    "candidate_key": {
+      "minLength": 1,
+      "title": "Candidate Key",
+      "type": "string"
+    },
+    "counter_evidence": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Counter Evidence",
+      "type": "array"
+    },
+    "definition": {
+      "minLength": 1,
+      "title": "Definition",
+      "type": "string"
+    },
+    "moderators": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Moderators",
+      "type": "array"
+    },
+    "query": {
+      "minLength": 1,
+      "title": "Query",
+      "type": "string"
+    },
+    "threshold_hints": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Threshold Hints",
+      "type": "array"
+    },
+    "title": {
+      "minLength": 1,
+      "title": "Title",
+      "type": "string"
+    }
+  },
+  "required": [
+    "candidate_key",
+    "title",
+    "definition",
+    "query"
+  ],
+  "title": "ResearchBrief",
+  "type": "object"
+}

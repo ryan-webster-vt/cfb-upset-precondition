@@ -1,0 +1,256 @@
+{
+  "$defs": {
+    "MatchedSpec": {
+      "additionalProperties": false,
+      "properties": {
+        "evidence": {
+          "$ref": "#/$defs/RuleEvidence"
+        },
+        "spec_id": {
+          "title": "Spec Id",
+          "type": "string"
+        },
+        "title": {
+          "title": "Title",
+          "type": "string"
+        },
+        "version": {
+          "minimum": 1,
+          "title": "Version",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "spec_id",
+        "version",
+        "title",
+        "evidence"
+      ],
+      "title": "MatchedSpec",
+      "type": "object"
+    },
+    "MonitorDecision": {
+      "additionalProperties": false,
+      "description": "A worker's confirm/drop result with probabilities and evidence refs.\n\n``dissent`` preserves minority signals (Pr9) instead of collapsing every\ndisagreement into a confident answer.",
+      "properties": {
+        "confidence": {
+          "default": 0.0,
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Confidence",
+          "type": "number"
+        },
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "decision": {
+          "$ref": "#/$defs/MonitorDecisionType"
+        },
+        "dissent": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Dissent",
+          "type": "array"
+        },
+        "evidence_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Evidence Ids",
+          "type": "array"
+        },
+        "game_id": {
+          "minLength": 1,
+          "title": "Game Id",
+          "type": "string"
+        },
+        "probabilities": {
+          "additionalProperties": {
+            "type": "number"
+          },
+          "title": "Probabilities",
+          "type": "object"
+        },
+        "quotes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Quotes",
+          "type": "array"
+        },
+        "rationale": {
+          "minLength": 1,
+          "title": "Rationale",
+          "type": "string"
+        }
+      },
+      "required": [
+        "game_id",
+        "decision",
+        "rationale",
+        "created_at"
+      ],
+      "title": "MonitorDecision",
+      "type": "object"
+    },
+    "MonitorDecisionType": {
+      "description": "The decision-model answer for one game's matched-rule bundle.",
+      "enum": [
+        "confirmed",
+        "contradicted",
+        "insufficient"
+      ],
+      "title": "MonitorDecisionType",
+      "type": "string"
+    },
+    "RuleEvidence": {
+      "additionalProperties": false,
+      "description": "Why a rule fired (or did not), including the observed value and timestamp.",
+      "properties": {
+        "field": {
+          "title": "Field",
+          "type": "string"
+        },
+        "known_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Known At"
+        },
+        "note": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Note"
+        },
+        "observed": {
+          "default": null,
+          "title": "Observed"
+        },
+        "op": {
+          "$ref": "#/$defs/RuleOp"
+        },
+        "state": {
+          "$ref": "#/$defs/ScreenState"
+        },
+        "threshold": {
+          "default": null,
+          "title": "Threshold"
+        },
+        "units": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Units"
+        },
+        "value2": {
+          "default": null,
+          "title": "Value2"
+        }
+      },
+      "required": [
+        "field",
+        "op",
+        "state"
+      ],
+      "title": "RuleEvidence",
+      "type": "object"
+    },
+    "RuleOp": {
+      "enum": [
+        "gt",
+        "ge",
+        "lt",
+        "le",
+        "eq",
+        "ne",
+        "in",
+        "not_in",
+        "between",
+        "is_true",
+        "is_false"
+      ],
+      "title": "RuleOp",
+      "type": "string"
+    },
+    "ScreenState": {
+      "enum": [
+        "TRUE",
+        "FALSE",
+        "UNKNOWN"
+      ],
+      "title": "ScreenState",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "description": "A confirmed upset flag handed from the monitor to the scorer.",
+  "properties": {
+    "confirmed_at": {
+      "format": "date-time",
+      "title": "Confirmed At",
+      "type": "string"
+    },
+    "decision": {
+      "$ref": "#/$defs/MonitorDecision"
+    },
+    "evidence_ids": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Evidence Ids",
+      "type": "array"
+    },
+    "game_id": {
+      "minLength": 1,
+      "title": "Game Id",
+      "type": "string"
+    },
+    "matched_specs": {
+      "items": {
+        "$ref": "#/$defs/MatchedSpec"
+      },
+      "minItems": 1,
+      "title": "Matched Specs",
+      "type": "array"
+    },
+    "rationale": {
+      "minLength": 1,
+      "title": "Rationale",
+      "type": "string"
+    }
+  },
+  "required": [
+    "game_id",
+    "matched_specs",
+    "rationale",
+    "evidence_ids",
+    "decision",
+    "confirmed_at"
+  ],
+  "title": "ConfirmedFlag",
+  "type": "object"
+}

@@ -1,0 +1,79 @@
+{
+  "$defs": {
+    "MonitorDecisionType": {
+      "description": "The decision-model answer for one game's matched-rule bundle.",
+      "enum": [
+        "confirmed",
+        "contradicted",
+        "insufficient"
+      ],
+      "title": "MonitorDecisionType",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "description": "A worker's confirm/drop result with probabilities and evidence refs.\n\n``dissent`` preserves minority signals (Pr9) instead of collapsing every\ndisagreement into a confident answer.",
+  "properties": {
+    "confidence": {
+      "default": 0.0,
+      "maximum": 1.0,
+      "minimum": 0.0,
+      "title": "Confidence",
+      "type": "number"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "decision": {
+      "$ref": "#/$defs/MonitorDecisionType"
+    },
+    "dissent": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Dissent",
+      "type": "array"
+    },
+    "evidence_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Evidence Ids",
+      "type": "array"
+    },
+    "game_id": {
+      "minLength": 1,
+      "title": "Game Id",
+      "type": "string"
+    },
+    "probabilities": {
+      "additionalProperties": {
+        "type": "number"
+      },
+      "title": "Probabilities",
+      "type": "object"
+    },
+    "quotes": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Quotes",
+      "type": "array"
+    },
+    "rationale": {
+      "minLength": 1,
+      "title": "Rationale",
+      "type": "string"
+    }
+  },
+  "required": [
+    "game_id",
+    "decision",
+    "rationale",
+    "created_at"
+  ],
+  "title": "MonitorDecision",
+  "type": "object"
+}

@@ -1,0 +1,172 @@
+{
+  "$defs": {
+    "RuleEvidence": {
+      "additionalProperties": false,
+      "description": "Why a rule fired (or did not), including the observed value and timestamp.",
+      "properties": {
+        "field": {
+          "title": "Field",
+          "type": "string"
+        },
+        "known_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Known At"
+        },
+        "note": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Note"
+        },
+        "observed": {
+          "default": null,
+          "title": "Observed"
+        },
+        "op": {
+          "$ref": "#/$defs/RuleOp"
+        },
+        "state": {
+          "$ref": "#/$defs/ScreenState"
+        },
+        "threshold": {
+          "default": null,
+          "title": "Threshold"
+        },
+        "units": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Units"
+        },
+        "value2": {
+          "default": null,
+          "title": "Value2"
+        }
+      },
+      "required": [
+        "field",
+        "op",
+        "state"
+      ],
+      "title": "RuleEvidence",
+      "type": "object"
+    },
+    "RuleOp": {
+      "enum": [
+        "gt",
+        "ge",
+        "lt",
+        "le",
+        "eq",
+        "ne",
+        "in",
+        "not_in",
+        "between",
+        "is_true",
+        "is_false"
+      ],
+      "title": "RuleOp",
+      "type": "string"
+    },
+    "ScreenState": {
+      "enum": [
+        "TRUE",
+        "FALSE",
+        "UNKNOWN"
+      ],
+      "title": "ScreenState",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "description": "One deterministic label for one game/spec pair.",
+  "properties": {
+    "evaluable": {
+      "default": true,
+      "title": "Evaluable",
+      "type": "boolean"
+    },
+    "evidence": {
+      "items": {
+        "$ref": "#/$defs/RuleEvidence"
+      },
+      "title": "Evidence",
+      "type": "array"
+    },
+    "game_id": {
+      "minLength": 1,
+      "title": "Game Id",
+      "type": "string"
+    },
+    "label": {
+      "anyOf": [
+        {
+          "maximum": 1,
+          "minimum": 0,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Label"
+    },
+    "label_id": {
+      "minLength": 1,
+      "title": "Label Id",
+      "type": "string"
+    },
+    "labeled_at": {
+      "format": "date-time",
+      "title": "Labeled At",
+      "type": "string"
+    },
+    "labeler_version": {
+      "minLength": 1,
+      "title": "Labeler Version",
+      "type": "string"
+    },
+    "spec_id": {
+      "minLength": 1,
+      "title": "Spec Id",
+      "type": "string"
+    },
+    "spec_version": {
+      "minimum": 1,
+      "title": "Spec Version",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "label_id",
+    "game_id",
+    "spec_id",
+    "spec_version",
+    "labeler_version",
+    "labeled_at"
+  ],
+  "title": "LabeledGame",
+  "type": "object"
+}

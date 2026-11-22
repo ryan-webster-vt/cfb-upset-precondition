@@ -1,0 +1,70 @@
+{
+  "additionalProperties": false,
+  "description": "A replayable analysis-cache record with a versioned key.",
+  "properties": {
+    "cache_key": {
+      "minLength": 1,
+      "title": "Cache Key",
+      "type": "string"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "embedding_version": {
+      "minLength": 1,
+      "title": "Embedding Version",
+      "type": "string"
+    },
+    "evidence_hash": {
+      "minLength": 1,
+      "title": "Evidence Hash",
+      "type": "string"
+    },
+    "expires_at": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Expires At"
+    },
+    "game_id": {
+      "minLength": 1,
+      "title": "Game Id",
+      "type": "string"
+    },
+    "result_json": {
+      "additionalProperties": true,
+      "title": "Result Json",
+      "type": "object"
+    },
+    "scorer_version": {
+      "minLength": 1,
+      "title": "Scorer Version",
+      "type": "string"
+    },
+    "spec_set_hash": {
+      "minLength": 1,
+      "title": "Spec Set Hash",
+      "type": "string"
+    }
+  },
+  "required": [
+    "cache_key",
+    "game_id",
+    "spec_set_hash",
+    "evidence_hash",
+    "scorer_version",
+    "embedding_version",
+    "created_at"
+  ],
+  "title": "CacheEntry",
+  "type": "object"
+}

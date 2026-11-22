@@ -1,0 +1,86 @@
+{
+  "$defs": {
+    "Adjudication": {
+      "description": "Blinded label-audit outcome (R30).",
+      "enum": [
+        "HOLD",
+        "NOT_HOLD",
+        "UNKNOWN"
+      ],
+      "title": "Adjudication",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "description": "A sampled, blinded adjudication of one label.",
+  "properties": {
+    "adjudication": {
+      "$ref": "#/$defs/Adjudication"
+    },
+    "audit_id": {
+      "minLength": 1,
+      "title": "Audit Id",
+      "type": "string"
+    },
+    "auditor": {
+      "minLength": 1,
+      "title": "Auditor",
+      "type": "string"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "evidence_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Evidence Ids",
+      "type": "array"
+    },
+    "game_id": {
+      "minLength": 1,
+      "title": "Game Id",
+      "type": "string"
+    },
+    "quote": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Quote"
+    },
+    "sampled": {
+      "default": true,
+      "title": "Sampled",
+      "type": "boolean"
+    },
+    "spec_id": {
+      "minLength": 1,
+      "title": "Spec Id",
+      "type": "string"
+    },
+    "spec_version": {
+      "minimum": 1,
+      "title": "Spec Version",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "audit_id",
+    "spec_id",
+    "spec_version",
+    "game_id",
+    "adjudication",
+    "auditor",
+    "created_at"
+  ],
+  "title": "LabelAudit",
+  "type": "object"
+}

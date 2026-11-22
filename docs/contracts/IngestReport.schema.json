@@ -1,0 +1,69 @@
+{
+  "additionalProperties": false,
+  "description": "Coverage and health summary returned by the Data-Orchestrator.",
+  "properties": {
+    "coverage": {
+      "additionalProperties": true,
+      "title": "Coverage",
+      "type": "object"
+    },
+    "duplicates_removed": {
+      "default": 0,
+      "minimum": 0,
+      "title": "Duplicates Removed",
+      "type": "integer"
+    },
+    "finished_at": {
+      "format": "date-time",
+      "title": "Finished At",
+      "type": "string"
+    },
+    "games_requested": {
+      "default": 0,
+      "minimum": 0,
+      "title": "Games Requested",
+      "type": "integer"
+    },
+    "games_stored": {
+      "default": 0,
+      "minimum": 0,
+      "title": "Games Stored",
+      "type": "integer"
+    },
+    "quarantined": {
+      "default": 0,
+      "minimum": 0,
+      "title": "Quarantined",
+      "type": "integer"
+    },
+    "report_id": {
+      "minLength": 1,
+      "title": "Report Id",
+      "type": "string"
+    },
+    "seasons": {
+      "items": {
+        "type": "integer"
+      },
+      "title": "Seasons",
+      "type": "array"
+    },
+    "source": {
+      "default": "espn",
+      "title": "Source",
+      "type": "string"
+    },
+    "started_at": {
+      "format": "date-time",
+      "title": "Started At",
+      "type": "string"
+    }
+  },
+  "required": [
+    "report_id",
+    "started_at",
+    "finished_at"
+  ],
+  "title": "IngestReport",
+  "type": "object"
+}
