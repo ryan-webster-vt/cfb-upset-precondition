@@ -1,6 +1,7 @@
 # Optional / phase-gated dependencies.
 #
-# chromadb is intentionally kept out of requirements.txt until P1.11/P6.9.
-# It pulls native wheels and is not needed for the Phase 0 walking skeleton,
-# but the capability probe records whether it is importable.
+# chromadb is present in the canonical `ads_5984` conda environment
+# (1.1.1, verified by the P0 probe). It is kept out of requirements.txt until
+# the citation-index adapter lands in P1.11/P6.9; it is not needed for the
+# Phase 0 walking skeleton.
 chromadb>=0.5

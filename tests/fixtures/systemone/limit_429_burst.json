@@ -12,8 +12,8 @@
     "status": 200
   },
   {
-    "body": "{'model': 'vllm-sr/d3-mini', 'answers': {'upset_likely': {'type': 'noul', 'noul': 0.026627641451289263}}, 'usage': {'input_tokens': 141, 'output_tokens': 0}}",
-    "status": 200
+    "body": "{'error': {'message': '4 of your requests are already queued or running, retry later', 'reason': 'user_concurrent', 'retry_after_s': 1}}",
+    "status": 429
   },
   {
     "body": "{'model': 'vllm-sr/d3-mini', 'answers': {'upset_likely': {'type': 'noul', 'noul': 0.02660868937528055}}, 'usage': {'input_tokens': 141, 'output_tokens': 0}}",

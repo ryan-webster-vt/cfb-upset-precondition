@@ -1560,9 +1560,9 @@ async def run_probe(
         "Golden `systemone` fixtures are committed under `tests/fixtures/systemone/`.",
         "The 5-way burst, oversized-body, and queue-timeout probes are best-effort because "
         "`systemone` is a shared per-user service.",
-        "A fifth concurrent `systemone` request returned 429 `user_concurrent` in the first "
-        "2026-11-22 run; a later run accepted all five. The 429 path is therefore verified "
-        "but not reproducible on demand; the 4-request semaphore remains mandatory.",
+        "A fifth concurrent `systemone` request returned 429 `user_concurrent` in two of three "
+        "2026-11-22 probes (the middle run accepted all five). The 429 path is verified but not "
+        "reproducible on demand; the 4-request semaphore remains mandatory.",
         "CFBD 2021 week-1 open-line coverage is measured live; the strength proxy remains the "
         "fallback when `spreadOpen` is null.",
         "No credential is written to the report or fixtures.",

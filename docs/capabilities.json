@@ -2,7 +2,7 @@
   "checks": [
     {
       "detail": "HTTP 200; 53 events; odds_present=False",
-      "duration_ms": 72.27953147888184,
+      "duration_ms": 111.90128231048584,
       "evidence": {
         "events": 53,
         "kind": "json",
@@ -13,7 +13,7 @@
     },
     {
       "detail": "HTTP 200; 53 events; 53 with odds",
-      "duration_ms": 125.46536350250244,
+      "duration_ms": 74.23842716217041,
       "evidence": {
         "events": 53,
         "status": 200,
@@ -24,7 +24,7 @@
     },
     {
       "detail": "HTTP 200; keys=['againstTheSpread', 'article', 'boxscore', 'broadcasts', 'drives', 'format', 'gameInfo', 'header', 'leaders', 'meta']",
-      "duration_ms": 89.05725002288818,
+      "duration_ms": 70.14493083953857,
       "evidence": {
         "keys": [
           "againstTheSpread",
@@ -53,7 +53,7 @@
     },
     {
       "detail": "HTTP 200; 2 items; providers=['ESPN BET', 'ESPN Bet - Live Odds']",
-      "duration_ms": 47.10124683380127,
+      "duration_ms": 73.6636438369751,
       "evidence": {
         "items": 2,
         "providers": [
@@ -67,7 +67,7 @@
     },
     {
       "detail": "HTTP 200; 2 ranking collections; polls=['AP Top 25', 'AFCA Coaches Poll']",
-      "duration_ms": 55.844482421875,
+      "duration_ms": 73.69112014770508,
       "evidence": {
         "polls": [
           "AP Top 25",
@@ -81,7 +81,7 @@
     },
     {
       "detail": "HTTP 200; 763 teams",
-      "duration_ms": 44.12827014923096,
+      "duration_ms": 93.59998893737793,
       "evidence": {
         "status": 200,
         "teams": 763
@@ -91,7 +91,7 @@
     },
     {
       "detail": "HTTP 200; name=FBS",
-      "duration_ms": 11.412311553955078,
+      "duration_ms": 10.5707368850708,
       "evidence": {
         "name": "FBS",
         "status": 200
@@ -101,7 +101,7 @@
     },
     {
       "detail": "HTTP 200; name=FCS",
-      "duration_ms": 10.36204719543457,
+      "duration_ms": 11.19759464263916,
       "evidence": {
         "name": "FCS",
         "status": 200
@@ -111,7 +111,7 @@
     },
     {
       "detail": "HTTP 200; 14 model ids",
-      "duration_ms": 168.3019323348999,
+      "duration_ms": 182.75693225860596,
       "evidence": {
         "models": [
           "vt-arc-llm",
@@ -136,7 +136,7 @@
     },
     {
       "detail": "HTTP 200; json_parse=True; finish_reason=stop; content='{\"ok\": true}'",
-      "duration_ms": 4193.580904960632,
+      "duration_ms": 1797.024127960205,
       "evidence": {
         "content_chars": 12,
         "finish_reason": "stop",
@@ -150,7 +150,7 @@
     },
     {
       "detail": "HTTP 200; kind=json; answer_keys=['upset_likely']",
-      "duration_ms": 112.9708080291748,
+      "duration_ms": 114.36334419250488,
       "evidence": {
         "status": 200,
         "usage": {
@@ -163,7 +163,7 @@
     },
     {
       "detail": "HTTP 200; kind=json; answer_keys=['confirm']",
-      "duration_ms": 109.50869083404541,
+      "duration_ms": 109.4104413986206,
       "evidence": {
         "status": 200,
         "usage": {
@@ -176,7 +176,7 @@
     },
     {
       "detail": "HTTP 200; kind=json; answer_keys=['risk']",
-      "duration_ms": 117.4806604385376,
+      "duration_ms": 116.37513065338135,
       "evidence": {
         "status": 200,
         "usage": {
@@ -188,13 +188,13 @@
       "status": "PASS"
     },
     {
-      "detail": "values=[0.02825084428381916, 0.02825084428381916, 0.02825084428381916]; latencies_ms=[113, 113, 110]",
+      "detail": "values=[0.02825084428381916, 0.02825084428381916, 0.02825084428381916]; latencies_ms=[110, 75, 108]",
       "duration_ms": null,
       "evidence": {
         "latencies_ms": [
-          113.29902458190918,
-          112.86637115478516,
-          109.94038200378418
+          109.82869529724121,
+          74.87259864807129,
+          107.97282981872559
         ],
         "values": [
           0.02825084428381916,
@@ -206,13 +206,13 @@
       "status": "PASS"
     },
     {
-      "detail": "values=[0.35116546408574767, 0.35116546408574767]; latencies_ms=[844, 828]",
+      "detail": "values=[0.35116546408574767, 0.35116546408574767]; latencies_ms=[841, 831]",
       "duration_ms": null,
       "evidence": {
         "chars": 20099,
         "latencies_ms": [
-          844.1589002609253,
-          828.0099010467529
+          840.5050134658813,
+          830.6789894104004
         ],
         "usage": [
           {
@@ -234,7 +234,7 @@
     },
     {
       "detail": "HTTP 400; body={'error': {'code': 400, 'message': '\"questions\" must be a non-empty object', 'type': 'invalid_request_error'}}",
-      "duration_ms": 59.357370376586914,
+      "duration_ms": 59.266629219055176,
       "evidence": {
         "body": {
           "error": {
@@ -250,7 +250,7 @@
     },
     {
       "detail": "HTTP 404; body={'error': 'd3 is a decision model and cannot chat or complete text: use POST /v1/systemone with a state and questions'}",
-      "duration_ms": 46.01015853881836,
+      "duration_ms": 45.720871925354004,
       "evidence": {
         "body": {
           "error": "d3 is a decision model and cannot chat or complete text: use POST /v1/systemone with a state and questions"
@@ -261,8 +261,8 @@
       "status": "PASS"
     },
     {
-      "detail": "statuses=[200, 200, 200, 200, 200]; 429_observed=False",
-      "duration_ms": 174.7192783355713,
+      "detail": "statuses=[200, 200, 200, 429, 200]; 429_observed=True",
+      "duration_ms": 119.29128170013428,
       "evidence": {
         "results": [
           {
@@ -278,8 +278,8 @@
             "status": 200
           },
           {
-            "body": "{'model': 'vllm-sr/d3-mini', 'answers': {'upset_likely': {'type': 'noul', 'noul': 0.026627641451289263}}, 'usage': {'input_tokens': 141, 'output_tokens': 0}}",
-            "status": 200
+            "body": "{'error': {'message': '4 of your requests are already queued or running, retry later', 'reason': 'user_concurrent', 'retry_after_s': 1}}",
+            "status": 429
           },
           {
             "body": "{'model': 'vllm-sr/d3-mini', 'answers': {'upset_likely': {'type': 'noul', 'noul': 0.02660868937528055}}, 'usage': {'input_tokens': 141, 'output_tokens': 0}}",
@@ -288,11 +288,11 @@
         ]
       },
       "name": "systemone 5-way burst (429)",
-      "status": "PARTIAL"
+      "status": "PASS"
     },
     {
       "detail": "HTTP 413; body={'detail': 'Request body too large'}",
-      "duration_ms": 160.3847770690918,
+      "duration_ms": 148.26408195495605,
       "evidence": {
         "body": {
           "detail": "Request body too large"
@@ -304,7 +304,7 @@
     },
     {
       "detail": "chars=30000; HTTP 200; usage={'input_tokens': 6091, 'output_tokens': 0}",
-      "duration_ms": 1597.065689086914,
+      "duration_ms": 1182.7316513061523,
       "evidence": {
         "chars": 30000,
         "status": 200,
@@ -325,7 +325,7 @@
     },
     {
       "detail": "HTTP 200; dims=[4096, 4096, 4096]; norms=[1.000001, 1.0, 1.0]",
-      "duration_ms": 180.6781187057495,
+      "duration_ms": 1794.5831308364868,
       "evidence": {
         "dims": [
           4096,
@@ -381,7 +381,7 @@
     },
     {
       "detail": "chars=144000; HTTP 200; dim=4096",
-      "duration_ms": 3479.4088315963745,
+      "duration_ms": 3826.9229440689087,
       "evidence": {
         "chars": 144000,
         "dim": 4096,
@@ -402,7 +402,7 @@
     },
     {
       "detail": "HTTP 200; dims=[2560, 2560, 2560]; norms=[1.0, 1.0, 1.0]",
-      "duration_ms": 82.55997848510742,
+      "duration_ms": 66.24049472808838,
       "evidence": {
         "dims": [
           2560,
@@ -412,9 +412,9 @@
         "expected_dim": 2560,
         "kind": "json",
         "norms": [
-          0.9999999535694962,
-          0.9999999634967504,
-          0.9999999745842773
+          0.9999999828787702,
+          1.0000000642321683,
+          1.000000062713503
         ],
         "status": 200
       },
@@ -458,7 +458,7 @@
     },
     {
       "detail": "chars=144000; HTTP 400; dim=0",
-      "duration_ms": 90.53350734710693,
+      "duration_ms": 93.45799350738525,
       "evidence": {
         "chars": 144000,
         "dim": 0,
@@ -469,7 +469,7 @@
     },
     {
       "detail": "HTTP 200; games=89; lines=353; spreadOpen_null=268 (75.9%); providers=['Bovada', 'Caesars (Pennsylvania)', 'William Hill (New Jersey)', 'consensus', 'numberfire', 'teamrankings']",
-      "duration_ms": 606.5850887298584,
+      "duration_ms": 187.44501781463623,
       "evidence": {
         "games": 89,
         "lines": 353,
@@ -491,7 +491,7 @@
     },
     {
       "detail": "HTTP 200; games=127; lines=270; spreadOpen_null=31 (11.5%); providers=['Bovada', 'DraftKings', 'ESPN Bet']",
-      "duration_ms": 85.25125694274902,
+      "duration_ms": 94.26055431365967,
       "evidence": {
         "games": 127,
         "lines": 270,
@@ -510,7 +510,7 @@
     },
     {
       "detail": "HTTP 200; venues=854; non_null={'latitude': 806, 'longitude': 806, 'elevation': 379, 'dome': 851, 'timezone': 364}",
-      "duration_ms": 134.78187084197998,
+      "duration_ms": 71.35319995880127,
       "evidence": {
         "non_null": {
           "dome": 851,
@@ -534,9 +534,9 @@
     },
     {
       "detail": "HTTP 200; hours=24; variables=['cloud_cover', 'precipitation', 'temperature_2m', 'time', 'wind_speed_10m']",
-      "duration_ms": 539.7955074310303,
+      "duration_ms": 605.3430519104004,
       "evidence": {
-        "generationtime_ms": 0.1176595687866211,
+        "generationtime_ms": 0.15473365783691406,
         "hours": 24,
         "kind": "json",
         "status": 200,
@@ -553,9 +553,9 @@
     },
     {
       "detail": "HTTP 200; hours=24; variables=['cloud_cover', 'precipitation', 'temperature_2m', 'time', 'wind_speed_10m']",
-      "duration_ms": 135.41286182403564,
+      "duration_ms": 147.65109539031982,
       "evidence": {
-        "generationtime_ms": 0.17976760864257812,
+        "generationtime_ms": 0.10848045349121094,
         "hours": 24,
         "kind": "json",
         "status": 200,
@@ -572,7 +572,7 @@
     },
     {
       "detail": "HTTP 200; hourly_keys=['temperature_2m', 'time']",
-      "duration_ms": 564.0888261795044,
+      "duration_ms": 570.392822265625,
       "evidence": {
         "hourly_keys": [
           "temperature_2m",
@@ -585,7 +585,7 @@
     },
     {
       "detail": "HTTP 422; key_configured=False; results=0",
-      "duration_ms": 192.03604316711426,
+      "duration_ms": 214.00494289398193,
       "evidence": {
         "results": 0,
         "status": 422
@@ -615,11 +615,11 @@
       "status": "SKIP"
     },
     {
-      "detail": "not installed (P1.11 adds it)",
+      "detail": "importable",
       "duration_ms": null,
       "evidence": {},
       "name": "chromadb import",
-      "status": "FAIL"
+      "status": "PASS"
     },
     {
       "detail": "free=2811.0 GiB; total=3753.4 GiB",
@@ -661,7 +661,7 @@
   },
   "environment": {
     "platform": "Linux-6.17.0-1032-oem-x86_64-with-glibc2.39",
-    "python": "3.13.5",
+    "python": "3.12.13",
     "settings": {
       "brave_configured": false,
       "cfbd_configured": true,
@@ -718,7 +718,7 @@
   "notes": [
     "Golden `systemone` fixtures are committed under `tests/fixtures/systemone/`.",
     "The 5-way burst, oversized-body, and queue-timeout probes are best-effort because `systemone` is a shared per-user service.",
-    "A fifth concurrent `systemone` request returned 429 `user_concurrent` in the first 2026-11-22 run; a later run accepted all five. The 429 path is therefore verified but not reproducible on demand; the 4-request semaphore remains mandatory.",
+    "A fifth concurrent `systemone` request returned 429 `user_concurrent` in two of three 2026-11-22 probes (the middle run accepted all five). The 429 path is verified but not reproducible on demand; the 4-request semaphore remains mandatory.",
     "CFBD 2021 week-1 open-line coverage is measured live; the strength proxy remains the fallback when `spreadOpen` is null.",
     "No credential is written to the report or fixtures."
   ],
@@ -733,10 +733,9 @@
   },
   "probe_version": "p0.1",
   "status_counts": {
-    "FAIL": 1,
-    "PARTIAL": 2,
-    "PASS": 34,
+    "PARTIAL": 1,
+    "PASS": 36,
     "SKIP": 5
   },
-  "timestamp": "2026-11-22T20:29:32.518572+00:00"
+  "timestamp": "2026-11-22T20:49:19.301062+00:00"
 }

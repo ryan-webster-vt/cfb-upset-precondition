@@ -5,7 +5,8 @@ what is actually done, what is next, what is blocked, and why decisions were mad
 **Plan version:** 1.3 (2026-11-22)
 **Status:** `P0 COMPLETE` (2026-11-22) — probe, scaffold, contracts, deterministic
 screen/stub scorer, and the Streamlit walking skeleton are implemented and verified offline.
-Capability matrix: **34 PASS · 2 PARTIAL · 5 SKIP · 1 FAIL** (`chromadb`, assigned to P1.11).
+Capability matrix: **36 PASS · 1 PARTIAL · 5 SKIP · 0 FAIL**, regenerated in the canonical
+`ads_5984` conda env (Python 3.12.13, incl. `chromadb==1.1.1`).
 Pre-flight and live capability capture are recorded in §5; generated evidence is in
 `docs/CAPABILITIES.md`.
 **Feature freeze:** 2026-12-01 · **Showcase:** 2026-12-03 17:00
@@ -58,7 +59,7 @@ Pre-flight and live capability capture are recorded in §5; generated evidence i
 | B1 | ~~`.env` empty; no VT ARC credentials~~ **Resolved 2026-11-22**: `.env` (untracked, git-ignored) now holds `OPEN_AI_API_KEY`, `OPEN_AI_ENDPOINT`, `OLLAMA_ENDPOINT`, `EMBED_MODEL`, `CFBD_API_KEY`; ARC `/models` and Ollama both return 200 | none for P0.1 | keep `.env` out of git; `Settings` accepts `OPEN_AI_API_KEY`/`OPEN_AI_ENDPOINT` as aliases | `[x]` |
 | B2 | ~~`systemone` wire schema/auth not captured~~ **Resolved 2026-11-22**: contract captured for `noul`/`choice`/`score`; identical `noul` ×3 and long payload ×2 deterministic; 400/404/413/429 observed; near-8k input 200 with 6,091 tokens. Residual: live 503 queue-timeout not held (shared window) | P8 can proceed from the §4.9.1 contract and fixtures | P8.2b: exercise 503 retry/degrade with mock transport; one controlled live hold only if the window is idle | `[~]` |
 | B3 | No MCP servers configured (Brave/Fetch/Deep Research); Brave endpoint exists but returns 422 without a key | R5/R12/R30 live paths blocked | decide endpoints; otherwise approve D2/D9 seeded fallbacks before P4 | `[!]` |
-| B4 | ~~Embedding width/normalisation unknown~~ **Resolved 2026-11-22**: Ollama `qwen3-embedding:8b` = 4096-d/norm 1.0; ARC `Qwen3-Embedding-4B` = 2560-d/norm 1.0; batch 32 OK; ARC 500s on the Ollama-style id. `chromadb` still not installed (the only P0 FAIL; P1.11 owns it) | Chroma install is the only remaining embedding task | P1.11: add `chromadb` (prefer Python 3.12 wheels) | `[~]` |
+| B4 | ~~Embedding width/normalisation unknown~~ **Resolved 2026-11-22**: Ollama `qwen3-embedding:8b` = 4096-d/norm 1.0; ARC `Qwen3-Embedding-4B` = 2560-d/norm 1.0; batch 32 OK. `chromadb==1.1.1` is importable in the canonical `ads_5984` env (P0 rerun) | The embedding stack is verified; only the adapter code remains | P1.11: wrap Chroma with width/metadata assertions (no install needed) | `[x]` |
 | B5 | Showcase night (2026-12-03) may have no FBS slate | live demo risk | approve D12 + pre-warm a real slate | `[~]` (planned) |
 | B6 | ~~CFBD academic key present, but 2021 `spreadOpen` null rate and provider mix are unverified~~ **Resolved 2026-11-22**: 2021 week 1 has 353 lines, **268 (75.9%) `spreadOpen` null**, providers Bovada/Caesars/William Hill/consensus/numberfire/teamrankings; 2025 week 1 is 11.5% null. `/venues` has lat/lon 94.4%, dome 99.6%, elevation 44.4%, timezone 42.6% | The D4 strength-proxy fallback is mandatory for 2021 | P1.4 seeds venues with a CSV fallback for missing geo/altitude/tz | `[x]` |
 | B7 | The ARC gateway exposes **no machine-readable schema**: `GET /api/v1/openapi.json` returns the Open WebUI HTML shell (HTTP 200, `text/html`); `/openapi.json` and `/docs` are 404 | Contract discovery costs live calls and cannot be automated from a spec | mitigated by the captured §4.9.1 fixture + golden responses; re-check after any gateway upgrade | `[x]` |
@@ -78,7 +79,8 @@ Pre-flight and live capability capture are recorded in §5; generated evidence i
    lat/lon, 55.6% missing elevation, and 57.4% missing timezone).
 4. P1.5 evidence snapshots, P1.6 ESPN/CFBD adapters from the captured fixtures.
 5. P1.7 weather/geocode, P1.8 search/fetch, P1.9 research, P1.10 LLM, P1.11 Chroma
-   (`chromadb` install is the one open dependency), P1.12 trace/budget, P1.13 leakage, P1.14 parity.
+   (the package is already present in `ads_5984`; only the adapter remains), P1.12 trace/budget,
+   P1.13 leakage, P1.14 parity.
 6. Re-run `make check` and record the P1 gate evidence before P2.
 
 **P0 facts to carry forward:**
@@ -88,11 +90,15 @@ Pre-flight and live capability capture are recorded in §5; generated evidence i
   process semaphore at 4, and parse `answers.<name>.{noul|choice|score}`.
 - `noul` is deterministic for an identical payload; it is **not** a validated upset model.
 - Ollama `qwen3-embedding:8b` is the primary 4096-d space; never mix it with ARC 2560-d.
+- Run everything with `conda activate ads_5984` (Python 3.12.13). The base env also runs the
+  offline tests but lacks `chromadb`; use the course env for probes and the app. See
+  `docs/ENVIRONMENT.md` and `make doctor`.
 - `docs/CAPABILITIES.md` is the generated matrix; `docs/capabilities.json` is its machine view.
 - `.env` is populated and git-ignored. Never print or commit it.
 
 **Working state:** P0 code and tests are complete; no DB, corpus, real specs, or external
-adapters yet. `docs/contracts/` holds 11 exported schemas. Git has no P0 commit yet.
+adapters yet. `docs/contracts/` holds 11 exported schemas. P0 was committed as `64de1e2`; the
+environment-correction docs/tests are the follow-up commit.
 
 ---
 
@@ -126,9 +132,10 @@ adapters yet. `docs/contracts/` holds 11 exported schemas. Git has no P0 commit 
 | AD-024 | 2026-11-22 | **`systemone` contract captured and frozen** for P8: `POST {base}/systemone` with `{model, state, questions{<name>:{type,instructions,criteria}}}`, `questions` an object; responses `answers.<name>.{noul\|choice+probabilities+confidence\|score+legend+probabilities+confidence}` + `usage`. `decision.vllm-sr/d3-mini` is listed in `/models` but `/chat/completions` returns 404. Same request 3× → identical `noul`. | Removes the plan's largest schedule risk; P0.1 now verifies fixtures instead of discovering a schema. The gateway has no OpenAPI document (`/api/v1/openapi.json` is the Web UI HTML), so the fixture is the contract of record. | R14, R19 | plan |
 | AD-025 | 2026-11-22 | `Settings` accepts the existing `.env` names as aliases: `OPEN_AI_API_KEY` → `VT_ARC_API_KEY`, `OPEN_AI_ENDPOINT` → `VT_ARC_BASE_URL`; canonical names are used everywhere else. `VT_ARC_DECISION_ENDPOINT` is **relative** (`/systemone`) because the base URL already ends in `/api/v1`. `.env` stays untracked and is never committed or printed. | The working credential file uses OpenAI-style names; renaming it risks breaking the user's other tooling. Relative endpoint paths prevent `/api/v1/api/v1` duplication. | R1, R22 | plan |
 | AD-026 | 2026-11-22 | **P0.8 chosen backends recorded:** scorer = `d3_mini` via `POST /systemone` with `calibrated_rules` fallback (D1); research = `seeded_literature` until an MCP endpoint exists (D2); weather = Open-Meteo historical forecast with `WEATHER_LEAD_HOURS_MAX=6` and the measured lead recorded (D3); embeddings = Ollama `qwen3-embedding:8b`, `EMBED_BACKEND=ollama`, `EMBED_DIM=4096`, ARC 2560-d optional (D8); odds/venues = CFBD `/lines` + `/venues` primary, ESPN open + strength proxy fallback (D17); MCP = runtime HTTP adapters, no harness-level MCP (D9). | These are the backends that passed the live probe and have fixtures under `tests/fixtures/`; every choice names its fallback so an outage degrades rather than fails. | R5, R8, R10, R14, R19, R24, R25 | plan |
-| AD-027 | 2026-11-22 | **The live 503 queue-timeout probe is skipped in P0.** A 5-way burst produced `429 user_concurrent` in the first run and all-200s in a later run; a 4-held-request probe would occupy the shared window for up to 30 s. P0 records 503 as SKIP and P8.2b tests the `503`/`retry_after_s` retry-then-degrade path with a mock transport. The 4-request semaphore is a hard constant regardless. | The shared service is not a load-test target; the failure envelope is already documented and can be exercised deterministically offline. This avoids harming other users while preserving the P8 acceptance path. | R1, R14, R19, R22 | plan |
+| AD-027 | 2026-11-22 | **The live 503 queue-timeout probe is skipped in P0.** A 5-way burst produced `429 user_concurrent` in two of three runs (the middle run accepted all five); a 4-held-request probe would occupy the shared window for up to 30 s. P0 records 503 as SKIP and P8.2b tests the `503`/`retry_after_s` retry-then-degrade path with a mock transport. The 4-request semaphore is a hard constant regardless. | The shared service is not a load-test target; the failure envelope is already documented and can be exercised deterministically offline. This avoids harming other users while preserving the P8 acceptance path. | R1, R14, R19, R22 | plan |
 | AD-028 | 2026-11-22 | **P0 scorer is an explicit stub:** `probability = min(0.95, base_rate + 0.06 × matched_count)`, `confidence = min(0.90, 0.35 + 0.12 × matched_count)`, `model_version = "stub-p0-rule-count"`, backend recorded as `calibrated_rules`. The rationale says it is not a trained probability. P8 replaces the internals, not the `UpsetScore`/`RankedAlert` contract. | The walking skeleton needs a deterministic, testable score to prove the vertical slice; a train/validate claim without calibration would violate R19 and the project's provenance rules. | R14, R19 | plan |
-| AD-029 | 2026-11-22 | **Probe and fixture redaction masks only exact secret keys and `_token` suffixes**, never usage counters. No `Authorization` header is written to any fixture; `docs/CAPABILITIES.md` and `docs/capabilities.json` carry status codes, counts, field names, widths, and model ids only. | The first redaction pass masked `input_tokens`/`output_tokens`, which destroys the P8 budget evidence. The corrected predicate keeps `input_tokens`/`output_tokens`/`token_ids` while masking `api_key`, `authorization`, `access_token`, etc. A key scan over `docs/`, `tests/`, `cfb_upset/`, `scripts/`, and `README.md` found no credential. | R1, R22 | plan |
+| AD-029 | 2026-11-22 | **Probe and fixture redaction masks only exact secret keys and secret-shaped suffixes**, never usage counters. No `Authorization` header is written to any fixture; `docs/CAPABILITIES.md` and `docs/capabilities.json` carry status codes, counts, field names, widths, and model ids only. | The first redaction pass masked `input_tokens`/`output_tokens`, which destroys the P8 budget evidence. The corrected predicate keeps `input_tokens`/`output_tokens`/`token_ids` while masking `api_key`, `authorization`, `access_token`, `*_api_key`, and `*_secret`. A key scan over `docs/`, `tests/`, `cfb_upset/`, `scripts/`, and `README.md` found no credential. | R1, R22 | plan |
+| AD-030 | 2026-11-22 | **Canonical development environment is the `ads_5984` conda env** (`/opt/anaconda3/envs/ads_5984/bin/python`, Python 3.12.13). It already contains `chromadb==1.1.1`, Streamlit 1.60, and every P0 dependency. The base Anaconda Python 3.13.5 also runs the offline tests but lacks `chromadb`; using it produced a false P0 FAIL. All final probe/test evidence is regenerated under `ads_5984`. | The Midterm project used the same env and `chromadb`; the P0 probe must inspect the interpreter that will run the app. Hard-coding an absolute path in `Makefile` would not travel, so the documented workflow is `conda activate ads_5984` before `make check`/`make probe`. | R1, R8, R22 | owner (env) / plan |
 
 ---
 
@@ -153,18 +160,20 @@ adapters yet. `docs/contracts/` holds 11 exported schemas. Git has no P0 commit 
 | `systemone` limits | 4 concurrent/user, 30 s queue, 8,192 input tokens, 8 MiB body, ≤8 images; 429/502/503 + `retry_after_s` | hard concurrency cap; D14 evaluation; budget fallback |
 | `systemone` semantics | `decision.vllm-sr/d3-mini`; `noul`→P(yes), `choice`→option probabilities, `score`→0..n−1 weighted level + legend; confidence; 400 malformed; cost ∝ input × questions | scorer `probability`; monitor confirm/drop; thresholds from audits |
 | MCP config | none; Brave endpoint exists but 422 without a key | D2/D9 |
-| chromadb | not installed; PyPI reachable; Python 3.12.3 available if 3.13 wheels fail | add dependency in P1.11 |
+| chromadb | **1.1.1 importable** in the canonical `ads_5984` env (Python 3.12.13); base Anaconda 3.13.5 lacks it | adapter in P1.11; no install needed |
 | Consumer Windows PC / demo host | Ollama serves `qwen3-embedding:8b` locally; app health-checks it at startup | demo needs Ollama for fresh runs; caches cover offline |
-| Python/toolchain | 3.13.5 (3.12.3 also), pydantic 2.10.3, streamlit 1.45.1, httpx 0.28.1, statsmodels 0.14.4, sklearn 1.6.1, pytest 8.3.4, respx, tenacity; 2.8 TB free | no install surprises except `chromadb` |
+| Python/toolchain | canonical `ads_5984`: Python 3.12.13, pydantic 2.12.5, streamlit 1.60.0, httpx 0.28.1, pytest 8.4.2, chromadb 1.1.1, ruff 0.17.2, black 25.12; base Anaconda is 3.13.5 and lacks chromadb; 2.8 TB free | use `conda activate ads_5984`; `make doctor` verifies |
 | Secret hygiene | `.env` is git-ignored and untracked; no key appears in the repo | never print `Authorization`; redact fixtures |
 | quarto/npx/pandoc | present; no LaTeX/Graphviz | UML PDF via Quarto/Typst |
 
-**P0 re-verification (2026-11-22 20:29 UTC):** `python scripts/probe.py --write` produced
-**34 PASS · 2 PARTIAL · 5 SKIP · 1 FAIL** in `docs/CAPABILITIES.md` / `docs/capabilities.json`.
-The FAIL is `chromadb` (P1.11). PARTIALs: the 5-way burst accepted all five requests this run
-(429 had been observed earlier; see AD-027) and ARC 4B over-context returned HTTP 400 (Ollama
-returns 200, likely truncating). ESPN rankings now use the site endpoint (`2` poll collections);
-ARC chat JSON mode returns `{"ok": true}` with `finish_reason=stop` at `max_tokens=256`.
+**P0 re-verification (2026-11-22 20:29 UTC, then corrected in `ads_5984`):**
+`python scripts/probe.py --write` produced **36 PASS · 1 PARTIAL · 5 SKIP · 0 FAIL** in
+`docs/CAPABILITIES.md` / `docs/capabilities.json` when run with the canonical
+`/opt/anaconda3/envs/ads_5984/bin/python` (Python 3.12.13). The PARTIAL is ARC 4B over-context
+(HTTP 400; Ollama returns 200, likely truncating). The 5-way burst reproduced `429
+user_concurrent` in two of three probes; the live 503 hold is still intentionally skipped
+(AD-027). ESPN rankings use the site endpoint (`2` poll collections); ARC chat JSON mode returns
+`{"ok": true}` with `finish_reason=stop` at `max_tokens=256`.
 
 ---
 
@@ -327,6 +336,7 @@ ARC chat JSON mode returns `{"ok": true}` with `finish_reason=stop` at `max_toke
 | 3 | 2026-11-22 | planning | Selected CFBD `/lines` + `/venues` for odds/geodata (D4/D17) and corrected weather provenance (D3: stitched archive, actual lead ≤6 h); updated probes, risk register, env schema, blockers | plan v1.2; CFBD tier docs + Open-Meteo coverage docs 2026-11-22 | obtain CFBD key; start P0.1 |
 | 4 | 2026-11-22 | planning | **Pre-flight + live contract capture.** `.env` supplied and verified; ARC `/models` (14 ids), `systemone` `noul`/`choice`/`score` captured with fixtures, determinism ×3, `/chat/completions` 404; Ollama 4096-d + ARC 2560-d embeddings; CFBD/Open-Meteo reachable; ARC has no OpenAPI schema; Python/dep/disk inventory; chose Ollama 8B as primary embedder; updated F1/F3, D8/D16, §4.9.1/§4.9.2, P0.1/P1.11/P6.9, Appendix A/B, blockers, AD-023–AD-025 | commands/evidence in `IMPLEMENTATION_PLAN.md` App. A and §5 above; no code written | **switch agents**, then P0.1 |
 | 5 | 2026-11-22 | P0 | **Phase 0 implemented and gated.** Scaffold, settings/logging/ids/errors, tolerant HTTP adapter, Pydantic contracts + 11 schemas, deterministic rule DSL/screen, explicit stub scorer + total ranking, in-memory trace, fixture slate, Streamlit skeleton, probe and docs. Fixed probe redaction (`input_tokens` preserved), ESPN rankings (site endpoint → 2 polls), ARC chat (`content=None` + 256-token reasoning budget). Added golden `systemone`/embedding/ESPN/CFBD/weather fixtures and a contract README. Wrote 152 offline tests incl. AppTest e2e. | `python scripts/probe.py --write` → **34 PASS / 2 PARTIAL / 5 SKIP / 1 FAIL (chromadb, P1.11)**; `make test-cov` → **152 passed**, `rules.py` 97%, `screen.py` 100%; `make lint` / `make schemas` green; AppTest → 2 alerts + 3 agents; 3-run deterministic payload hash `c2981f97…`; `git check-ignore .env` exit 0; credential scan clean | **start P1.1**, then P1.2 migrations; no P1 code yet |
+| 6 | 2026-11-22 | P0 correction | **Environment correction.** `chromadb` was reported missing only because the probe ran in base Anaconda Python 3.13.5. The canonical `ads_5984` conda env already has `chromadb==1.1.1` (Python 3.12.13, Streamlit 1.60). Installed the missing dev formatter (`black 25.12`) in that env, regenerated the matrix there, and synced docs/requirements/AD-030. | `/opt/anaconda3/envs/ads_5984/bin/python scripts/probe.py --write` → **36 PASS / 1 PARTIAL / 5 SKIP / 0 FAIL**, incl. `chromadb import PASS` and a reproduced `429`; env pytest → **160 passed**; env ruff/black clean; env coverage `rules.py` 97%, `screen.py` 100% | commit correction; start P1.1 |
 
 **Template**
 ```
