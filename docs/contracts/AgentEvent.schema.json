@@ -1,0 +1,45 @@
+{
+  "additionalProperties": false,
+  "description": "A single timeline event; the UI renders these in order.",
+  "properties": {
+    "agent": {
+      "title": "Agent",
+      "type": "string"
+    },
+    "event_id": {
+      "title": "Event Id",
+      "type": "string"
+    },
+    "event_type": {
+      "title": "Event Type",
+      "type": "string"
+    },
+    "payload": {
+      "title": "Payload",
+      "type": "object"
+    },
+    "phase": {
+      "title": "Phase",
+      "type": "string"
+    },
+    "run_id": {
+      "title": "Run Id",
+      "type": "string"
+    },
+    "ts": {
+      "format": "date-time",
+      "title": "Ts",
+      "type": "string"
+    }
+  },
+  "required": [
+    "event_id",
+    "run_id",
+    "agent",
+    "phase",
+    "event_type",
+    "ts"
+  ],
+  "title": "AgentEvent",
+  "type": "object"
+}

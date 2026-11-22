@@ -1,0 +1,22 @@
+[
+  {
+    "body": "{'model': 'vllm-sr/d3-mini', 'answers': {'upset_likely': {'type': 'noul', 'noul': 0.03036596393867679}}, 'usage': {'input_tokens': 141, 'output_tokens': 0}}",
+    "status": 200
+  },
+  {
+    "body": "{'model': 'vllm-sr/d3-mini', 'answers': {'upset_likely': {'type': 'noul', 'noul': 0.02632255576954074}}, 'usage': {'input_tokens': 141, 'output_tokens': 0}}",
+    "status": 200
+  },
+  {
+    "body": "{'model': 'vllm-sr/d3-mini', 'answers': {'upset_likely': {'type': 'noul', 'noul': 0.026151513400913096}}, 'usage': {'input_tokens': 141, 'output_tokens': 0}}",
+    "status": 200
+  },
+  {
+    "body": "{'model': 'vllm-sr/d3-mini', 'answers': {'upset_likely': {'type': 'noul', 'noul': 0.026627641451289263}}, 'usage': {'input_tokens': 141, 'output_tokens': 0}}",
+    "status": 200
+  },
+  {
+    "body": "{'model': 'vllm-sr/d3-mini', 'answers': {'upset_likely': {'type': 'noul', 'noul': 0.02660868937528055}}, 'usage': {'input_tokens': 141, 'output_tokens': 0}}",
+    "status": 200
+  }
+]

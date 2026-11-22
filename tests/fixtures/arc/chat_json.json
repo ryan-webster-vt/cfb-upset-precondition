@@ -1,0 +1,58 @@
+{
+  "request": {
+    "max_tokens": 256,
+    "messages": [
+      {
+        "content": "Return only this JSON object and nothing else: {\"ok\": true}",
+        "role": "user"
+      }
+    ],
+    "model": "GLM-5.3",
+    "temperature": 0
+  },
+  "response": {
+    "choices": [
+      {
+        "finish_reason": "stop",
+        "index": 0,
+        "logprobs": null,
+        "message": {
+          "audio": null,
+          "content": "{\"ok\": true}",
+          "function_call": null,
+          "reasoning": "The user is asking me to return only a specific JSON object and nothing else. This is a simple, harmless request. They want exactly: {\"ok\": true}\n\nI should comply with this request. There's nothing harmful about it. The instruction is clear - return only the JSON object with no additional text.",
+          "refusal": null,
+          "role": "assistant"
+        },
+        "routed_experts": null,
+        "stop_reason": 154827,
+        "token_ids": null,
+        "weight_versions": null
+      }
+    ],
+    "created": 1795379373,
+    "ec_transfer_params": null,
+    "id": "chatcmpl-e441b70d",
+    "kv_transfer_params": null,
+    "metrics": null,
+    "model": "GLM-5.3-0",
+    "object": "chat.completion",
+    "prompt_logprobs": null,
+    "prompt_text": null,
+    "prompt_token_ids": null,
+    "service_tier": null,
+    "system_fingerprint": "vllm-0.34.0-tp8-ep-78aa6ec8",
+    "usage": {
+      "completion_tokens": 69,
+      "completion_tokens_details": {
+        "reasoning_tokens": 62
+      },
+      "prompt_tokens": 26,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "created_cache_tokens": 0
+      },
+      "total_tokens": 95
+    }
+  }
+}

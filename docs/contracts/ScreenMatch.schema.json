@@ -1,0 +1,168 @@
+{
+  "$defs": {
+    "MatchedSpec": {
+      "additionalProperties": false,
+      "properties": {
+        "evidence": {
+          "$ref": "#/$defs/RuleEvidence"
+        },
+        "spec_id": {
+          "title": "Spec Id",
+          "type": "string"
+        },
+        "title": {
+          "title": "Title",
+          "type": "string"
+        },
+        "version": {
+          "minimum": 1,
+          "title": "Version",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "spec_id",
+        "version",
+        "title",
+        "evidence"
+      ],
+      "title": "MatchedSpec",
+      "type": "object"
+    },
+    "RuleEvidence": {
+      "additionalProperties": false,
+      "description": "Why a rule fired (or did not), including the observed value and timestamp.",
+      "properties": {
+        "field": {
+          "title": "Field",
+          "type": "string"
+        },
+        "known_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Known At"
+        },
+        "note": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Note"
+        },
+        "observed": {
+          "default": null,
+          "title": "Observed"
+        },
+        "op": {
+          "$ref": "#/$defs/RuleOp"
+        },
+        "state": {
+          "$ref": "#/$defs/ScreenState"
+        },
+        "threshold": {
+          "default": null,
+          "title": "Threshold"
+        },
+        "units": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Units"
+        },
+        "value2": {
+          "default": null,
+          "title": "Value2"
+        }
+      },
+      "required": [
+        "field",
+        "op",
+        "state"
+      ],
+      "title": "RuleEvidence",
+      "type": "object"
+    },
+    "RuleOp": {
+      "enum": [
+        "gt",
+        "ge",
+        "lt",
+        "le",
+        "eq",
+        "ne",
+        "in",
+        "not_in",
+        "between",
+        "is_true",
+        "is_false"
+      ],
+      "title": "RuleOp",
+      "type": "string"
+    },
+    "ScreenState": {
+      "enum": [
+        "TRUE",
+        "FALSE",
+        "UNKNOWN"
+      ],
+      "title": "ScreenState",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "evaluable_count": {
+      "minimum": 0,
+      "title": "Evaluable Count",
+      "type": "integer"
+    },
+    "game_id": {
+      "title": "Game Id",
+      "type": "string"
+    },
+    "matched_count": {
+      "minimum": 0,
+      "title": "Matched Count",
+      "type": "integer"
+    },
+    "matched_specs": {
+      "items": {
+        "$ref": "#/$defs/MatchedSpec"
+      },
+      "title": "Matched Specs",
+      "type": "array"
+    },
+    "unknown_count": {
+      "minimum": 0,
+      "title": "Unknown Count",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "game_id",
+    "matched_count",
+    "evaluable_count",
+    "unknown_count"
+  ],
+  "title": "ScreenMatch",
+  "type": "object"
+}

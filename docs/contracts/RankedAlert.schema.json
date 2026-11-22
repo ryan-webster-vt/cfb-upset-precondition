@@ -1,0 +1,1074 @@
+{
+  "$defs": {
+    "Citation": {
+      "additionalProperties": false,
+      "description": "A resolvable source supporting a claim or a rule.",
+      "properties": {
+        "citation_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Citation Id"
+        },
+        "published_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Published At"
+        },
+        "quote": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Quote"
+        },
+        "source": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source"
+        },
+        "title": {
+          "minLength": 1,
+          "title": "Title",
+          "type": "string"
+        },
+        "url": {
+          "minLength": 1,
+          "title": "Url",
+          "type": "string"
+        }
+      },
+      "required": [
+        "title",
+        "url"
+      ],
+      "title": "Citation",
+      "type": "object"
+    },
+    "FavoriteSource": {
+      "enum": [
+        "cfbd_open",
+        "espn_open",
+        "strength_proxy"
+      ],
+      "title": "FavoriteSource",
+      "type": "string"
+    },
+    "GameStatus": {
+      "enum": [
+        "scheduled",
+        "in_progress",
+        "final",
+        "postponed",
+        "canceled"
+      ],
+      "title": "GameStatus",
+      "type": "string"
+    },
+    "MarketProbSource": {
+      "enum": [
+        "moneyline",
+        "spread_mapped",
+        "unavailable"
+      ],
+      "title": "MarketProbSource",
+      "type": "string"
+    },
+    "MatchedSpec": {
+      "additionalProperties": false,
+      "properties": {
+        "evidence": {
+          "$ref": "#/$defs/RuleEvidence"
+        },
+        "spec_id": {
+          "title": "Spec Id",
+          "type": "string"
+        },
+        "title": {
+          "title": "Title",
+          "type": "string"
+        },
+        "version": {
+          "minimum": 1,
+          "title": "Version",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "spec_id",
+        "version",
+        "title",
+        "evidence"
+      ],
+      "title": "MatchedSpec",
+      "type": "object"
+    },
+    "OddsInfo": {
+      "additionalProperties": false,
+      "description": "Pre-kickoff market context.\n\n``spread`` is from the favourite's perspective (negative = favourite gives\npoints). Opening/closing distinction is carried by ``known_at`` so the\nleakage filter can exclude anything known at or after kickoff.",
+      "properties": {
+        "favorite_source": {
+          "$ref": "#/$defs/FavoriteSource"
+        },
+        "favorite_team_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Favorite Team Id"
+        },
+        "known_at": {
+          "format": "date-time",
+          "title": "Known At",
+          "type": "string"
+        },
+        "line_provider": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Line Provider"
+        },
+        "market_prob": {
+          "anyOf": [
+            {
+              "maximum": 1.0,
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Market Prob"
+        },
+        "market_prob_source": {
+          "$ref": "#/$defs/MarketProbSource",
+          "default": "unavailable"
+        },
+        "over_under": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Over Under"
+        },
+        "provider": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Provider"
+        },
+        "spread": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Spread"
+        },
+        "spread_open": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Spread Open"
+        }
+      },
+      "required": [
+        "favorite_source",
+        "known_at"
+      ],
+      "title": "OddsInfo",
+      "type": "object"
+    },
+    "Provenance": {
+      "additionalProperties": false,
+      "description": "Where a value came from and when it was knowable.",
+      "properties": {
+        "confidence": {
+          "anyOf": [
+            {
+              "maximum": 1.0,
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Confidence"
+        },
+        "content_hash": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Content Hash"
+        },
+        "fetched_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Fetched At"
+        },
+        "known_at": {
+          "format": "date-time",
+          "title": "Known At",
+          "type": "string"
+        },
+        "published_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Published At"
+        },
+        "source": {
+          "title": "Source",
+          "type": "string"
+        },
+        "source_url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Url"
+        }
+      },
+      "required": [
+        "source",
+        "known_at"
+      ],
+      "title": "Provenance",
+      "type": "object"
+    },
+    "RuleEvidence": {
+      "additionalProperties": false,
+      "description": "Why a rule fired (or did not), including the observed value and timestamp.",
+      "properties": {
+        "field": {
+          "title": "Field",
+          "type": "string"
+        },
+        "known_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Known At"
+        },
+        "note": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Note"
+        },
+        "observed": {
+          "default": null,
+          "title": "Observed"
+        },
+        "op": {
+          "$ref": "#/$defs/RuleOp"
+        },
+        "state": {
+          "$ref": "#/$defs/ScreenState"
+        },
+        "threshold": {
+          "default": null,
+          "title": "Threshold"
+        },
+        "units": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Units"
+        },
+        "value2": {
+          "default": null,
+          "title": "Value2"
+        }
+      },
+      "required": [
+        "field",
+        "op",
+        "state"
+      ],
+      "title": "RuleEvidence",
+      "type": "object"
+    },
+    "RuleOp": {
+      "enum": [
+        "gt",
+        "ge",
+        "lt",
+        "le",
+        "eq",
+        "ne",
+        "in",
+        "not_in",
+        "between",
+        "is_true",
+        "is_false"
+      ],
+      "title": "RuleOp",
+      "type": "string"
+    },
+    "ScoreBackend": {
+      "enum": [
+        "d3_mini",
+        "calibrated_rules"
+      ],
+      "title": "ScoreBackend",
+      "type": "string"
+    },
+    "ScreenState": {
+      "enum": [
+        "TRUE",
+        "FALSE",
+        "UNKNOWN"
+      ],
+      "title": "ScreenState",
+      "type": "string"
+    },
+    "SlateGame": {
+      "additionalProperties": false,
+      "description": "One FBS-vs-FBS game shown to the user and screened by the agents.",
+      "properties": {
+        "away": {
+          "$ref": "#/$defs/TeamInfo"
+        },
+        "broadcast": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Broadcast"
+        },
+        "conference_game": {
+          "default": false,
+          "title": "Conference Game",
+          "type": "boolean"
+        },
+        "game_id": {
+          "minLength": 1,
+          "title": "Game Id",
+          "type": "string"
+        },
+        "home": {
+          "$ref": "#/$defs/TeamInfo"
+        },
+        "kickoff_utc": {
+          "format": "date-time",
+          "title": "Kickoff Utc",
+          "type": "string"
+        },
+        "neutral_site": {
+          "default": false,
+          "title": "Neutral Site",
+          "type": "boolean"
+        },
+        "odds": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/OddsInfo"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "provenance": {
+          "additionalProperties": {
+            "$ref": "#/$defs/Provenance"
+          },
+          "title": "Provenance",
+          "type": "object"
+        },
+        "slate_date": {
+          "format": "date",
+          "title": "Slate Date",
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/$defs/GameStatus",
+          "default": "scheduled"
+        },
+        "venue": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/VenueInfo"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "weather": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/WeatherInfo"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "game_id",
+        "slate_date",
+        "kickoff_utc",
+        "home",
+        "away"
+      ],
+      "title": "SlateGame",
+      "type": "object"
+    },
+    "TeamInfo": {
+      "additionalProperties": false,
+      "properties": {
+        "abbreviation": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Abbreviation"
+        },
+        "alt_color": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Alt Color"
+        },
+        "color": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Color"
+        },
+        "conference": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Conference"
+        },
+        "is_fbs": {
+          "default": true,
+          "title": "Is Fbs",
+          "type": "boolean"
+        },
+        "logo_url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Logo Url"
+        },
+        "nickname": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Nickname"
+        },
+        "rank": {
+          "anyOf": [
+            {
+              "maximum": 25,
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Rank"
+        },
+        "record": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Record"
+        },
+        "school": {
+          "minLength": 1,
+          "title": "School",
+          "type": "string"
+        },
+        "team_id": {
+          "minLength": 1,
+          "title": "Team Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "team_id",
+        "school"
+      ],
+      "title": "TeamInfo",
+      "type": "object"
+    },
+    "UpsetScore": {
+      "additionalProperties": false,
+      "description": "A calibrated-ish upset probability plus the evidence behind it.\n\nPhase 0 uses a deterministic rule-count/base-rate stub. Later phases keep\nthis exact contract while swapping in the ``d3_mini`` or fitted\n``calibrated_rules`` backend.",
+      "properties": {
+        "backend": {
+          "$ref": "#/$defs/ScoreBackend"
+        },
+        "citations": {
+          "items": {
+            "$ref": "#/$defs/Citation"
+          },
+          "title": "Citations",
+          "type": "array"
+        },
+        "confidence": {
+          "default": 0.5,
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Confidence",
+          "type": "number"
+        },
+        "degraded_reason": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Degraded Reason"
+        },
+        "game_id": {
+          "title": "Game Id",
+          "type": "string"
+        },
+        "key_signals": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Key Signals",
+          "type": "array"
+        },
+        "model_version": {
+          "title": "Model Version",
+          "type": "string"
+        },
+        "probability": {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Probability",
+          "type": "number"
+        },
+        "rationale": {
+          "title": "Rationale",
+          "type": "string"
+        },
+        "raw_probability": {
+          "anyOf": [
+            {
+              "maximum": 1.0,
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Raw Probability"
+        },
+        "score_legend": {
+          "anyOf": [
+            {
+              "additionalProperties": {
+                "type": "string"
+              },
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Score Legend"
+        },
+        "score_value": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Score Value"
+        },
+        "unstable": {
+          "default": false,
+          "title": "Unstable",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "game_id",
+        "probability",
+        "backend",
+        "model_version",
+        "rationale"
+      ],
+      "title": "UpsetScore",
+      "type": "object"
+    },
+    "VenueInfo": {
+      "additionalProperties": false,
+      "properties": {
+        "altitude_m": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Altitude M"
+        },
+        "city": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "City"
+        },
+        "country": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Country"
+        },
+        "grass": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Grass"
+        },
+        "indoor": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Indoor"
+        },
+        "lat": {
+          "anyOf": [
+            {
+              "maximum": 90.0,
+              "minimum": -90.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Lat"
+        },
+        "lon": {
+          "anyOf": [
+            {
+              "maximum": 180.0,
+              "minimum": -180.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Lon"
+        },
+        "name": {
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "source": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source"
+        },
+        "state": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "State"
+        },
+        "tz": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Tz"
+        },
+        "venue_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Venue Id"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "title": "VenueInfo",
+      "type": "object"
+    },
+    "WeatherInfo": {
+      "additionalProperties": false,
+      "properties": {
+        "condition": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Condition"
+        },
+        "known_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Known At"
+        },
+        "lead_hours": {
+          "anyOf": [
+            {
+              "maximum": 168.0,
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Lead Hours"
+        },
+        "precipitation_mm": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Precipitation Mm"
+        },
+        "source": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source"
+        },
+        "temperature_c": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Temperature C"
+        },
+        "unavailable_reason": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Unavailable Reason"
+        },
+        "wind_kph": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Wind Kph"
+        }
+      },
+      "title": "WeatherInfo",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "citations": {
+      "items": {
+        "$ref": "#/$defs/Citation"
+      },
+      "title": "Citations",
+      "type": "array"
+    },
+    "game": {
+      "$ref": "#/$defs/SlateGame"
+    },
+    "matched_specs": {
+      "items": {
+        "$ref": "#/$defs/MatchedSpec"
+      },
+      "title": "Matched Specs",
+      "type": "array"
+    },
+    "rank": {
+      "minimum": 1,
+      "title": "Rank",
+      "type": "integer"
+    },
+    "rationale": {
+      "title": "Rationale",
+      "type": "string"
+    },
+    "score": {
+      "$ref": "#/$defs/UpsetScore"
+    }
+  },
+  "required": [
+    "rank",
+    "game",
+    "score",
+    "rationale"
+  ],
+  "title": "RankedAlert",
+  "type": "object"
+}

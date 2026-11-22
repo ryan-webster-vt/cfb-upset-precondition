@@ -1,0 +1,16 @@
+# Runtime dependencies for Phase 0 onward.
+#
+# Phase-gated additions (install when the phase needs them):
+#   chromadb  -- P1.11 / P6.9 citation index
+#   respx     -- dev only; listed in requirements-dev.txt
+pydantic>=2.10,<3
+pydantic-settings>=2.6,<3
+httpx>=0.28,<1
+tenacity>=9,<10
+PyYAML>=6,<7
+streamlit>=1.45,<2
+numpy>=2,<3
+pandas>=2.2,<3
+scipy>=1.14,<2
+statsmodels>=0.14,<1
+scikit-learn>=1.6,<2

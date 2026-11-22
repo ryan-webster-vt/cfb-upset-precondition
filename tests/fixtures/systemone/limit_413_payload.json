@@ -1,0 +1,6 @@
+{
+  "body": {
+    "detail": "Request body too large"
+  },
+  "status": 413
+}

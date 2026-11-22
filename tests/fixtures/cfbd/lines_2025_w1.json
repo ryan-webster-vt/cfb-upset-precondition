@@ -1,0 +1,125 @@
+[
+  {
+    "awayClassification": "fbs",
+    "awayTeam": "Fresno State",
+    "homeClassification": "fbs",
+    "homeTeam": "Kansas",
+    "id": 401756847,
+    "lines": [
+      {
+        "awayMoneyline": 410,
+        "formattedSpread": "Kansas -14",
+        "homeMoneyline": -550,
+        "overUnder": 51.5,
+        "overUnderOpen": 51.5,
+        "provider": "DraftKings",
+        "spread": -14,
+        "spreadOpen": -14
+      },
+      {
+        "awayMoneyline": 425,
+        "formattedSpread": "Kansas -14.5",
+        "homeMoneyline": -650,
+        "overUnder": 50.5,
+        "overUnderOpen": 51.5,
+        "provider": "ESPN Bet",
+        "spread": -14.5,
+        "spreadOpen": -13.5
+      },
+      {
+        "awayMoneyline": 400,
+        "formattedSpread": "Kansas -14.0",
+        "homeMoneyline": -575,
+        "overUnder": 50,
+        "overUnderOpen": 51.5,
+        "provider": "Bovada",
+        "spread": -14,
+        "spreadOpen": -14.5
+      }
+    ],
+    "season": 2025,
+    "week": 1
+  },
+  {
+    "awayClassification": "fbs",
+    "awayTeam": "Sam Houston",
+    "homeClassification": "fbs",
+    "homeTeam": "Western Kentucky",
+    "id": 401757218,
+    "lines": [
+      {
+        "awayMoneyline": 285,
+        "formattedSpread": "Western Kentucky -9.5",
+        "homeMoneyline": -360,
+        "overUnder": 60.5,
+        "overUnderOpen": 60.5,
+        "provider": "DraftKings",
+        "spread": -9.5,
+        "spreadOpen": -9.5
+      },
+      {
+        "awayMoneyline": 300,
+        "formattedSpread": "Western Kentucky -10.5",
+        "homeMoneyline": -400,
+        "overUnder": 60.5,
+        "overUnderOpen": 61.5,
+        "provider": "ESPN Bet",
+        "spread": -10.5,
+        "spreadOpen": -9.5
+      },
+      {
+        "awayMoneyline": 295,
+        "formattedSpread": "Western Kentucky -9.5",
+        "homeMoneyline": -390,
+        "overUnder": 60,
+        "overUnderOpen": 61.5,
+        "provider": "Bovada",
+        "spread": -9.5,
+        "spreadOpen": -7
+      }
+    ],
+    "season": 2025,
+    "week": 1
+  },
+  {
+    "awayClassification": "fbs",
+    "awayTeam": "Stanford",
+    "homeClassification": "fbs",
+    "homeTeam": "Hawai'i",
+    "id": 401754516,
+    "lines": [
+      {
+        "awayMoneyline": -102,
+        "formattedSpread": "Hawai'i -1.5",
+        "homeMoneyline": -118,
+        "overUnder": 53.5,
+        "overUnderOpen": 53.5,
+        "provider": "DraftKings",
+        "spread": -1.5,
+        "spreadOpen": -1.5
+      },
+      {
+        "awayMoneyline": 110,
+        "formattedSpread": "Hawai'i -1.5",
+        "homeMoneyline": -120,
+        "overUnder": 50.5,
+        "overUnderOpen": 53.5,
+        "provider": "ESPN Bet",
+        "spread": -1.5,
+        "spreadOpen": -1.5
+      },
+      {
+        "awayMoneyline": -135,
+        "formattedSpread": "Hawai'i -2.0",
+        "homeMoneyline": 115,
+        "overUnder": 50,
+        "overUnderOpen": 55.5,
+        "provider": "Bovada",
+        "spread": -2,
+        "spreadOpen": 2.5
+      }
+    ],
+    "season": 2025,
+    "week": 1
+  }
+]

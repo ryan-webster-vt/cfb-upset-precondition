@@ -1,0 +1,21 @@
+{
+  "body": {
+    "answers": {
+      "upset_likely": {
+        "noul": 0.4222603279722357,
+        "type": "noul"
+      }
+    },
+    "model": "vllm-sr/d3-mini",
+    "usage": {
+      "input_tokens": 6091,
+      "output_tokens": 0
+    }
+  },
+  "chars": 30000,
+  "status": 200,
+  "usage": {
+    "input_tokens": 6091,
+    "output_tokens": 0
+  }
+}

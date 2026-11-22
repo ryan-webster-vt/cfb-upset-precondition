@@ -2,7 +2,10 @@
 
 **Project:** 34.4.13 Sports: Upset Condition Profiler (ADS 5984, Agentic AI in Practice)
 **Repo:** `cfb-upset-precondition`
-**Plan version:** 1.0 — 2026-11-22
+**Plan version:** 1.3 — 2026-11-22
+**Revision history:** 1.0 initial plan · 1.1 embedding provider/space policy · 1.2 CFBD odds/venues
++ weather provenance · 1.3 captured `systemone` contract, measured embedding widths, Ollama 8B as
+primary embedder (AD-023/AD-024/AD-025 in `PROGRESS.md`).
 **Target events:** feature freeze **Tue 2026-12-01**, Agentic AI Showcase **Thu 2026-12-03 17:00–19:00**, Canvas submission at showcase start.
 
 > **Plan-mode note.** This document was produced in OpenCode Plan mode, which restricts writes to
@@ -178,7 +181,8 @@ talk only to their orchestrator; orchestrators are the validation and persistenc
 
 **Deterministic collaborators.** `Pydantic Validator`, `Spec Store`, `Deterministic Labeler`,
 `Deterministic Rule Screen`, `Statistical Validation Tools`, `Cache`, `qwen3-embedding:8b`
-(reached through `POST /api/v1/embeddings`; see D8/D16 and §4.9.2).
+(local Ollama `POST /v1/embeddings`; ARC `Qwen3-Embedding-4B` is the optional 2560-d space; see
+D8/D16 and §4.9.2).
 
 **Tools.** ESPN API (historical + daily slate + odds), Deep Research MCP, Brave Search MCP,
 Fetch MCP, VT ARC d3-mini.
@@ -194,9 +198,9 @@ loop with deterministic screen, `par` monitor workers, `alt` empty/confirmed bra
 
 | ID | Finding | Evidence | Consequence if unaddressed |
 |---|---|---|---|
-| F1 | **d3-mini is served from a separate, non-OpenAI-compatible endpoint.** The project owner confirmed decision models are available only via `POST /api/v1/systemone`; they do not appear in `/v1/models`. The request/response schema, model selection, and temperature semantics are not documented in the repo. (The same provider lists four chat models: `GLM-5.3`, `gpt-oss-120b`, `MiniMax-M2.7`, `vt-arc-llm`.) | owner confirmation 2026-11-22; `models` query; `~/.config/opencode/opencode.json` | R14 is achievable, but the `systemone` contract must be captured in P0 or the scorer will fail at the end of the critical path; R19 still needs a consistency check on that path |
+| F1 | **d3-mini is a decision model with its own API surface.** It now appears in `/v1/models`, but `POST /v1/chat/completions` returns 404: *"d3 is a decision model and cannot chat or complete text: use POST /v1/systemone with a state and questions"*. The wire contract is captured in §4.9.1 (`{model, state, questions{name:{type,instructions,criteria}}}` → `answers{name:{…}}`). Residual unknowns are the 429/503 envelopes and determinism on long monitor payloads. | live probe 2026-11-22: `noul`/`choice`/`score` all HTTP 200; identical `noul` request 3× → identical `0.0210483384072851` | R14 is unblocked; P0.1 now confirms a captured fixture instead of discovering a schema; R19's consistency check moves to long payloads |
 | F2 | **No MCP servers or provider credentials are configured** in the environment (no Brave/Deep Research/Fetch endpoints; no env keys). | `~/.config/opencode/opencode.json`, `env` scan | R5/R12/R30 blocked; app cannot be demoed or tested deterministically |
-| F3 | **`qwen3-embedding:8b` is reachable only through `POST /api/v1/embeddings`**, not `/v1/models`, and `chromadb` is not installed. The provider catalogue describes a Qwen3-Embedding model with 2560-d vectors and 8,192-token inputs, but the requested id `qwen3-embedding:8b` is natively 4096-d, so the returned width must be measured, never inferred. | provider catalogue + owner confirmation 2026-11-22; `models` query | R8 is unblocked, but a wrong dimension silently breaks the Chroma collection; wire shape, batch cap, and width must be captured in P0 |
+| F3 | **Embeddings split across two providers.** Local Ollama serves `qwen3-embedding:8b` at `http://localhost:11434/v1/embeddings` → 200, **4096-d, L2-normalised**; the VT ARC gateway serves `Qwen3-Embedding-4B` at `/api/v1/embeddings` → 200, **2560-d, L2-normalised**, and rejects the Ollama-style id `qwen3-embedding:8b` with **500**. `chromadb` is not installed. | live probes 2026-11-22 (`/v1/models`, Ollama `/api/tags`, both embeddings endpoints) | R8 is unblocked; the primary and fallback are different vector spaces and must never share a Chroma collection |
 | F4 | **ESPN historical scoreboards contain no odds and no weather.** Odds exist only in the per-event `core` odds endpoint; `open` lines are present for 2023+ but absent in sampled 2021 games. CFBD `/lines` exposes `spreadOpen`/`overUnderOpen` with a provider for the mandated seasons on the free academic tier (3,000 calls/mo, ~75 calls for five seasons), and `/venues` supplies lat/lon/elevation/dome/timezone that ESPN omits. | probes of `20210904`, `20231118`, `20251115`, `20241109`; core odds for `401281942`, `401628543`; CFBD API docs 2026-11-22 | R10 "weather, betting odds" is not satisfiable from ESPN alone; CFBD is the preferred odds/venue source with ESPN as fallback, and the 2021 open-line null rate must be probed |
 | F5 | **Weather post-kickoff observations leak.** Any historical weather source keyed by game time is, by construction, known after kickoff. | by definition | R24 violation if raw observed weather is admitted |
 | F6 | **ESPN season-level team statistics are end-of-season.** Using them to describe an in-season game leaks the future. | endpoint semantics | Silent leakage into almost every feature if used naively |
@@ -226,7 +230,7 @@ loop with deterministic screen, `par` monitor workers, `alt` empty/confirmed bra
 | **D5** | Tables (names preserved): `precondition_spec` = immutable research report + proposed rule (raw candidates, all versions); `spec_store` = active-spec registry (`spec_id`, `version`, `is_active`, `promoted_at`); plus side tables `label_audits`, `stat_results`, `evidence`, `evidence_links`, `analysis_runs`, `analysis_cache`, `agent_events`, `game_fields`, `quarantine`. | F7; separates immutable history from mutable state, which R27's versioning needs. | R8/R15/R27 clarified; no table removed. |
 | **D6** | R25 evaluation replays the **structured-feature path** of the system (screen → scorer) for all games; the evidence-confirmation stage is evaluated separately on a subset with archived evidence. The report states both numbers and never claims the full pipeline was replayed. | F8/F9; honest and reproducible. The conservative claim is defensible at Q&A and is stronger than an inflated synthetic number. | R25 partially satisfied by construction; report contains Brier/log loss/calibration on 2025 for the shipped scorer. |
 | **D7** | Promotion has three states — `validated`, `provisional`, `rejected` — and the rule screen uses `validated`; if fewer than three specs validate, it uses the strongest `provisional` specs with a visible banner and a `provisional` flag on every alert. | F10; otherwise the product can legitimately produce no output. Thresholds stay pre-registered. | R9/R29 preserved; UI and README disclose status. |
-| **D8** | Embeddings: `qwen3_embedding` via `POST /api/v1/embeddings` is the primary path; a deterministic local hashing/TF-IDF embedder is the offline fallback behind the same interface. ChromaDB is mandatory either way. `EMBED_DIM` is measured in P0, pinned in config and collection metadata, and asserted on every response; real and fallback vectors never share a collection. | F3; the documented neural path now exists, and the fallback keeps tests and the offline demo network-free. | R8 satisfied; the width ambiguity is contained to one probe and one runtime assertion. |
+| **D8** | Embeddings: **local Ollama `qwen3-embedding:8b`** via `POST http://localhost:11434/v1/embeddings` is primary (**4096-d**, L2-normalised, keyless, offline-capable). VT ARC `Qwen3-Embedding-4B` is an optional secondary space (**2560-d**); a deterministic hashing embedder exists for tests only. One Chroma collection per embedding space; the active width is pinned and asserted. If the embedder is unavailable at query time, retrieval degrades to each spec's direct citations and the run is flagged — a collection is never queried with a different model. | F3; Ollama removes the network/credential dependency and matches the design's named `qwen3-embedding:8b`; the ARC space keeps a portable option for a grading machine without Ollama. | R8 satisfied; the offline demo needs only cached query embeddings; no mixed-space risk. |
 | **D9** | "MCP tools" are implemented as **runtime tool adapters** (HTTP JSON-RPC/MCP client with mock transport), not as OpenCode-host MCP servers. Workers call these adapters; tests use recorded fixtures. | F2; the application must run standalone (`streamlit run app.py`) and be testable offline. Harness-level MCP would make grading and CI depend on the developer's editor. | R5/R12 satisfied at the tool-contract level; the MCP transport is preserved. |
 | **D10** | Add a blinded `Adjudicator` (separate model, fresh context, no access to worker reasoning) for R30 label audits. The `Research-Orchestrator` still computes precision/recall and owns the tuning gate. | Pr3/Pr6/Pr7; a worker grading its own labels is exactly the failure mode the doctrine warns about. | R30 strengthened; "orchestrator computes" preserved. |
 | **D11** | UI runs orchestration in a background thread with an event queue (`agent_events`), polled by a Streamlit fragment; runs are cancellable and resumable from cache. | F12. | R1/R3 satisfied without duplicated runs. |
@@ -234,7 +238,7 @@ loop with deterministic screen, `par` monitor workers, `alt` empty/confirmed bra
 | **D13** | Corpus may optionally extend to 2016–2020 for descriptive/power purposes, but promotion, tuning, and evaluation use only the mandated 2021–2025 window. | F10. | R25/R31 unaffected; increases power without contaminating splits. **Open question — default off.** |
 | **D14** | R25 full-corpus replay uses `calibrated_rules`. `d3_mini` is calibrated on **all 2024 candidate games** and evaluated on **all 2025 candidate games** (expected a few hundred requests); if the service is saturated, degrade to a stratified sample and report the reduced n. | Sub-second decisions at 4 concurrency make candidate-set scoring practical, but the service is shared; scoring every historical game (including non-candidates) would be wasteful and unfair. | R25 satisfied with a faithful candidate-set evaluation and an explicit population definition. |
 | **D15** | Primary probability = calibrated `noul` `P(yes)`; a 5-level `score` question is a secondary signal; the monitor worker uses a `choice` question with `{confirmed, contradicted, insufficient}`. | The API provides probabilities directly for `noul`; `score`/`choice` add graded and categorical decisions without inventing a mapping. Calibration on 2024 addresses the provider's own advice to fit cutoffs empirically. | R14 satisfied; consistency improved (distribution scoring, not token sampling); R30's labelled sample sets the thresholds. |
-| **D16** | The embedding model id sent to the gateway is `qwen3-embedding:8b` (the name in the design docs), while the provider catalogue describes a Qwen3-Embedding model at 2560 dimensions with an 8,192-token limit. The adapter treats the **returned width as authoritative**, pins it in `EMBED_DIM` and collection metadata, and never assumes 2560 or 4096. Embeddings are used only for the citation index — never for chat, rationale, monitor confirmation, or scoring. | Owner instruction 2026-11-22; the 4B model card (2560-d, instruction-aware, not a chat model) conflicts with the `:8b` id's native 4096-d. Measuring once in P0 removes the ambiguity for every later phase. | R8 satisfied; the named tool is preserved; the deviation and the measured width are disclosed in `docs/ARCHITECTURE.md` and the README. |
+| **D16** | Embedding spaces are measured, not assumed: Ollama `qwen3-embedding:8b` = **4096-d**, ARC `Qwen3-Embedding-4B` = **2560-d**, both L2-normalised. `EMBED_MODEL`/`EMBED_DIM` and collection metadata name the exact space, and the adapter rejects a response of the wrong width. Embeddings are citation-retrieval only — never chat, rationale, monitor confirmation, or scoring. | Live probes 2026-11-22; the two available models differ in width and the ARC gateway 500s on the Ollama-style id, so the space must be pinned per collection. | R8 satisfied; the design's named model is preserved via Ollama; the ARC 4B option is explicit and separate. |
 | **D17** | **CFBD** is a secondary structured source through `adapters/cfbd.py`: historical lines (`/lines`) and venue geodata (`/venues`: lat/lon, elevation, dome, timezone). It requires a free academic API key (3,000 calls/mo); responses are cached and fixtures recorded. Without the key the app degrades to ESPN + strength proxy, and the offline demo never calls CFBD. | F4 plus ESPN's missing venue coordinates; CFBD is the only free source that supplies both open lines and stadium coordinates for the mandated window. | R10/R24 satisfied with better coverage; R8 unaffected; adds one optional credential (B6). |
 
 ### 4.4 Layered runtime architecture
@@ -393,7 +397,7 @@ record stores both scores. This gives the "measure honestly" comparison and prot
 | Element | Contract |
 | --- | --- |
 | Model | `decision.vllm-sr/d3-mini` — a decision model, not a chat model; unavailable in the web UI |
-| Request | `input` (text or JSON) + one or more **named questions**; optional `images` as data URLs |
+| Request | `{"model": "decision.vllm-sr/d3-mini", "state": "<text>", "questions": {"<name>": {"type": "…", "instructions": "…", "criteria": …}}}` where `type` is one of `noul`, `choice`, `score`; optional `images` as data URLs. `questions` must be a **JSON object**, not a list |
 | `noul` question | `instructions` is a yes/no question; the answer is `P(yes) = P(true)` |
 | `choice` question | `instructions` + `criteria` (option name → description, description may be null); answer = most likely option, probabilities for every option, confidence |
 | `score` question | `instructions` + `criteria` (2–10 level descriptions, lowest first); answer = probability-weighted level in `[0, n−1]`, per-level probabilities, legend, confidence |
@@ -401,6 +405,38 @@ record stores both scores. This gives the "measure honestly" comparison and prot
 | Invalid request | HTTP 400 with a specific message (unknown type, malformed criteria, …); validate locally first |
 | Cost | every question re-reads the whole input: cost ∝ input length × number of questions |
 | Latency | short requests under a second; larger inputs slower |
+
+**Captured wire example (live probe, 2026-11-22).**
+
+```json
+{"model":"decision.vllm-sr/d3-mini",
+ "state":"Virginia Tech hosts Miami on Saturday. Miami is a 7-point favorite.",
+ "questions":{
+   "upset_likely":{"type":"noul","instructions":"Will the home team win outright?"},
+   "confirm":{"type":"choice","instructions":"Does the evidence confirm Miami is overvalued?",
+              "criteria":{"confirmed":"…","contradicted":"…","insufficient":"…"}},
+   "risk":{"type":"score","instructions":"How likely is an upset?",
+           "criteria":["very unlikely","unlikely","possible","likely","very likely"]}}}
+```
+
+```json
+{"model":"vllm-sr/d3-mini",
+ "answers":{
+   "upset_likely":{"type":"noul","noul":0.0210483384072851},
+   "confirm":{"type":"choice","choice":"insufficient",
+              "probabilities":{"confirmed":0.002,"contradicted":0.089,"insufficient":0.909},
+              "confidence":0.7138},
+   "risk":{"type":"score","score":1.5178,
+           "legend":{"0":"very unlikely","1":"unlikely","2":"possible","3":"likely","4":"very likely"},
+           "probabilities":{"0":0.055,"1":0.418,"2":0.487,"3":0.035,"4":0.005},
+           "confidence":0.3677}},
+ "usage":{"input_tokens":126,"output_tokens":0}}
+```
+
+Required fields: `model`, `state`, and a non-empty `questions` object. Missing `model` → 400
+`"Body must be a JSON object with a \"model\""`; missing `state` → 400 `"\"state\" must be
+provided"`; empty `questions` → 400 `"\"questions\" must be a non-empty object"`. Identical
+requests are stable at the tested length (3× identical `noul` = `0.0210483384072851`).
 
 Operating limits:
 
@@ -438,29 +474,35 @@ the adapter never guesses.
 
 #### 4.9.2 Embeddings API envelope (R8)
 
-| Element | Contract | Status |
+| Element | Primary — local Ollama | Secondary — VT ARC |
 | --- | --- | --- |
-| Endpoint | `POST {VT_ARC_BASE_URL}/embeddings` (default base `https://llm-api.arc.vt.edu/api/v1`) | owner-confirmed 2026-11-22 |
-| Auth | same credential as the chat models (`Authorization: Bearer $VT_ARC_API_KEY`) | owner-confirmed; verify in probe |
-| Model id | `qwen3-embedding:8b` | owner instruction 2026-11-22 |
-| Request | OpenAI-style `{model, input}`; `input` is a string or a list of strings | probe shape; store a golden fixture |
-| Response | `data[i].embedding` plus `usage`; vector length **measured**, not assumed (catalogue says 2560; the `:8b` id is natively 4096) | probe → `EMBED_DIM` |
-| Input limit | 8,192 tokens per input, enforced by the gateway (native card context is larger) | probe the overflow case (400 vs 413 vs truncation) |
-| Similarity | cosine; if the gateway does not L2-normalise, normalise client-side | probe ‖v‖ ≈ 1 |
-| Instruction format | Qwen3-Embedding cards use `Instruct: {task}\nQuery: {query}` for **queries** and raw text for **documents**; the template is stored in collection metadata | probe the retrieval effect; `EMBED_INSTRUCTION_TEMPLATE` |
-| Batching | batch chunks per request up to the probe-measured cap; shrink once on 413/400 | probe; `EMBED_BATCH_SIZE` |
-| Use | citation retrieval only (Chroma `citation_chunks`); **never** chat, rationale, monitor confirmation, or scoring | architecture rule (import-linter + review) |
-| Failure | 429/5xx → retry with jitter, then use the hashing embedder **for that batch only** and flag the run; never mix widths or models inside one collection | mirrors §4.9.1 error policy |
-| Versioning | collection name/metadata carries `{model, dim, instruction_template, normalized}`; the embedding version is part of `analysis_cache.cache_key` | so re-embedding invalidates retrieval-dependent caches deterministically |
+| Endpoint | `POST {OLLAMA_BASE_URL}/embeddings`, default `http://localhost:11434/v1` | `POST {VT_ARC_BASE_URL}/embeddings` |
+| Auth | none (localhost) | `Authorization: Bearer $VT_ARC_API_KEY` |
+| Model id | `qwen3-embedding:8b` | `Qwen3-Embedding-4B` (ARC 500s on the Ollama-style id) |
+| Measured width | **4096** | **2560** |
+| Norm | **1.0** (already L2-normalised) | **1.0** |
+| Response | OpenAI-style `data[i].embedding`, `usage` | same |
+| Request | `{model, input}`; `input` is a string or list of strings | same |
+| Context | native 32k; keep chunks ≤2k tokens to avoid Ollama context truncation | native 8,192-token gateway cap |
+| Similarity | cosine | cosine |
+| Instruction format | Qwen3 cards use `Instruct: {task}\nQuery: {query}` for queries and raw text for documents; the template is stored in collection metadata | same |
+| Batching | probe list-input support; default batch 8 | probe cap |
+| Use | citation retrieval only (`citation_chunks`); never chat, rationale, monitor confirmation, or scoring | optional portable space |
+| Failure | Ollama down at query time → use each spec's **direct citations**, flag `retrieval_degraded`; do not query a 4096 collection with 2560 | only valid if the collection was built in the 2560 space |
+| Versioning | collection name/metadata carries `{model, dim, instruction_template, normalized}`; the active embedding version is part of `analysis_cache.cache_key` | separate collection per space |
 
-**Chunking.** Accepted citations are split into ~512–1,000-token chunks with a small overlap; the
-adapter token-counts before send and refuses a batch that exceeds 8,192 tokens per input rather
-than letting the gateway truncate silently.
+**Chunking.** Accepted citations are split into ~512–1,000-token chunks with a small overlap. The
+adapter token-counts before send and keeps every input well under the provider context, so neither
+Ollama nor the gateway can truncate silently. Vector width is asserted on every response.
+
+**Demo safety.** Query embeddings for the pre-warmed demo runs are cached, so the offline demo works
+even if Ollama is stopped. Any fresh run requires the Ollama service, which the app health-checks at
+startup and reports in the UI.
 
 ### 4.10 Concurrency model
 
 `asyncio` + `httpx.AsyncClient`; one semaphore per provider (`ESPN_MAX_CONCURRENCY=6`,
-`SEARCH_MAX_CONCURRENCY=4`, `LLM_MAX_CONCURRENCY=4`); `anyio` task groups with
+`SEARCH_MAX_CONCURRENCY=4`, `LLM_MAX_CONCURRENCY=4`, `EMBED_MAX_CONCURRENCY=2`); `anyio` task groups with
 `return_exceptions=True`; each task writes `AgentEvent`s and returns a typed result or a typed
 failure. Orchestrators never `await` inside a loop without gathering batches. Wall-clock budget
 propagates as a deadline; tasks past the deadline are cancelled and reported as `skipped_budget`.
@@ -485,7 +527,7 @@ four scorer requests in flight.
 | HTTP | `httpx` (async) + `tenacity` | timeouts, retries, connection pooling |
 | Storage | SQLite via stdlib `sqlite3` + SQL migrations | R8/R15; zero-ops, auditable |
 | Vectors | ChromaDB (persistent client) | R8; metadata filtering for spec citations |
-| Embeddings | `qwen3-embedding:8b` via `POST /api/v1/embeddings` (VT ARC, same key/base as chat); local hashing/TF-IDF fallback | D8/D16; neural retrieval for Chroma with a network-free path; embedding-only model kept out of the chat client |
+| Embeddings | **Ollama `qwen3-embedding:8b`** at `http://localhost:11434/v1/embeddings` (4096-d, normalised, keyless) primary; ARC `Qwen3-Embedding-4B` (2560-d) optional secondary; hashing for tests only | D8/D16; matches the design's named model, removes the network dependency, and keeps spaces strictly separated |
 | Secondary data | CFBD REST (`/lines`, `/venues`) via `adapters/cfbd.py` | historical open lines plus stadium lat/lon/elevation/indoor; free academic key; optional, cached, fixture-tested |
 | Stats | `numpy`, `pandas`, `scipy`, `statsmodels`, `scikit-learn` | effect sizes, CIs, BH-FDR, calibration, logistic model |
 | UI | Streamlit 1.45+ (`st.fragment`, `AppTest`) | R1; testable |
@@ -543,7 +585,7 @@ cfb-upset-precondition/
 │   │   ├── fetch.py                # fetch adapter, domain whitelist, extraction, snapshots
 │   │   ├── deep_research.py        # MCP client + seeded-literature provider
 │   │   ├── llm.py                  # VT ARC chat client, JSON mode, retries, token ledger
-│   │   ├── embeddings.py           # qwen3-embedding:8b (VT ARC /embeddings) + hashing fallback
+│   │   ├── embeddings.py           # Ollama qwen3-embedding:8b (4096) / ARC 4B (2560) / hashing
 │   │   └── chroma.py               # one collection per embedding space
 │   ├── agents/
 │   │   ├── base.py                 # AgentContext (trace, budget, repos), AgentResult
@@ -749,18 +791,15 @@ the repo, and prove one end-to-end path from fixture data to a ranked Streamlit 
 **Tasks.**
 1. `scripts/probe.py` + `cfb_upset/pipelines/capabilities.py`: probe ESPN scoreboard/summary/odds/
    rankings/teams/groups; VT ARC `/v1/models` + one chat completion with JSON-only instruction;
-   `POST /api/v1/systemone` with `decision.vllm-sr/d3-mini`: capture the exact JSON field names and
-   record golden responses for one `noul`, one `choice`, and one `score` question; verify
-   named-question batching; send a malformed question → expect 400 with a specific message; send
-   the same request twice → record determinism; measure latency for a small and a near-8,192-token
-   input; **limit probes**: 5 simultaneous requests → 429 `user_concurrent`, oversized body → 413,
-   a request held past the queue window → 503 with `retry_after_s`, and confirm the `Retry-After`
-   header and body field agree; **embeddings probe** (`POST /api/v1/embeddings` with
-   `qwen3-embedding:8b` under the chat credential): capture request/response golden fixture,
-   measure the returned vector length (catalogue says 2560; `:8b` is natively 4096), test the
-   batch cap, force an over-8,192-token input to learn 400-vs-413-vs-truncation, check whether
-   vectors are L2-normalised, compare raw vs `Instruct: …\nQuery: …` query prefixes, and record
-   429/latency; **CFBD probe** (`/lines` for 2021 week 1: `spreadOpen` null rate and provider mix;
+   **confirm the captured `systemone` contract** (`{model,state,questions{}}`, §4.9.1) and write
+   golden fixtures for one `noul`, one `choice`, and one `score` question; re-verify determinism on
+   a long payload; **limit probes**: 5 simultaneous requests → 429 `user_concurrent`, oversized
+   body → 413, a request held past the queue window → 503 with `retry_after_s`, and confirm the
+   `Retry-After` header and body field agree; **embeddings probe** (local Ollama
+   `qwen3-embedding:8b` and ARC `Qwen3-Embedding-4B`): capture request/response fixtures, confirm
+   **4096** vs **2560** widths and norm 1.0, test list input + batch cap, force an over-context
+   input to learn truncation-vs-error, compare raw vs `Instruct: …\nQuery: …` prefixes, record
+   latency; **CFBD probe** (`/lines` for 2021 week 1: `spreadOpen` null rate and provider mix;
    `/venues`: lat/lon/elevation/dome/timezone; no key → SKIP); **weather probe** (Open-Meteo
    Historical Forecast for one 2021 and one 2025 venue-date: variable coverage, actual lead/run
    cadence; compare Previous Runs `_previous_day1`); Brave/Fetch/Deep
@@ -845,7 +884,8 @@ provenanced, every provider behind a fault-tolerant adapter with fixtures.
 - Each adapter has a fixture-backed test and a `live`-marked smoke test that skips without keys.
 - `LeakageError` is raised for any field with `known_at >= kickoff` in a unit test.
 - Trace records contain `run_id`, `agent`, `phase`, `event_type`, `ts` for a scripted run.
-- Chroma round-trip test passes with the fallback embedder (skip if `chromadb` unavailable).
+- Chroma round-trip test passes with the hashing embedder (CI has no Ollama) and skips cleanly if
+  `chromadb` is unavailable; the real 4096-d space is exercised in P6.9.
 
 **Testing.** Unit: contracts, repositories, leakage policy, retry/circuit breaker, cache keys.
 Integration: adapter fixture parity (parsed record fields match expectations).
@@ -1077,8 +1117,9 @@ FDR control and out-of-sample checks; promote only what survives.
    write `label_audits` and `reports/label_audit_<ts>.md`.
 4. One tuning round: adjust thresholds for specs with precision < 0.80; re-label; re-test; log
    before/after. Requires `--approve` when `REQUIRE_APPROVAL=1`.
-5. Citation index: embed accepted citations with the real embedder (fallback per D8, disclosed),
-   upsert into Chroma with model/dim/instruction metadata; verify by retrieving top-3 for each spec.
+5. Citation index: embed accepted citations with the active Ollama space (`qwen3-embedding:8b`,
+   4096) and upsert into that collection with model/dim/instruction metadata; if Ollama is down,
+   fail loudly rather than mixing spaces; verify by retrieving top-3 for each spec.
 6. CLI: `build_preconditions --stage validate [--approve]`.
 
 **Files.** `domain/stats.py`, `domain/calibration.py` (shared), `domain/promotion.py`,
@@ -1520,7 +1561,7 @@ table, and the limitations. This is the answer to "are the results meaningful?" 
 
 | # | Risk | L | I | Mitigation / trigger | Fallback |
 | --- | --- | --- | --- | --- | --- |
-| 1 | `systemone` (d3-mini) contract undocumented or unstable | M | H | P0 probe captures schema + golden fixture; contract test + shadow mode; dispersion check | `calibrated_rules` (D1), degraded flag |
+| 1 | `systemone` (d3-mini) contract undocumented or unstable | L | H | **Contract captured 2026-11-22 (§4.9.1) and deterministic at tested length**; P0 pins golden fixtures; contract test + shadow mode; dispersion check on long payloads | `calibrated_rules` (D1), degraded flag |
 | 2 | Deep Research/Brave/Fetch unavailable or costly | H | H | Provider adapters, fixtures, budgets | Seeded literature (D2); offline evidence |
 | 3 | Historical pre-kickoff odds missing (2021) | M | M | CFBD `/lines` backfill + 2021 null-rate probe; record `favorite_source`/`line_provider`; sensitivity analysis | Strength proxy (D4) |
 | 4 | Weather leakage or no coverage | M | M | Archived forecast with recorded actual lead (≤6 h) and `known_at`; coverage gate; optional IEM MOS check | Drop weather specs (D3) |
@@ -1536,17 +1577,19 @@ table, and the limitations. This is the answer to "are the results meaningful?" 
 | 14 | Prompt injection from fetched pages | M | M | Whitelist, delimit, no tool instructions, snapshots | Deterministic fallback |
 | 15 | Disk/DB growth (raw summaries) | M | L | Store extracted fields only; compress snapshots | Retention policy |
 | 16 | `systemone` saturation or queue timeouts during demo/eval | M | H | Hard cap 4, Retry-After handling, budget + priority ordering, D14 sampling, pre-warmed demo cache | `calibrated_rules` with `scoring_degraded` flag |
+| 17 | Ollama not running where the app is graded/run | M | M | Startup health check + visible status; demo uses cached query embeddings; collection metadata pins the space | Re-index in the ARC 2560-d space (separate collection) or use each spec's direct citations with `retrieval_degraded` |
 
 ---
 
 ## 14. Assumptions and open questions
 
 **Assumptions.**
-- VT ARC credentials and an OpenAI-compatible chat endpoint are available (a key exists in the
-  course context; `.env` is currently empty).
-- The VT ARC gateway serves embeddings at `POST /api/v1/embeddings` under the same credential as
-  chat, with an 8,192-token input cap; the actual vector width is measured in P0.1.
-- A free CFBD academic key is obtainable (3,000 calls/mo); the app still runs without it.
+- VT ARC credentials are available in `.env` (`OPEN_AI_API_KEY` / `OPEN_AI_ENDPOINT`, accepted as
+  aliases for `VT_ARC_API_KEY` / `VT_ARC_BASE_URL`); verified 2026-11-22.
+- Local Ollama serves `qwen3-embedding:8b` at `http://localhost:11434/v1` and is running whenever a
+  fresh analysis or re-index is performed; the offline demo uses cached query embeddings.
+- The VT ARC gateway also serves `Qwen3-Embedding-4B` (2560-d) as an optional secondary space.
+- A CFBD academic key is present in `.env`; the app still runs without it.
 - Open-Meteo's non-commercial free tier with attribution is acceptable for coursework.
 - ESPN public endpoints remain accessible and unauthenticated for scoreboard/summary/odds/rankings.
 - Open-Meteo historical-forecast and geocoding endpoints remain keyless and rate-tolerant for
@@ -1557,16 +1600,17 @@ table, and the limitations. This is the answer to "are the results meaningful?" 
   requirement's intent.
 
 **Open questions (resolve in P0 and record in `PROGRESS.md`).**
-1. What are the exact JSON field names for `POST /api/v1/systemone` (`input`/`state`, `questions`,
-   `criteria`, `images`, model selector)? Semantics, question types, and response fields are known;
-   only the wire-level schema and auth details remain for P0.
+1. ~~What are the exact JSON field names for `POST /api/v1/systemone`?~~ **Resolved 2026-11-22**:
+   `{model, state, questions{name:{type, instructions, criteria}}}` → `answers{name:{noul | choice
+   +probabilities +confidence | score +legend +probabilities +confidence}}` + `usage`; see §4.9.1
+   and the golden fixtures P0.1 adds.
 2. Is the 4-request-per-user limit shared with other teammates/apps running under the same VT ARC
    identity at showcase time, and should the demo reserve headroom (e.g., run at 2)?
 3. Are Brave Search, Fetch, and Deep Research available as MCP endpoints with credentials, and
    what are their quotas?
-4. Does `POST /api/v1/embeddings` accept `qwen3-embedding:8b` and return 2560 or 4096 dimensions?
-   (Measure in P0.1; leave `EMBED_DIM` unset until then. Also confirm whether an instruction prefix
-   is expected and whether vectors are L2-normalised.)
+4. Does the grading/demo machine run Ollama? Default is local `qwen3-embedding:8b` (4096);
+   if not, rebuild the citation index in the ARC `Qwen3-Embedding-4B` space (2560). Collections are
+   separate and versioned, so switching requires a re-index, not a config flip.
 5. May the corpus extend to 2016–2020 for statistical power (D13), given R25's mandated splits?
 6. Should closing lines be admitted with `known_at = kickoff` (violates strict `<`) for the market
    baseline, or is the open line / strength proxy the only admissible market signal?
@@ -1599,7 +1643,7 @@ A phase is done when: tasks complete; acceptance criteria objectively verified; 
 
 ## Appendix A — Capability probe results (observed 2026-11-22 in this environment)
 
-These are facts gathered while planning; they justify D1–D4 and must be re-run in P0.
+These are facts gathered during planning; they justify D1–D8 and D16/D17, and must be re-run in P0.
 
 | Capability | Result | Evidence |
 | --- | --- | --- |
@@ -1613,28 +1657,31 @@ These are facts gathered while planning; they justify D1–D4 and must be re-run
 | Open-Meteo forecast archive | PASS — keyless hourly forecast for a past date; GFS archive starts 2021-03-23; the stitched series has an effective lead ≤6 h (not 24 h); Previous Runs `_previous_day1` has full-variable coverage only from 2024 | `historical-forecast-api.open-meteo.com`; Open-Meteo docs 2026-11-22 |
 | CFBD lines | PASS (documented) — `/lines` returns `spreadOpen`, `overUnderOpen`, `spread`, moneylines, and provider; free academic tier 3,000 calls/mo; 2021 open-line null rate unverified | `api.collegefootballdata.com` docs 2026-11-22 |
 | CFBD venues | PASS (documented) — `/venues` returns lat/lon/elevation/dome/timezone | `api.collegefootballdata.com` docs 2026-11-22 |
-| VT ARC model list | PARTIAL — four chat models; no decision/embedding model listed (both are served outside `/v1/models`) | provider `models` query |
-| VT ARC embeddings | **PASS (provider-confirmed)** — Qwen3-Embedding family at `POST /api/v1/embeddings`, same credential as chat; catalogue describes 2560-d vectors, 8,192-token inputs, instruction-aware queries; model id requested as `qwen3-embedding:8b`; not chat-capable and not in the web UI; **returned width unverified** | provider catalogue + owner 2026-11-22; `models` query |
-| VT ARC decision models | **PASS (owner-confirmed)** — served at `POST /api/v1/systemone`, exposed through the API only, not `/v1/models`; schema not yet captured | owner confirmation 2026-11-22 |
+| VT ARC model list | PASS — ids include `GLM-5.3`, `gpt-oss-120b`, `claude-on-arc`, `DeepSeek-V4.1-Flash`, `Qwen3-Embedding-4B`, `decision.vllm-sr/d3-mini` | `GET /api/v1/models` with `OPEN_AI_API_KEY` 2026-11-22 |
+| VT ARC embeddings | PASS — `POST /api/v1/embeddings` with `Qwen3-Embedding-4B` → 200, **2560-d**, norm 1.0; the Ollama-style id `qwen3-embedding:8b` → **500** | live probe 2026-11-22 |
+| Local Ollama embeddings | PASS — `qwen3-embedding:8b` via `http://localhost:11434/v1/embeddings` → 200, **4096-d**, norm 1.0; Ollama also lists `gemma4:12b`, `qwen3.8:27b` | live probe 2026-11-22 |
+| VT ARC decision models | PASS — `POST /api/v1/systemone` `{model,state,questions{}}`; `noul`/`choice`/`score` all 200; identical request 3× deterministic; `/chat/completions` → 404 with guidance | live probe 2026-11-22; §4.9.1 |
 | `systemone` limits | 4 queued/running per user; 30 s queue wait; 8,192 input tokens; 8 MiB body; ≤8 images; 429/502/503 semantics with `retry_after_s` | owner-provided limits 2026-11-22 |
-| `systemone` model/API | `decision.vllm-sr/d3-mini`; input + named questions; types `noul` (P yes), `choice` (option probabilities), `score` (0..n−1 weighted level); confidence 0..1; 400 on malformed requests; cost ∝ input × questions | owner-provided semantics 2026-11-22 |
+| `systemone` model/API | `decision.vllm-sr/d3-mini`; `state` + object of named questions; `noul` (P yes), `choice` (option + probabilities), `score` (0..n−1 + legend + probabilities); confidence 0..1; 400 on malformed requests; cost ∝ input × questions | owner-provided semantics + captured wire fixture 2026-11-22 |
 | Brave endpoint reachable | PARTIAL — HTTP 422 without a key (endpoint exists) | `api.search.brave.com` |
 | MCP servers configured | FAIL — none in `opencode.json`; no env keys | config + env scan |
 | ChromaDB installed | FAIL — not importable (installable from PyPI; PyPI reachable) | import probe |
 | Quarto / Node / Pandoc | PASS — `quarto`, `npx`, `pandoc` present; no Graphviz/LaTeX | tool probe |
-| Existing Python deps | PASS — pydantic 2.10, streamlit 1.45, statsmodels, sklearn, httpx, pytest, tenacity | `pip list` |
+| Existing Python deps | PASS — Python 3.13.5 (3.12.3 also), pydantic 2.10.3, streamlit 1.45.1, httpx 0.28.1, statsmodels 0.14.4, sklearn 1.6.1, pytest 8.3.4, respx, tenacity; 2.8 TB free | `python -V`, `pip list`, `df -h` |
+| Working credentials | PASS — `.env` holds `OPEN_AI_API_KEY`, `OPEN_AI_ENDPOINT`, `OLLAMA_ENDPOINT`, `EMBED_MODEL`, `CFBD_API_KEY`; file is git-ignored and untracked | `.env` scan (values not printed); `git check-ignore -v .env` |
+| ARC schema discovery | FAIL — `GET /api/v1/openapi.json` returns the Open WebUI HTML shell (200 `text/html`); `/openapi.json` and `/docs` are 404 | live probe 2026-11-22; §4.9.1 fixture is the contract of record |
 
 ## Appendix B — Environment variables (`.env.example`)
 
 ```
 # --- VT ARC ---
-VT_ARC_API_KEY=
-VT_ARC_BASE_URL=https://llm-api.arc.vt.edu/api/v1
+VT_ARC_API_KEY=                          # alias accepted: OPEN_AI_API_KEY (current .env)
+VT_ARC_BASE_URL=https://llm-api.arc.vt.edu/api/v1   # alias accepted: OPEN_AI_ENDPOINT
 VT_ARC_MODEL=GLM-5.3
 VT_ARC_EXTRACTOR_MODEL=GLM-5.3
 VT_ARC_ADJUDICATOR_MODEL=gpt-oss-120b
-VT_ARC_DECISION_ENDPOINT=/api/v1/systemone  # decision models are served here, not via /models
-VT_ARC_DECISION_MODEL=d3-mini              # optional; empty => calibrated_rules backend
+VT_ARC_DECISION_ENDPOINT=/systemone      # relative to the base URL (already ends in /api/v1)
+VT_ARC_DECISION_MODEL=decision.vllm-sr/d3-mini   # listed in /models; /chat/completions returns 404
 SCORER_BACKEND=auto                      # auto | d3_mini | calibrated_rules
 SYSTEMONE_MAX_CONCURRENCY=4              # hard cap; values >4 are rejected at startup
 SYSTEMONE_MAX_INPUT_TOKENS=8192
@@ -1656,14 +1703,18 @@ RESEARCH_PROVIDER=auto                   # auto | mcp_deep_research | seeded_lit
 ALLOWED_DOMAINS=espn.com,sports-reference.com,cbssports.com,si.com
 
 # --- Embeddings / vector store ---
-EMBED_BASE_URL=                          # default: VT_ARC_BASE_URL
-EMBED_API_KEY=                           # default: VT_ARC_API_KEY
-EMBED_MODEL=qwen3-embedding:8b
-EMBED_DIM=                               # REQUIRED before first embed; measured in P0.1, asserted on every response
-EMBED_BACKEND=auto                       # auto | qwen3 | hashing
-EMBED_MAX_INPUT_TOKENS=8192
-EMBED_BATCH_SIZE=32                      # lower if the probe finds a smaller gateway cap
-EMBED_MAX_CONCURRENCY=4
+EMBED_BACKEND=ollama                     # ollama | arc | hashing
+OLLAMA_BASE_URL=http://localhost:11434/v1   # alias accepted: OLLAMA_ENDPOINT
+OLLAMA_EMBED_MODEL=qwen3-embedding:8b    # alias accepted: EMBED_MODEL
+OLLAMA_EMBED_DIM=4096                    # measured 2026-11-22; assert on every response
+EMBED_BASE_URL=                          # ARC secondary; default: VT_ARC_BASE_URL
+EMBED_API_KEY=                           # ARC secondary; default: VT_ARC_API_KEY
+ARC_EMBED_MODEL=Qwen3-Embedding-4B
+ARC_EMBED_DIM=2560                       # measured 2026-11-22; separate collection only
+EMBED_DIM=4096                           # active space; must match EMBED_BACKEND
+EMBED_MAX_INPUT_TOKENS=2048              # keep well below Ollama's context; no silent truncation
+EMBED_BATCH_SIZE=8
+EMBED_MAX_CONCURRENCY=2
 EMBED_INSTRUCTION_TEMPLATE=              # query prefix; empty => send raw text
 CHROMA_PATH=./data/chroma
 

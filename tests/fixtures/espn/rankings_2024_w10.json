@@ -1,0 +1,2706 @@
+{
+  "availableRankings": [
+    {
+      "id": "21",
+      "name": "Playoff Committee Rankings",
+      "seasonType": 2,
+      "shortName": "CFP Rankings",
+      "week": "12"
+    },
+    {
+      "id": "1",
+      "name": "AP Top 25",
+      "seasonType": 2,
+      "shortName": "AP Poll",
+      "week": "13"
+    },
+    {
+      "id": "2",
+      "name": "AFCA Coaches Poll",
+      "seasonType": 2,
+      "shortName": "AFCA Coaches Poll",
+      "week": "13"
+    },
+    {
+      "id": "20",
+      "name": "FCS Coaches Poll",
+      "seasonType": 2,
+      "shortName": "FCS Coaches Poll",
+      "week": "12"
+    },
+    {
+      "id": "11",
+      "name": "AFCA Division II Coaches Poll",
+      "seasonType": 2,
+      "shortName": "AFCA Div II",
+      "week": "12"
+    }
+  ],
+  "latestSeason": {
+    "endDate": "2027-01-28T07:59Z",
+    "startDate": "2026-02-01T08:00Z",
+    "type": {
+      "abbreviation": "reg",
+      "id": "2",
+      "name": "Regular Season",
+      "type": 2
+    },
+    "year": 2026
+  },
+  "latestWeek": {
+    "displayValue": "Week 13",
+    "last": false,
+    "number": 13,
+    "type": "week",
+    "value": "13"
+  },
+  "leagues": [
+    {
+      "$ref": "http://sports.core.api.espn.pvt/v2/sports/football/leagues/college-football?lang=en&region=us",
+      "abbreviation": "NCAAF",
+      "id": "23",
+      "midsizeName": "NCAA Football",
+      "name": "NCAA - Football",
+      "shortName": "NCAA Football",
+      "uid": "s:20~l:23"
+    }
+  ],
+  "rankings": [
+    {
+      "$ref": "http://sports.core.api.espn.pvt/v2/sports/football/leagues/college-football/seasons/2026/types/2/weeks/13/rankings/1?lang=en&region=us",
+      "availability": {},
+      "date": "2026-11-22T08:00Z",
+      "droppedOut": [
+        {
+          "current": 0,
+          "date": "2026-11-22T08:00Z",
+          "firstPlaceVotes": 0,
+          "lastUpdated": "2026-11-22T22:11Z",
+          "points": 62.0,
+          "previous": 17,
+          "recordSummary": "0-0",
+          "team": {
+            "abbreviation": "UK",
+            "color": "0033a0",
+            "groups": {
+              "id": "8",
+              "isConference": true,
+              "parent": {
+                "id": "80",
+                "isConference": false,
+                "shortName": "FBS"
+              },
+              "shortName": "SEC"
+            },
+            "id": "96",
+            "links": [
+              {
+                "href": "https://www.espn.com/college-football/team/_/id/96/kentucky-wildcats",
+                "rel": [
+                  "clubhouse",
+                  "desktop",
+                  "team"
+                ],
+                "text": "Clubhouse"
+              }
+            ],
+            "location": "Kentucky",
+            "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/96.png",
+            "logos": [
+              {
+                "alt": "",
+                "height": 500,
+                "href": "https://a.espncdn.com/i/teamlogos/ncaa/500/96.png",
+                "lastUpdated": "2025-12-19T23:48Z",
+                "rel": [
+                  "full",
+                  "default"
+                ],
+                "width": 500
+              },
+              {
+                "alt": "",
+                "height": 500,
+                "href": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/96.png",
+                "lastUpdated": "2025-12-19T23:47Z",
+                "rel": [
+                  "full",
+                  "dark"
+                ],
+                "width": 500
+              },
+              {
+                "alt": "",
+                "height": 4096,
+                "href": "https://a.espncdn.com/guid/d5ec1329-3c7b-93e8-6f57-982c4f33ea75/logos/primary_logo_on_white_color.png",
+                "lastUpdated": "2026-07-23T17:30Z",
+                "rel": [
+                  "full",
+                  "primary_logo_on_white_color"
+                ],
+                "width": 4096
+              },
+              {
+                "alt": "",
+                "height": 4096,
+                "href": "https://a.espncdn.com/guid/d5ec1329-3c7b-93e8-6f57-982c4f33ea75/logos/primary_logo_on_black_color.png",
+                "lastUpdated": "2026-07-23T17:30Z",
+                "rel": [
+                  "full",
+                  "primary_logo_on_black_color"
+                ],
+                "width": 4096
+              },
+              {
+                "alt": "",
+                "height": 4096,
+                "href": "https://a.espncdn.com/guid/d5ec1329-3c7b-93e8-6f57-982c4f33ea75/logos/primary_logo_on_primary_color.png",
+                "lastUpdated": "2026-07-23T17:30Z",
+                "rel": [
+                  "full",
+                  "primary_logo_on_primary_color"
+                ],
+                "width": 4096
+              }
+            ],
+            "name": "Wildcats",
+            "nickname": "Kentucky",
+            "uid": "s:20~l:23~t:96"
+          },
+          "trend": "+17"
+        },
+        {
+          "current": 0,
+          "date": "2026-11-22T08:00Z",
+          "firstPlaceVotes": 0,
+          "lastUpdated": "2026-11-22T22:11Z",
+          "points": 0.0,
+          "previous": 24,
+          "recordSummary": "8-2",
+          "team": {
+            "abbreviation": "MEM",
+            "color": "004991",
+            "groups": {
+              "id": "151",
+              "isConference": true,
+              "parent": {
+                "id": "80",
+                "isConference": false,
+                "shortName": "FBS"
+              },
+              "shortName": "American"
+            },
+            "id": "235",
+            "links": [
+              {
+                "href": "https://www.espn.com/college-football/team/_/id/235/memphis-tigers",
+                "rel": [
+                  "clubhouse",
+                  "desktop",
+                  "team"
+                ],
+                "text": "Clubhouse"
+              }
+            ],
+            "location": "Memphis",
+            "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/235.png",
+            "logos": [
+              {
+                "alt": "",
+                "height": 500,
+                "href": "https://a.espncdn.com/i/teamlogos/ncaa/500/235.png",
+                "lastUpdated": "2026-07-01T04:35Z",
+                "rel": [
+                  "full",
+                  "default"
+                ],
+                "width": 500
+              },
+              {
+                "alt": "",
+                "height": 500,
+                "href": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/235.png",
+                "lastUpdated": "2026-07-01T04:34Z",
+                "rel": [
+                  "full",
+                  "dark"
+                ],
+                "width": 500
+              },
+              {
+                "alt": "",
+                "height": 4096,
+                "href": "https://a.espncdn.com/guid/29a2a6b5-5874-ac84-39e4-b5ab605e7449/logos/primary_logo_on_white_color.png",
+                "lastUpdated": "2026-07-23T17:33Z",
+                "rel": [
+                  "full",
+                  "primary_logo_on_white_color"
+                ],
+                "width": 4096
+              },
+              {
+                "alt": "",
+                "height": 4096,
+                "href": "https://a.espncdn.com/guid/29a2a6b5-5874-ac84-39e4-b5ab605e7449/logos/primary_logo_on_black_color.png",
+                "lastUpdated": "2026-07-23T17:33Z",
+                "rel": [
+                  "full",
+                  "primary_logo_on_black_color"
+                ],
+                "width": 4096
+              },
+              {
+                "alt": "",
+                "height": 4096,
+                "href": "https://a.espncdn.com/guid/29a2a6b5-5874-ac84-39e4-b5ab605e7449/logos/primary_logo_on_primary_color.png",
+                "lastUpdated": "2026-07-23T17:33Z",
+                "rel": [
+                  "full",
+                  "primary_logo_on_primary_color"
+                ],
+                "width": 4096
+              }
+            ],
+            "name": "Tigers",
+            "nickname": "Memphis",
+            "uid": "s:20~l:23~t:235"
+          },
+          "trend": "+24"
+        }
+      ],
+      "firstOccurrence": {
+        "type": "week",
+        "value": "1"
+      },
+      "headline": "2026 NCAA Football Rankings - AP Poll Week 13",
+      "id": "1",
+      "lastUpdated": "2026-11-22T22:11Z",
+      "name": "AP Top 25",
+      "occurrence": {
+        "displayValue": "Week 13",
+        "last": false,
+        "number": 13,
+        "type": "week",
+        "value": "13"
+      },
+      "others": [
+        {
+          "current": 0,
+          "date": "2026-11-22T08:00Z",
+          "firstPlaceVotes": 0,
+          "lastUpdated": "2026-11-22T22:11Z",
+          "points": 95.0,
+          "previous": 0,
+          "recordSummary": "0-0",
+          "team": {
+            "abbreviation": "UNM",
+            "color": "ba0c2f",
+            "groups": {
+              "id": "17",
+              "isConference": true,
+              "parent": {
+                "id": "80",
+                "isConference": false,
+                "shortName": "FBS"
+              },
+              "shortName": "Mountain West"
+            },
+            "id": "167",
+            "links": [
+              {
+                "href": "https://www.espn.com/college-football/team/_/id/167/new-mexico-lobos",
+                "rel": [
+                  "clubhouse",
+                  "desktop",
+                  "team"
+                ],
+                "text": "Clubhouse"
+              }
+            ],
+            "location": "New Mexico",
+            "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/167.png",
+            "logos": [
+              {
+                "alt": "",
+                "height": 500,
+                "href": "https://a.espncdn.com/i/teamlogos/ncaa/500/167.png",
+                "lastUpdated": "2025-12-24T20:19Z",
+                "rel": [
+                  "full",
+                  "default"
+                ],
+                "width": 500
+              },
+              {
+                "alt": "",
+                "height": 500,
+                "href": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/167.png",
+                "lastUpdated": "2025-12-24T20:18Z",
+                "rel": [
+                  "full",
+                  "dark"
+                ],
+                "width": 500
+              },
+              {
+                "alt": "",
+                "height": 4096,
+                "href": "https://a.espncdn.com/guid/a35083ab-ed9e-a3f2-be14-f7958c2b6655/logos/primary_logo_on_white_color.png",
+                "lastUpdated": "2026-07-23T17:35Z",
+                "rel": [
+                  "full",
+                  "primary_logo_on_white_color"
+                ],
+                "width": 4096
+              },
+              {
+                "alt": "",
+                "height": 4096,
+                "href": "https://a.espncdn.com/guid/a35083ab-ed9e-a3f2-be14-f7958c2b6655/logos/primary_logo_on_black_color.png",
+                "lastUpdated": "2026-07-23T17:35Z",
+                "rel": [
+                  "full",
+                  "primary_logo_on_black_color"
+                ],
+                "width": 4096
+              },
+              {
+                "alt": "",
+                "height": 4096,
+                "href": "https://a.espncdn.com/guid/a35083ab-ed9e-a3f2-be14-f7958c2b6655/logos/primary_logo_on_primary_color.png",
+                "lastUpdated": "2026-07-23T17:35Z",
+                "rel": [
+                  "full",
+                  "primary_logo_on_primary_color"
+                ],
+                "width": 4096
+              }
+            ],
+            "name": "Lobos",
+            "nickname": "New Mexico",
+            "uid": "s:20~l:23~t:167"
+          },
+          "trend": "+26"
+        },
+        {
+          "current": 0,
+          "date": "2026-11-22T08:00Z",
+          "firstPlaceVotes": 0,
+          "lastUpdated": "2026-11-22T22:11Z",
+          "points": 90.0,
+          "previous": 0,
+          "recordSummary": "0-0",
+          "team": {
+            "abbreviation": "NEB",
+            "color": "e31937",
+            "groups": {
+              "id": "5",
+              "isConference": true,
+              "parent": {
+                "id": "80",
+                "isConference": false,
+                "shortName": "FBS"
+              },
+              "shortName": "Big Ten"
+            },
+            "id": "158",
+            "links": [
+              {
+                "href": "https://www.espn.com/college-football/team/_/id/158/nebraska-cornhuskers",
+                "rel": [
+                  "clubhouse",
+                  "desktop",
+                  "team"
+                ],
+                "text": "Clubhouse"
+              }
+            ],
+            "location": "Nebraska",
+            "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/158.png",
+            "logos": [
+              {
+                "alt": "",
+                "height": 500,
+                "href": "https://a.espncdn.com/i/teamlogos/ncaa/500/158.png",
+                "lastUpdated": "2025-12-23T01:44Z",
+                "rel": [
+                  "full",
+                  "default"
+                ],
+                "width": 500
+              },
+              {
+                "alt": "",
+                "height": 500,
+                "href": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/158.png",
+                "lastUpdated": "2025-12-23T01:44Z",
+                "rel": [
+                  "full",
+                  "dark"
+                ],
+                "width": 500
+              },
+              {
+                "alt": "",
+                "height": 4096,
+                "href": "https://a.espncdn.com/guid/e9635416-dfc2-d9d6-ff1c-3e0f70ab2d8c/logos/primary_logo_on_white_color.png",
+                "lastUpdated": "2026-07-23T17:35Z",
+                "rel": [
+                  "full",
+                  "primary_logo_on_white_color"
+                ],
+                "width": 4096
+              },
+              {
+                "alt": "",
+                "height": 4096,
+                "href": "https://a.espncdn.com/guid/e9635416-dfc2-d9d6-ff1c-3e0f70ab2d8c/logos/primary_logo_on_black_color.png",
+                "lastUpdated": "2026-07-23T17:35Z",
+                "rel": [
+                  "full",
+                  "primary_logo_on_black_color"
+                ],
+                "width": 4096
+              },
+              {
+                "alt": "",
+                "height": 4096,
+                "href": "https://a.espncdn.com/guid/e9635416-dfc2-d9d6-ff1c-3e0f70ab2d8c/logos/primary_logo_on_primary_color.png",
+                "lastUpdated": "2026-07-23T17:35Z",
+                "rel": [
+                  "full",
+                  "primary_logo_on_primary_color"
+                ],
+                "width": 4096
+              }
+            ],
+            "name": "Cornhuskers",
+            "nickname": "Nebraska",
+            "uid": "s:20~l:23~t:158"
+          },
+          "trend": "+26"
+        },
+        {
+          "current": 0,
+          "date": "2026-11-22T08:00Z",
+          "firstPlaceVotes": 0,
+          "lastUpdated": "2026-11-22T22:11Z",
+          "points": 75.0,
+          "previous": 0,
+          "recordSummary": "0-0",
+          "team": {
+            "abbreviation": "UTSA",
+            "color": "0c2340",
+            "groups": {
+              "id": "151",
+              "isConference": true,
+              "parent": {
+                "id": "80",
+                "isConference": false,
+                "shortName": "FBS"
+              },
+              "shortName": "American"
+            },
+            "id": "2636",
+            "links": [
+              {
+                "href": "https://www.espn.com/college-football/team/_/id/2636/utsa-roadrunners",
+                "rel": [
+                  "clubhouse",
+                  "desktop",
+                  "team"
+                ],
+                "text": "Clubhouse"
+              }
+            ],
+            "location": "UTSA",
+            "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2636.png",
+            "logos": [
+              {
+                "alt": "",
+                "height": 500,
+                "href": "https://a.espncdn.com/i/teamlogos/ncaa/500/2636.png",
+                "lastUpdated": "2025-12-23T22:08Z",
+                "rel": [
+                  "full",
+                  "default"
+                ],
+                "width": 500
+              },
+              {
+                "alt": "",
+                "height": 500,
+                "href": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2636.png",
+                "lastUpdated": "2025-12-23T22:08Z",
+                "rel": [
+                  "full",
+                  "dark"
+                ],
+                "width": 500
+              },
+              {
+                "alt": "",
+                "height": 4096,
+                "href": "https://a.espncdn.com/guid/43f30dfa-e0d9-ad12-1cb6-f8ceae32ffb4/logos/primary_logo_on_white_color.png",
+                "lastUpdated": "2026-07-23T17:47Z",
+                "rel": [
+                  "full",
+                  "primary_logo_on_white_color"
+                ],
+                "width": 4096
+              },
+              {
+                "alt": "",
+                "height": 4096,
+                "href": "https://a.espncdn.com/guid/43f30dfa-e0d9-ad12-1cb6-f8ceae32ffb4/logos/primary_logo_on_black_color.png",
+                "lastUpdated": "2026-07-23T17:47Z",
+                "rel": [
+                  "full",
+                  "primary_logo_on_black_color"
+                ],
+                "width": 4096
+              },
+              {
+                "alt": "",
+                "height": 4096,
+                "href": "https://a.espncdn.com/guid/43f30dfa-e0d9-ad12-1cb6-f8ceae32ffb4/logos/primary_logo_on_primary_color.png",
+                "lastUpdated": "2026-07-23T17:47Z",
+                "rel": [
+                  "full",
+                  "primary_logo_on_primary_color"
+                ],
+                "width": 4096
+              }
+            ],
+            "name": "Roadrunners",
+            "nickname": "UTSA",
+            "uid": "s:20~l:23~t:2636"
+          },
+          "trend": "+26"
+        },
+        {
+          "current": 0,
+          "date": "2026-11-22T08:00Z",
+          "firstPlaceVotes": 0,
+          "lastUpdated": "2026-11-22T22:11Z",
+          "points": 62.0,
+          "previous": 17,
+          "recordSummary": "0-0",
+          "team": {
+            "abbreviation": "UK",
+            "color": "0033a0",
+            "groups": {
+              "id": "8",
+              "isConference": true,
+              "parent": {
+                "id": "80",
+                "isConference": false,
+                "shortName": "FBS"
+              },
+              "shortName": "SEC"
+            },
+            "id": "96",
+            "links": [
+              {
+                "href": "https://www.espn.com/college-football/team/_/id/96/kentucky-wildcats",
+                "rel": [
+                  "clubhouse",
+                  "desktop",
+                  "team"
+                ],
+                "text": "Clubhouse"
+              }
+            ],
+            "location": "Kentucky",
+            "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/96.png",
+            "logos": [
+              {
+                "alt": "",
+                "height": 500,
+                "href": "https://a.espncdn.com/i/teamlogos/ncaa/500/96.png",
+                "lastUpdated": "2025-12-19T23:48Z",
+                "rel": [
+                  "full",
+                  "default"
+                ],
+                "width": 500
+              },
+              {
+                "alt": "",
+                "height": 500,
+                "href": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/96.png",
+                "lastUpdated": "2025-12-19T23:47Z",
+                "rel": [
+                  "full",
+                  "dark"
+                ],
+                "width": 500
+              },
+              {
+                "alt": "",
+                "height": 4096,
+                "href": "https://a.espncdn.com/guid/d5ec1329-3c7b-93e8-6f57-982c4f33ea75/logos/primary_logo_on_white_color.png",
+                "lastUpdated": "2026-07-23T17:30Z",
+                "rel": [
+                  "full",
+                  "primary_logo_on_white_color"
+                ],
+                "width": 4096
+              },
+              {
+                "alt": "",
+                "height": 4096,
+                "href": "https://a.espncdn.com/guid/d5ec1329-3c7b-93e8-6f57-982c4f33ea75/logos/primary_logo_on_black_color.png",
+                "lastUpdated": "2026-07-23T17:30Z",
+                "rel": [
+                  "full",
+                  "primary_logo_on_black_color"
+                ],
+                "width": 4096
+              },
+              {
+                "alt": "",
+                "height": 4096,
+                "href": "https://a.espncdn.com/guid/d5ec1329-3c7b-93e8-6f57-982c4f33ea75/logos/primary_logo_on_primary_color.png",
+                "lastUpdated": "2026-07-23T17:30Z",
+                "rel": [
+                  "full",
+                  "primary_logo_on_primary_color"
+                ],
+                "width": 4096
+              }
+            ],
+            "name": "Wildcats",
+            "nickname": "Kentucky",
+            "uid": "s:20~l:23~t:96"
+          },
+          "trend": "+17"
+        },
+        {
+          "current": 0,
+          "date": "2026-11-22T08:00Z",
+          "firstPlaceVotes": 0,
+          "lastUpdated": "2026-11-22T22:11Z",
+          "points": 39.0,
+          "previous": 0,
+          "recordSummary": "0-0",
+          "team": {
+            "abbreviation": "WASH",
+            "color": "33006f",
+            "groups": {
+              "id": "5",
+              "isConference": true,
+              "parent": {
+                "id": "80",
+                "isConference": false,
+                "shortName": "FBS"
+              },
+              "shortName": "Big Ten"
+            },
+            "id": "264",
+            "links": [
+              {
+                "href": "https://www.espn.com/college-football/team/_/id/264/washington-huskies",
+                "rel": [
+                  "clubhouse",
+                  "desktop",
+                  "team"
+                ],
+                "text": "Clubhouse"
+              }
+            ],
+            "location": "Washington",
+            "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/264.png",
+            "logos": [
+              {
+                "alt": "",
+                "height": 500,
+                "href": "https://a.espncdn.com/i/teamlogos/ncaa/500/264.png",
+                "lastUpdated": "2025-12-23T01:44Z",
+                "rel": [
+                  "full",
+                  "default"
+                ],
+                "width": 500
+              },
+              {
+                "alt": "",
+                "height": 500,
+                "href": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/264.png",
+                "lastUpdated": "2025-12-23T01:44Z",
+                "rel": [
+                  "full",
+                  "dark"
+                ],
+                "width": 500
+              },
+              {
+                "alt": "",
+                "height": 4096,
+                "href": "https://a.espncdn.com/guid/0c6752e3-aae3-f2c1-32c6-79b79425f9cc/logos/primary_logo_on_white_color.png",
+                "lastUpdated": "2026-07-23T17:48Z",
+                "rel": [
+                  "full",
+                  "primary_logo_on_white_color"
+                ],
+                "width": 4096
+              },
+              {
+                "alt": "",
+                "height": 4096,
+                "href": "https://a.espncdn.com/guid/0c6752e3-aae3-f2c1-32c6-79b79425f9cc/logos/primary_logo_on_black_color.png",
+                "lastUpdated": "2026-07-23T17:48Z",
+                "rel": [
+                  "full",
+                  "primary_logo_on_black_color"
+                ],
+                "width": 4096
+              },
+              {
+                "alt": "",
+                "height": 4096,
+                "href": "https://a.espncdn.com/guid/0c6752e3-aae3-f2c1-32c6-79b79425f9cc/logos/primary_logo_on_primary_color.png",
+                "lastUpdated": "2026-07-23T17:48Z",
+                "rel": [
+                  "full",
+                  "primary_logo_on_primary_color"
+                ],
+                "width": 4096
+              }
+            ],
+            "name": "Huskies",
+            "nickname": "Washington",
+            "uid": "s:20~l:23~t:264"
+          },
+          "trend": "+26"
+        }
+      ],
+      "ranks": [
+        {
+          "current": 1,
+          "date": "2026-11-22T08:00Z",
+          "firstPlaceVotes": 56,
+          "lastUpdated": "2026-11-22T22:11Z",
+          "points": 1711.0,
+          "previous": 1,
+          "recordSummary": "10-1",
+          "team": {
+            "abbreviation": "UGA",
+            "color": "ba0c2f",
+            "groups": {
+              "id": "8",
+              "isConference": true,
+              "parent": {
+                "id": "80",
+                "isConference": false,
+                "shortName": "FBS"
+              },
+              "shortName": "SEC"
+            },
+            "id": "61",
+            "links": [
+              {
+                "href": "https://www.espn.com/college-football/team/_/id/61/georgia-bulldogs",
+                "rel": [
+                  "clubhouse",
+                  "desktop",
+                  "team"
+                ],
+                "text": "Clubhouse"
+              }
+            ],
+            "location": "Georgia",
+            "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/61.png",
+            "logos": [
+              {
+                "alt": "",
+                "height": 500,
+                "href": "https://a.espncdn.com/i/teamlogos/ncaa/500/61.png",
+                "lastUpdated": "2025-12-19T23:48Z",
+                "rel": [
+                  "full",
+                  "default"
+                ],
+                "width": 500
+              },
+              {
+                "alt": "",
+                "height": 500,
+                "href": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/61.png",
+                "lastUpdated": "2025-12-19T23:47Z",
+                "rel": [
+                  "full",
+                  "dark"
+                ],
+                "width": 500
+              },
+              {
+                "alt": "",
+                "height": 4096,
+                "href": "https://a.espncdn.com/guid/4351fef8-fe69-53b1-ea57-72684b36ec35/logos/primary_logo_on_white_color.png",
+                "lastUpdated": "2026-07-23T17:27Z",
+                "rel": [
+                  "full",
+                  "primary_logo_on_white_color"
+                ],
+                "width": 4096
+              },
+              {
+                "alt": "",
+                "height": 4096,
+                "href": "https://a.espncdn.com/guid/4351fef8-fe69-53b1-ea57-72684b36ec35/logos/primary_logo_on_black_color.png",
+                "lastUpdated": "2026-07-23T17:27Z",
+                "rel": [
+                  "full",
+                  "primary_logo_on_black_color"
+                ],
+                "width": 4096
+              },
+              {
+                "alt": "",
+                "height": 4096,
+                "href": "https://a.espncdn.com/guid/4351fef8-fe69-53b1-ea57-72684b36ec35/logos/primary_logo_on_primary_color.png",
+                "lastUpdated": "2026-07-23T17:27Z",
+                "rel": [
+                  "full",
+                  "primary_logo_on_primary_color"
+                ],
+                "width": 4096
+              }
+            ],
+            "name": "Bulldogs",
+            "nickname": "Georgia",
+            "uid": "s:20~l:23~t:61"
+          },
+          "trend": "-"
+        },
+        {
+          "current": 2,
+          "date": "2026-11-22T08:00Z",
+          "firstPlaceVotes": 12,
+          "lastUpdated": "2026-11-22T22:11Z",
+          "points": 1662.0,
+          "previous": 2,
+          "recordSummary": "11-0",
+          "team": {
+            "abbreviation": "UTAH",
+            "color": "be0000",
+            "groups": {
+              "id": "4",
+              "isConference": true,
+              "parent": {
+                "id": "80",
+                "isConference": false,
+                "shortName": "FBS"
+              },
+              "shortName": "Big 12"
+            },
+            "id": "254",
+            "links": [
+              {
+                "href": "https://www.espn.com/college-football/team/_/id/254/utah-utes",
+                "rel": [
+                  "clubhouse",
+                  "desktop",
+                  "team"
+                ],
+                "text": "Clubhouse"
+              }
+            ],
+            "location": "Utah",
+            "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/254.png",
+            "logos": [
+              {
+                "alt": "",
+                "height": 500,
+                "href": "https://a.espncdn.com/i/teamlogos/ncaa/500/254.png",
+                "lastUpdated": "2025-12-23T01:44Z",
+                "rel": [
+                  "full",
+                  "default"
+                ],
+                "width": 500
+              },
+              {
+                "alt": "",
+                "height": 500,
+                "href": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/254.png",
+                "lastUpdated": "2026-01-05T20:06Z",
+                "rel": [
+                  "full",
+                  "dark"
+                ],
+                "width": 500
+              },
+              {
+                "alt": "",
+                "height": 4096,
+                "href": "https://a.espncdn.com/guid/8dbdf443-6ffa-7a66-b58f-c0a7484ead29/logos/primary_logo_on_white_color.png",
+                "lastUpdated": "2026-07-23T17:47Z",
+                "rel": [
+                  "full",
+                  "primary_logo_on_white_color"
+                ],
+                "width": 4096
+              },
+              {
+                "alt": "",
+                "height": 4096,
+                "href": "https://a.espncdn.com/guid/8dbdf443-6ffa-7a66-b58f-c0a7484ead29/logos/primary_logo_on_black_color.png",
+                "lastUpdated": "2026-07-23T17:47Z",
+                "rel": [
+                  "full",
+                  "primary_logo_on_black_color"
+                ],
+                "width": 4096
+              },
+              {
+                "alt": "",
+                "height": 4096,
+                "href": "https://a.espncdn.com/guid/8dbdf443-6ffa-7a66-b58f-c0a7484ead29/logos/primary_logo_on_primary_color.png",
+                "lastUpdated": "2026-07-23T17:47Z",
+                "rel": [
+                  "full",
+                  "primary_logo_on_primary_color"
+                ],
+                "width": 4096
+              }
+            ],
+            "name": "Utes",
+            "nickname": "Utah",
+            "uid": "s:20~l:23~t:254"
+          },
+          "trend": "-"
+        },
+        {
+          "current": 3,
+          "date": "2026-11-22T08:00Z",
+          "firstPlaceVotes": 1,
+          "lastUpdated": "2026-11-22T22:11Z",
+          "points": 1591.0,
+          "previous": 3,
+          "recordSummary": "10-1",
+          "team": {
+            "abbreviation": "ND",
+            "color": "062340",
+            "groups": {
+              "id": "18",
+              "isConference": true,
+              "parent": {
+                "id": "80",
+                "isConference": false,
+                "shortName": "FBS"
+              },
+              "shortName": "FBS Indep."
+            },
+            "id": "87",
+            "links": [
+              {
+                "href": "https://www.espn.com/college-football/team/_/id/87/notre-dame-fighting-irish",
+                "rel": [
+                  "clubhouse",
+                  "desktop",
+                  "team"
+                ],
+                "text": "Clubhouse"
+              }
+            ],
+            "location": "Notre Dame",
+            "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/87.png",
+            "logos": [
+              {
+                "alt": "",
+                "height": 500,
+                "href": "https://a.espncdn.com/i/teamlogos/ncaa/500/87.png",
+                "lastUpdated": "2025-12-19T22:33Z",
+                "rel": [
+                  "full",
+                  "default"
+                ],
+                "width": 500
+              },
+              {
+                "alt": "",
+                "height": 500,
+                "href": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/87.png",
+                "lastUpdated": "2025-12-19T22:35Z",
+                "rel": [
+                  "full",
+                  "dark"
+                ],
+                "width": 500
+              },
+              {
+                "alt": "",
+                "height": 4096,
+                "href": "https://a.espncdn.com/guid/ebc2999c-2ff4-8435-ca46-9641e9f9ea10/logos/primary_logo_on_white_color.png",
+                "lastUpdated": "2026-07-23T17:37Z",
+                "rel": [
+                  "full",
+                  "primary_logo_on_white_color"
+                ],
+                "width": 4096
+              },
+              {
+                "alt": "",
+                "height": 4096,
+                "href": "https://a.espncdn.com/guid/ebc2999c-2ff4-8435-ca46-9641e9f9ea10/logos/primary_logo_on_black_color.png",
+                "lastUpdated": "2026-07-23T17:37Z",
+                "rel": [
+                  "full",
+                  "primary_logo_on_black_color"
+                ],
+                "width": 4096
+              },
+              {
+                "alt": "",
+                "height": 4096,
+                "href": "https://a.espncdn.com/guid/ebc2999c-2ff4-8435-ca46-9641e9f9ea10/logos/primary_logo_on_primary_color.png",
+                "lastUpdated": "2026-07-23T17:37Z",
+                "rel": [
+                  "full",
+                  "primary_logo_on_primary_color"
+                ],
+                "width": 4096
+              }
+            ],
+            "name": "Fighting Irish",
+            "nickname": "Notre Dame",
+            "uid": "s:20~l:23~t:87"
+          },
+          "trend": "-"
+        },
+        {
+          "current": 4,
+          "date": "2026-11-22T08:00Z",
+          "firstPlaceVotes": 0,
+          "lastUpdated": "2026-11-22T22:11Z",
+          "points": 1491.0,
+          "previous": 5,
+          "recordSummary": "10-1",
+          "team": {
+            "abbreviation": "MIA",
+            "color": "f47423",
+            "groups": {
+              "id": "1",
+              "isConference": true,
+              "parent": {
+                "id": "80",
+                "isConference": false,
+                "shortName": "FBS"
+              },
+              "shortName": "ACC"
+            },
+            "id": "2390",
+            "links": [
+              {
+                "href": "https://www.espn.com/college-football/team/_/id/2390/miami-hurricanes",
+                "rel": [
+                  "clubhouse",
+                  "desktop",
+                  "team"
+                ],
+                "text": "Clubhouse"
+              }
+            ],
+            "location": "Miami",
+            "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2390.png",
+            "logos": [
+              {
+                "alt": "",
+                "height": 500,
+                "href": "https://a.espncdn.com/i/teamlogos/ncaa/500/2390.png",
+                "lastUpdated": "2025-12-19T22:33Z",
+                "rel": [
+                  "full",
+                  "default"
+                ],
+                "width": 500
+              },
+              {
+                "alt": "",
+                "height": 500,
+                "href": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2390.png",
+                "lastUpdated": "2025-12-19T22:35Z",
+                "rel": [
+                  "full",
+                  "dark"
+                ],
+                "width": 500
+              },
+              {
+                "alt": "",
+                "height": 4096,
+                "href": "https://a.espncdn.com/guid/2b3657a5-caae-31a2-899a-0d09df0f7bed/logos/primary_logo_on_white_color.png",
+                "lastUpdated": "2026-07-23T17:33Z",
+                "rel": [
+                  "full",
+                  "primary_logo_on_white_color"
+                ],
+                "width": 4096
+              },
+              {
+                "alt": "",
+                "height": 4096,
+                "href": "https://a.espncdn.com/guid/2b3657a5-caae-31a2-899a-0d09df0f7bed/logos/primary_logo_on_black_color.png",
+                "lastUpdated": "2026-07-23T17:33Z",
+                "rel": [
+                  "full",
+                  "primary_logo_on_black_color"
+                ],
+                "width": 4096
+              },
+              {
+                "alt": "",
+                "height": 4096,
+                "href": "https://a.espncdn.com/guid/2b3657a5-caae-31a2-899a-0d09df0f7bed/logos/primary_logo_on_primary_color.png",
+                "lastUpdated": "2026-07-23T17:33Z",
+                "rel": [
+                  "full",
+                  "primary_logo_on_primary_color"
+                ],
+                "width": 4096
+              }
+            ],
+            "name": "Hurricanes",
+            "nickname": "Miami",
+            "uid": "s:20~l:23~t:2390"
+          },
+          "trend": "+1"
+        },
+        {
+          "current": 5,
+          "date": "2026-11-22T08:00Z",
+          "firstPlaceVotes": 0,
+          "lastUpdated": "2026-11-22T22:11Z",
+          "points": 1392.0,
+          "previous": 8,
+          "recordSummary": "9-2",
+          "team": {
+            "abbreviation": "TEX",
+            "color": "af5c37",
+            "groups": {
+              "id": "8",
+              "isConference": true,
+              "parent": {
+                "id": "80",
+                "isConference": false,
+                "shortName": "FBS"
+              },
+              "shortName": "SEC"
+            },
+            "id": "251",
+            "links": [
+              {
+                "href": "https://www.espn.com/college-football/team/_/id/251/texas-longhorns",
+                "rel": [
+                  "clubhouse",
+                  "desktop",
+                  "team"
+                ],
+                "text": "Clubhouse"
+              }
+            ],
+            "location": "Texas",
+            "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/251.png",
+            "logos": [
+              {
+                "alt": "",
+                "height": 500,
+                "href": "https://a.espncdn.com/i/teamlogos/ncaa/500/251.png",
+                "lastUpdated": "2025-12-19T23:48Z",
+                "rel": [
+                  "full",
+                  "default"
+                ],
+                "width": 500
+              },
+              {
+                "alt": "",
+                "height": 500,
+                "href": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/251.png",
+                "lastUpdated": "2025-12-19T23:47Z",
+                "rel": [
+                  "full",
+                  "dark"
+                ],
+                "width": 500
+              },
+              {
+                "alt": "",
+                "height": 4096,
+                "href": "https://a.espncdn.com/guid/013a8bab-0dd5-f6a0-45e6-1128a124f34b/logos/primary_logo_on_white_color.png",
+                "lastUpdated": "2026-07-23T17:44Z",
+                "rel": [
+                  "full",
+                  "primary_logo_on_white_color"
+                ],
+                "width": 4096
+              },
+              {
+                "alt": "",
+                "height": 4096,
+                "href": "https://a.espncdn.com/guid/013a8bab-0dd5-f6a0-45e6-1128a124f34b/logos/primary_logo_on_black_color.png",
+                "lastUpdated": "2026-07-23T17:44Z",
+                "rel": [
+                  "full",
+                  "primary_logo_on_black_color"
+                ],
+                "width": 4096
+              },
+              {
+                "alt": "",
+                "height": 4096,
+                "href": "https://a.espncdn.com/guid/013a8bab-0dd5-f6a0-45e6-1128a124f34b/logos/primary_logo_on_primary_color.png",
+                "lastUpdated": "2026-07-23T17:44Z",
+                "rel": [
+                  "full",
+                  "primary_logo_on_primary_color"
+                ],
+                "width": 4096
+              }
+            ],
+            "name": "Longhorns",
+            "nickname": "Texas",
+            "uid": "s:20~l:23~t:251"
+          },
+          "trend": "+3"
+        }
+      ],
+      "season": {
+        "athletes": {
+          "$ref": "http://sports.core.api.espn.pvt/v2/sports/football/leagues/college-football/seasons/2026/athletes?lang=en&region=us"
+        },
+        "displayName": "2026",
+        "endDate": "2027-01-28T07:59Z",
+        "futures": {
+          "$ref": "http://sports.core.api.espn.pvt/v2/sports/football/leagues/college-football/seasons/2026/futures?lang=en&region=us"
+        },
+        "leaders": {
+          "$ref": "http://sports.core.api.espn.pvt/v2/sports/football/leagues/college-football/seasons/2026/types/2/leaders?lang=en&region=us"
+        },
+        "startDate": "2026-02-01T08:00Z",
+        "type": {
+          "abbreviation": "reg",
+          "name": "Regular Season",
+          "type": 2
+        },
+        "year": 2026
+      },
+      "shortHeadline": "2026 AP Poll: Week 13",
+      "shortName": "AP Poll",
+      "showConferences": false,
+      "type": "ap"
+    },
+    {
+      "$ref": "http://sports.core.api.espn.pvt/v2/sports/football/leagues/college-football/seasons/2026/types/2/weeks/13/rankings/2?lang=en&region=us",
+      "availability": {},
+      "date": "2026-11-22T08:00Z",
+      "droppedOut": [
+        {
+          "current": 0,
+          "date": "2026-11-22T08:00Z",
+          "firstPlaceVotes": 0,
+          "lastUpdated": "2026-11-22T20:55Z",
+          "points": 153.0,
+          "previous": 17,
+          "recordSummary": "0-0",
+          "team": {
+            "abbreviation": "OSU",
+            "color": "ba0c2f",
+            "groups": {
+              "id": "5",
+              "isConference": true,
+              "parent": {
+                "id": "80",
+                "isConference": false,
+                "shortName": "FBS"
+              },
+              "shortName": "Big Ten"
+            },
+            "id": "194",
+            "links": [
+              {
+                "href": "https://www.espn.com/college-football/team/_/id/194/ohio-state-buckeyes",
+                "rel": [
+                  "clubhouse",
+                  "desktop",
+                  "team"
+                ],
+                "text": "Clubhouse"
+              }
+            ],
+            "location": "Ohio State",
+            "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/194.png",
+            "logos": [
+              {
+                "alt": "",
+                "height": 500,
+                "href": "https://a.espncdn.com/i/teamlogos/ncaa/500/194.png",
+                "lastUpdated": "2025-12-23T01:44Z",
+                "rel": [
+                  "full",
+                  "default"
+                ],
+                "width": 500
+              },
+              {
+                "alt": "",
+                "height": 500,
+                "href": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/194.png",
+                "lastUpdated": "2025-12-23T01:44Z",
+                "rel": [
+                  "full",
+                  "dark"
+                ],
+                "width": 500
+              },
+              {
+                "alt": "",
+                "height": 4096,
+                "href": "https://a.espncdn.com/guid/2fc3b71f-8247-22a5-f6da-df3902cbb438/logos/primary_logo_on_white_color.png",
+                "lastUpdated": "2026-07-23T17:37Z",
+                "rel": [
+                  "full",
+                  "primary_logo_on_white_color"
+                ],
+                "width": 4096
+              },
+              {
+                "alt": "",
+                "height": 4096,
+                "href": "https://a.espncdn.com/guid/2fc3b71f-8247-22a5-f6da-df3902cbb438/logos/primary_logo_on_black_color.png",
+                "lastUpdated": "2026-07-23T17:37Z",
+                "rel": [
+                  "full",
+                  "primary_logo_on_black_color"
+                ],
+                "width": 4096
+              },
+              {
+                "alt": "",
+                "height": 4096,
+                "href": "https://a.espncdn.com/guid/2fc3b71f-8247-22a5-f6da-df3902cbb438/logos/primary_logo_on_primary_color.png",
+                "lastUpdated": "2026-07-23T17:37Z",
+                "rel": [
+                  "full",
+                  "primary_logo_on_primary_color"
+                ],
+                "width": 4096
+              }
+            ],
+            "name": "Buckeyes",
+            "nickname": "Ohio State",
+            "uid": "s:20~l:23~t:194"
+          },
+          "trend": "+17"
+        },
+        {
+          "current": 0,
+          "date": "2026-11-22T08:00Z",
+          "firstPlaceVotes": 0,
+          "lastUpdated": "2026-11-22T20:55Z",
+          "points": 4.0,
+          "previous": 23,
+          "recordSummary": "0-0",
+          "team": {
+            "abbreviation": "LSU",
+            "color": "461d76",
+            "groups": {
+              "id": "8",
+              "isConference": true,
+              "parent": {
+                "id": "80",
+                "isConference": false,
+                "shortName": "FBS"
+              },
+              "shortName": "SEC"
+            },
+            "id": "99",
+            "links": [
+              {
+                "href": "https://www.espn.com/college-football/team/_/id/99/lsu-tigers",
+                "rel": [
+                  "clubhouse",
+                  "desktop",
+                  "team"
+                ],
+                "text": "Clubhouse"
+              }
+            ],
+            "location": "LSU",
+            "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/99.png",
+            "logos": [
+              {
+                "alt": "",
+                "height": 500,
+                "href": "https://a.espncdn.com/i/teamlogos/ncaa/500/99.png",
+                "lastUpdated": "2025-12-19T23:48Z",
+                "rel": [
+                  "full",
+                  "default"
+                ],
+                "width": 500
+              },
+              {
+                "alt": "",
+                "height": 500,
+                "href": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/99.png",
+                "lastUpdated": "2025-12-19T23:47Z",
+                "rel": [
+                  "full",
+                  "dark"
+                ],
+                "width": 500
+              },
+              {
+                "alt": "",
+                "height": 4096,
+                "href": "https://a.espncdn.com/guid/b9a22bd6-7449-92bc-0e95-a6d8da673b3e/logos/primary_logo_on_white_color.png",
+                "lastUpdated": "2026-07-23T17:30Z",
+                "rel": [
+                  "full",
+                  "primary_logo_on_white_color"
+                ],
+                "width": 4096
+              },
+              {
+                "alt": "",
+                "height": 4096,
+                "href": "https://a.espncdn.com/guid/b9a22bd6-7449-92bc-0e95-a6d8da673b3e/logos/primary_logo_on_black_color.png",
+                "lastUpdated": "2026-07-23T17:30Z",
+                "rel": [
+                  "full",
+                  "primary_logo_on_black_color"
+                ],
+                "width": 4096
+              },
+              {
+                "alt": "",
+                "height": 4096,
+                "href": "https://a.espncdn.com/guid/b9a22bd6-7449-92bc-0e95-a6d8da673b3e/logos/primary_logo_on_primary_color.png",
+                "lastUpdated": "2026-07-23T17:30Z",
+                "rel": [
+                  "full",
+                  "primary_logo_on_primary_color"
+                ],
+                "width": 4096
+              }
+            ],
+            "name": "Tigers",
+            "nickname": "LSU",
+            "uid": "s:20~l:23~t:99"
+          },
+          "trend": "+23"
+        },
+        {
+          "current": 0,
+          "date": "2026-11-22T08:00Z",
+          "firstPlaceVotes": 0,
+          "lastUpdated": "2026-11-22T20:55Z",
+          "points": 22.0,
+          "previous": 24,
+          "recordSummary": "0-0",
+          "team": {
+            "abbreviation": "DUKE",
+            "color": "00539b",
+            "groups": {
+              "id": "1",
+              "isConference": true,
+              "parent": {
+                "id": "80",
+                "isConference": false,
+                "shortName": "FBS"
+              },
+              "shortName": "ACC"
+            },
+            "id": "150",
+            "links": [
+              {
+                "href": "https://www.espn.com/college-football/team/_/id/150/duke-blue-devils",
+                "rel": [
+                  "clubhouse",
+                  "desktop",
+                  "team"
+                ],
+                "text": "Clubhouse"
+              }
+            ],
+            "location": "Duke",
+            "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/150.png",
+            "logos": [
+              {
+                "alt": "",
+                "height": 500,
+                "href": "https://a.espncdn.com/i/teamlogos/ncaa/500/150.png",
+                "lastUpdated": "2025-12-19T22:33Z",
+                "rel": [
+                  "full",
+                  "default"
+                ],
+                "width": 500
+              },
+              {
+                "alt": "",
+                "height": 500,
+                "href": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/150.png",
+                "lastUpdated": "2026-01-05T20:04Z",
+                "rel": [
+                  "full",
+                  "dark"
+                ],
+                "width": 500
+              },
+              {
+                "alt": "",
+                "height": 4096,
+                "href": "https://a.espncdn.com/guid/33423e84-1594-6373-1025-20cdd256c421/logos/primary_logo_on_white_color.png",
+                "lastUpdated": "2026-07-23T17:25Z",
+                "rel": [
+                  "full",
+                  "primary_logo_on_white_color"
+                ],
+                "width": 4096
+              },
+              {
+                "alt": "",
+                "height": 4096,
+                "href": "https://a.espncdn.com/guid/33423e84-1594-6373-1025-20cdd256c421/logos/primary_logo_on_black_color.png",
+                "lastUpdated": "2026-07-23T17:25Z",
+                "rel": [
+                  "full",
+                  "primary_logo_on_black_color"
+                ],
+                "width": 4096
+              },
+              {
+                "alt": "",
+                "height": 4096,
+                "href": "https://a.espncdn.com/guid/33423e84-1594-6373-1025-20cdd256c421/logos/primary_logo_on_primary_color.png",
+                "lastUpdated": "2026-07-23T17:25Z",
+                "rel": [
+                  "full",
+                  "primary_logo_on_primary_color"
+                ],
+                "width": 4096
+              }
+            ],
+            "name": "Blue Devils",
+            "nickname": "Duke",
+            "uid": "s:20~l:23~t:150"
+          },
+          "trend": "+24"
+        }
+      ],
+      "firstOccurrence": {
+        "type": "week",
+        "value": "1"
+      },
+      "headline": "2026 NCAA Football Rankings - AFCA Coaches Poll Week 13",
+      "id": "2",
+      "lastUpdated": "2026-11-22T20:55Z",
+      "name": "AFCA Coaches Poll",
+      "occurrence": {
+        "displayValue": "Week 13",
+        "last": false,
+        "number": 13,
+        "type": "week",
+        "value": "13"
+      },
+      "others": [
+        {
+          "current": 0,
+          "date": "2026-11-22T08:00Z",
+          "firstPlaceVotes": 0,
+          "lastUpdated": "2026-11-22T20:55Z",
+          "points": 153.0,
+          "previous": 17,
+          "recordSummary": "0-0",
+          "team": {
+            "abbreviation": "OSU",
+            "color": "ba0c2f",
+            "groups": {
+              "id": "5",
+              "isConference": true,
+              "parent": {
+                "id": "80",
+                "isConference": false,
+                "shortName": "FBS"
+              },
+              "shortName": "Big Ten"
+            },
+            "id": "194",
+            "links": [
+              {
+                "href": "https://www.espn.com/college-football/team/_/id/194/ohio-state-buckeyes",
+                "rel": [
+                  "clubhouse",
+                  "desktop",
+                  "team"
+                ],
+                "text": "Clubhouse"
+              }
+            ],
+            "location": "Ohio State",
+            "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/194.png",
+            "logos": [
+              {
+                "alt": "",
+                "height": 500,
+                "href": "https://a.espncdn.com/i/teamlogos/ncaa/500/194.png",
+                "lastUpdated": "2025-12-23T01:44Z",
+                "rel": [
+                  "full",
+                  "default"
+                ],
+                "width": 500
+              },
+              {
+                "alt": "",
+                "height": 500,
+                "href": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/194.png",
+                "lastUpdated": "2025-12-23T01:44Z",
+                "rel": [
+                  "full",
+                  "dark"
+                ],
+                "width": 500
+              },
+              {
+                "alt": "",
+                "height": 4096,
+                "href": "https://a.espncdn.com/guid/2fc3b71f-8247-22a5-f6da-df3902cbb438/logos/primary_logo_on_white_color.png",
+                "lastUpdated": "2026-07-23T17:37Z",
+                "rel": [
+                  "full",
+                  "primary_logo_on_white_color"
+                ],
+                "width": 4096
+              },
+              {
+                "alt": "",
+                "height": 4096,
+                "href": "https://a.espncdn.com/guid/2fc3b71f-8247-22a5-f6da-df3902cbb438/logos/primary_logo_on_black_color.png",
+                "lastUpdated": "2026-07-23T17:37Z",
+                "rel": [
+                  "full",
+                  "primary_logo_on_black_color"
+                ],
+                "width": 4096
+              },
+              {
+                "alt": "",
+                "height": 4096,
+                "href": "https://a.espncdn.com/guid/2fc3b71f-8247-22a5-f6da-df3902cbb438/logos/primary_logo_on_primary_color.png",
+                "lastUpdated": "2026-07-23T17:37Z",
+                "rel": [
+                  "full",
+                  "primary_logo_on_primary_color"
+                ],
+                "width": 4096
+              }
+            ],
+            "name": "Buckeyes",
+            "nickname": "Ohio State",
+            "uid": "s:20~l:23~t:194"
+          },
+          "trend": "+17"
+        },
+        {
+          "current": 0,
+          "date": "2026-11-22T08:00Z",
+          "firstPlaceVotes": 0,
+          "lastUpdated": "2026-11-22T20:55Z",
+          "points": 84.0,
+          "previous": 0,
+          "recordSummary": "0-0",
+          "team": {
+            "abbreviation": "UTSA",
+            "color": "0c2340",
+            "groups": {
+              "id": "151",
+              "isConference": true,
+              "parent": {
+                "id": "80",
+                "isConference": false,
+                "shortName": "FBS"
+              },
+              "shortName": "American"
+            },
+            "id": "2636",
+            "links": [
+              {
+                "href": "https://www.espn.com/college-football/team/_/id/2636/utsa-roadrunners",
+                "rel": [
+                  "clubhouse",
+                  "desktop",
+                  "team"
+                ],
+                "text": "Clubhouse"
+              }
+            ],
+            "location": "UTSA",
+            "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2636.png",
+            "logos": [
+              {
+                "alt": "",
+                "height": 500,
+                "href": "https://a.espncdn.com/i/teamlogos/ncaa/500/2636.png",
+                "lastUpdated": "2025-12-23T22:08Z",
+                "rel": [
+                  "full",
+                  "default"
+                ],
+                "width": 500
+              },
+              {
+                "alt": "",
+                "height": 500,
+                "href": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2636.png",
+                "lastUpdated": "2025-12-23T22:08Z",
+                "rel": [
+                  "full",
+                  "dark"
+                ],
+                "width": 500
+              },
+              {
+                "alt": "",
+                "height": 4096,
+                "href": "https://a.espncdn.com/guid/43f30dfa-e0d9-ad12-1cb6-f8ceae32ffb4/logos/primary_logo_on_white_color.png",
+                "lastUpdated": "2026-07-23T17:47Z",
+                "rel": [
+                  "full",
+                  "primary_logo_on_white_color"
+                ],
+                "width": 4096
+              },
+              {
+                "alt": "",
+                "height": 4096,
+                "href": "https://a.espncdn.com/guid/43f30dfa-e0d9-ad12-1cb6-f8ceae32ffb4/logos/primary_logo_on_black_color.png",
+                "lastUpdated": "2026-07-23T17:47Z",
+                "rel": [
+                  "full",
+                  "primary_logo_on_black_color"
+                ],
+                "width": 4096
+              },
+              {
+                "alt": "",
+                "height": 4096,
+                "href": "https://a.espncdn.com/guid/43f30dfa-e0d9-ad12-1cb6-f8ceae32ffb4/logos/primary_logo_on_primary_color.png",
+                "lastUpdated": "2026-07-23T17:47Z",
+                "rel": [
+                  "full",
+                  "primary_logo_on_primary_color"
+                ],
+                "width": 4096
+              }
+            ],
+            "name": "Roadrunners",
+            "nickname": "UTSA",
+            "uid": "s:20~l:23~t:2636"
+          },
+          "trend": "+26"
+        },
+        {
+          "current": 0,
+          "date": "2026-11-22T08:00Z",
+          "firstPlaceVotes": 0,
+          "lastUpdated": "2026-11-22T20:55Z",
+          "points": 78.0,
+          "previous": 0,
+          "recordSummary": "0-0",
+          "team": {
+            "abbreviation": "UNM",
+            "color": "ba0c2f",
+            "groups": {
+              "id": "17",
+              "isConference": true,
+              "parent": {
+                "id": "80",
+                "isConference": false,
+                "shortName": "FBS"
+              },
+              "shortName": "Mountain West"
+            },
+            "id": "167",
+            "links": [
+              {
+                "href": "https://www.espn.com/college-football/team/_/id/167/new-mexico-lobos",
+                "rel": [
+                  "clubhouse",
+                  "desktop",
+                  "team"
+                ],
+                "text": "Clubhouse"
+              }
+            ],
+            "location": "New Mexico",
+            "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/167.png",
+            "logos": [
+              {
+                "alt": "",
+                "height": 500,
+                "href": "https://a.espncdn.com/i/teamlogos/ncaa/500/167.png",
+                "lastUpdated": "2025-12-24T20:19Z",
+                "rel": [
+                  "full",
+                  "default"
+                ],
+                "width": 500
+              },
+              {
+                "alt": "",
+                "height": 500,
+                "href": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/167.png",
+                "lastUpdated": "2025-12-24T20:18Z",
+                "rel": [
+                  "full",
+                  "dark"
+                ],
+                "width": 500
+              },
+              {
+                "alt": "",
+                "height": 4096,
+                "href": "https://a.espncdn.com/guid/a35083ab-ed9e-a3f2-be14-f7958c2b6655/logos/primary_logo_on_white_color.png",
+                "lastUpdated": "2026-07-23T17:35Z",
+                "rel": [
+                  "full",
+                  "primary_logo_on_white_color"
+                ],
+                "width": 4096
+              },
+              {
+                "alt": "",
+                "height": 4096,
+                "href": "https://a.espncdn.com/guid/a35083ab-ed9e-a3f2-be14-f7958c2b6655/logos/primary_logo_on_black_color.png",
+                "lastUpdated": "2026-07-23T17:35Z",
+                "rel": [
+                  "full",
+                  "primary_logo_on_black_color"
+                ],
+                "width": 4096
+              },
+              {
+                "alt": "",
+                "height": 4096,
+                "href": "https://a.espncdn.com/guid/a35083ab-ed9e-a3f2-be14-f7958c2b6655/logos/primary_logo_on_primary_color.png",
+                "lastUpdated": "2026-07-23T17:35Z",
+                "rel": [
+                  "full",
+                  "primary_logo_on_primary_color"
+                ],
+                "width": 4096
+              }
+            ],
+            "name": "Lobos",
+            "nickname": "New Mexico",
+            "uid": "s:20~l:23~t:167"
+          },
+          "trend": "+26"
+        },
+        {
+          "current": 0,
+          "date": "2026-11-22T08:00Z",
+          "firstPlaceVotes": 0,
+          "lastUpdated": "2026-11-22T20:55Z",
+          "points": 71.0,
+          "previous": 0,
+          "recordSummary": "0-0",
+          "team": {
+            "abbreviation": "NEB",
+            "color": "e31937",
+            "groups": {
+              "id": "5",
+              "isConference": true,
+              "parent": {
+                "id": "80",
+                "isConference": false,
+                "shortName": "FBS"
+              },
+              "shortName": "Big Ten"
+            },
+            "id": "158",
+            "links": [
+              {
+                "href": "https://www.espn.com/college-football/team/_/id/158/nebraska-cornhuskers",
+                "rel": [
+                  "clubhouse",
+                  "desktop",
+                  "team"
+                ],
+                "text": "Clubhouse"
+              }
+            ],
+            "location": "Nebraska",
+            "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/158.png",
+            "logos": [
+              {
+                "alt": "",
+                "height": 500,
+                "href": "https://a.espncdn.com/i/teamlogos/ncaa/500/158.png",
+                "lastUpdated": "2025-12-23T01:44Z",
+                "rel": [
+                  "full",
+                  "default"
+                ],
+                "width": 500
+              },
+              {
+                "alt": "",
+                "height": 500,
+                "href": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/158.png",
+                "lastUpdated": "2025-12-23T01:44Z",
+                "rel": [
+                  "full",
+                  "dark"
+                ],
+                "width": 500
+              },
+              {
+                "alt": "",
+                "height": 4096,
+                "href": "https://a.espncdn.com/guid/e9635416-dfc2-d9d6-ff1c-3e0f70ab2d8c/logos/primary_logo_on_white_color.png",
+                "lastUpdated": "2026-07-23T17:35Z",
+                "rel": [
+                  "full",
+                  "primary_logo_on_white_color"
+                ],
+                "width": 4096
+              },
+              {
+                "alt": "",
+                "height": 4096,
+                "href": "https://a.espncdn.com/guid/e9635416-dfc2-d9d6-ff1c-3e0f70ab2d8c/logos/primary_logo_on_black_color.png",
+                "lastUpdated": "2026-07-23T17:35Z",
+                "rel": [
+                  "full",
+                  "primary_logo_on_black_color"
+                ],
+                "width": 4096
+              },
+              {
+                "alt": "",
+                "height": 4096,
+                "href": "https://a.espncdn.com/guid/e9635416-dfc2-d9d6-ff1c-3e0f70ab2d8c/logos/primary_logo_on_primary_color.png",
+                "lastUpdated": "2026-07-23T17:35Z",
+                "rel": [
+                  "full",
+                  "primary_logo_on_primary_color"
+                ],
+                "width": 4096
+              }
+            ],
+            "name": "Cornhuskers",
+            "nickname": "Nebraska",
+            "uid": "s:20~l:23~t:158"
+          },
+          "trend": "+26"
+        },
+        {
+          "current": 0,
+          "date": "2026-11-22T08:00Z",
+          "firstPlaceVotes": 0,
+          "lastUpdated": "2026-11-22T20:55Z",
+          "points": 68.0,
+          "previous": 0,
+          "recordSummary": "0-0",
+          "team": {
+            "abbreviation": "WASH",
+            "color": "33006f",
+            "groups": {
+              "id": "5",
+              "isConference": true,
+              "parent": {
+                "id": "80",
+                "isConference": false,
+                "shortName": "FBS"
+              },
+              "shortName": "Big Ten"
+            },
+            "id": "264",
+            "links": [
+              {
+                "href": "https://www.espn.com/college-football/team/_/id/264/washington-huskies",
+                "rel": [
+                  "clubhouse",
+                  "desktop",
+                  "team"
+                ],
+                "text": "Clubhouse"
+              }
+            ],
+            "location": "Washington",
+            "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/264.png",
+            "logos": [
+              {
+                "alt": "",
+                "height": 500,
+                "href": "https://a.espncdn.com/i/teamlogos/ncaa/500/264.png",
+                "lastUpdated": "2025-12-23T01:44Z",
+                "rel": [
+                  "full",
+                  "default"
+                ],
+                "width": 500
+              },
+              {
+                "alt": "",
+                "height": 500,
+                "href": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/264.png",
+                "lastUpdated": "2025-12-23T01:44Z",
+                "rel": [
+                  "full",
+                  "dark"
+                ],
+                "width": 500
+              },
+              {
+                "alt": "",
+                "height": 4096,
+                "href": "https://a.espncdn.com/guid/0c6752e3-aae3-f2c1-32c6-79b79425f9cc/logos/primary_logo_on_white_color.png",
+                "lastUpdated": "2026-07-23T17:48Z",
+                "rel": [
+                  "full",
+                  "primary_logo_on_white_color"
+                ],
+                "width": 4096
+              },
+              {
+                "alt": "",
+                "height": 4096,
+                "href": "https://a.espncdn.com/guid/0c6752e3-aae3-f2c1-32c6-79b79425f9cc/logos/primary_logo_on_black_color.png",
+                "lastUpdated": "2026-07-23T17:48Z",
+                "rel": [
+                  "full",
+                  "primary_logo_on_black_color"
+                ],
+                "width": 4096
+              },
+              {
+                "alt": "",
+                "height": 4096,
+                "href": "https://a.espncdn.com/guid/0c6752e3-aae3-f2c1-32c6-79b79425f9cc/logos/primary_logo_on_primary_color.png",
+                "lastUpdated": "2026-07-23T17:48Z",
+                "rel": [
+                  "full",
+                  "primary_logo_on_primary_color"
+                ],
+                "width": 4096
+              }
+            ],
+            "name": "Huskies",
+            "nickname": "Washington",
+            "uid": "s:20~l:23~t:264"
+          },
+          "trend": "+26"
+        }
+      ],
+      "ranks": [
+        {
+          "current": 1,
+          "date": "2026-11-22T08:00Z",
+          "firstPlaceVotes": 60,
+          "lastUpdated": "2026-11-22T20:55Z",
+          "points": 1811.0,
+          "previous": 1,
+          "recordSummary": "10-1",
+          "team": {
+            "abbreviation": "UGA",
+            "color": "ba0c2f",
+            "groups": {
+              "id": "8",
+              "isConference": true,
+              "parent": {
+                "id": "80",
+                "isConference": false,
+                "shortName": "FBS"
+              },
+              "shortName": "SEC"
+            },
+            "id": "61",
+            "links": [
+              {
+                "href": "https://www.espn.com/college-football/team/_/id/61/georgia-bulldogs",
+                "rel": [
+                  "clubhouse",
+                  "desktop",
+                  "team"
+                ],
+                "text": "Clubhouse"
+              }
+            ],
+            "location": "Georgia",
+            "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/61.png",
+            "logos": [
+              {
+                "alt": "",
+                "height": 500,
+                "href": "https://a.espncdn.com/i/teamlogos/ncaa/500/61.png",
+                "lastUpdated": "2025-12-19T23:48Z",
+                "rel": [
+                  "full",
+                  "default"
+                ],
+                "width": 500
+              },
+              {
+                "alt": "",
+                "height": 500,
+                "href": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/61.png",
+                "lastUpdated": "2025-12-19T23:47Z",
+                "rel": [
+                  "full",
+                  "dark"
+                ],
+                "width": 500
+              },
+              {
+                "alt": "",
+                "height": 4096,
+                "href": "https://a.espncdn.com/guid/4351fef8-fe69-53b1-ea57-72684b36ec35/logos/primary_logo_on_white_color.png",
+                "lastUpdated": "2026-07-23T17:27Z",
+                "rel": [
+                  "full",
+                  "primary_logo_on_white_color"
+                ],
+                "width": 4096
+              },
+              {
+                "alt": "",
+                "height": 4096,
+                "href": "https://a.espncdn.com/guid/4351fef8-fe69-53b1-ea57-72684b36ec35/logos/primary_logo_on_black_color.png",
+                "lastUpdated": "2026-07-23T17:27Z",
+                "rel": [
+                  "full",
+                  "primary_logo_on_black_color"
+                ],
+                "width": 4096
+              },
+              {
+                "alt": "",
+                "height": 4096,
+                "href": "https://a.espncdn.com/guid/4351fef8-fe69-53b1-ea57-72684b36ec35/logos/primary_logo_on_primary_color.png",
+                "lastUpdated": "2026-07-23T17:27Z",
+                "rel": [
+                  "full",
+                  "primary_logo_on_primary_color"
+                ],
+                "width": 4096
+              }
+            ],
+            "name": "Bulldogs",
+            "nickname": "Georgia",
+            "uid": "s:20~l:23~t:61"
+          },
+          "trend": "-"
+        },
+        {
+          "current": 2,
+          "date": "2026-11-22T08:00Z",
+          "firstPlaceVotes": 12,
+          "lastUpdated": "2026-11-22T20:55Z",
+          "points": 1755.0,
+          "previous": 2,
+          "recordSummary": "11-0",
+          "team": {
+            "abbreviation": "UTAH",
+            "color": "be0000",
+            "groups": {
+              "id": "4",
+              "isConference": true,
+              "parent": {
+                "id": "80",
+                "isConference": false,
+                "shortName": "FBS"
+              },
+              "shortName": "Big 12"
+            },
+            "id": "254",
+            "links": [
+              {
+                "href": "https://www.espn.com/college-football/team/_/id/254/utah-utes",
+                "rel": [
+                  "clubhouse",
+                  "desktop",
+                  "team"
+                ],
+                "text": "Clubhouse"
+              }
+            ],
+            "location": "Utah",
+            "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/254.png",
+            "logos": [
+              {
+                "alt": "",
+                "height": 500,
+                "href": "https://a.espncdn.com/i/teamlogos/ncaa/500/254.png",
+                "lastUpdated": "2025-12-23T01:44Z",
+                "rel": [
+                  "full",
+                  "default"
+                ],
+                "width": 500
+              },
+              {
+                "alt": "",
+                "height": 500,
+                "href": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/254.png",
+                "lastUpdated": "2026-01-05T20:06Z",
+                "rel": [
+                  "full",
+                  "dark"
+                ],
+                "width": 500
+              },
+              {
+                "alt": "",
+                "height": 4096,
+                "href": "https://a.espncdn.com/guid/8dbdf443-6ffa-7a66-b58f-c0a7484ead29/logos/primary_logo_on_white_color.png",
+                "lastUpdated": "2026-07-23T17:47Z",
+                "rel": [
+                  "full",
+                  "primary_logo_on_white_color"
+                ],
+                "width": 4096
+              },
+              {
+                "alt": "",
+                "height": 4096,
+                "href": "https://a.espncdn.com/guid/8dbdf443-6ffa-7a66-b58f-c0a7484ead29/logos/primary_logo_on_black_color.png",
+                "lastUpdated": "2026-07-23T17:47Z",
+                "rel": [
+                  "full",
+                  "primary_logo_on_black_color"
+                ],
+                "width": 4096
+              },
+              {
+                "alt": "",
+                "height": 4096,
+                "href": "https://a.espncdn.com/guid/8dbdf443-6ffa-7a66-b58f-c0a7484ead29/logos/primary_logo_on_primary_color.png",
+                "lastUpdated": "2026-07-23T17:47Z",
+                "rel": [
+                  "full",
+                  "primary_logo_on_primary_color"
+                ],
+                "width": 4096
+              }
+            ],
+            "name": "Utes",
+            "nickname": "Utah",
+            "uid": "s:20~l:23~t:254"
+          },
+          "trend": "-"
+        },
+        {
+          "current": 3,
+          "date": "2026-11-22T08:00Z",
+          "firstPlaceVotes": 1,
+          "lastUpdated": "2026-11-22T20:55Z",
+          "points": 1668.0,
+          "previous": 3,
+          "recordSummary": "10-1",
+          "team": {
+            "abbreviation": "ND",
+            "color": "062340",
+            "groups": {
+              "id": "18",
+              "isConference": true,
+              "parent": {
+                "id": "80",
+                "isConference": false,
+                "shortName": "FBS"
+              },
+              "shortName": "FBS Indep."
+            },
+            "id": "87",
+            "links": [
+              {
+                "href": "https://www.espn.com/college-football/team/_/id/87/notre-dame-fighting-irish",
+                "rel": [
+                  "clubhouse",
+                  "desktop",
+                  "team"
+                ],
+                "text": "Clubhouse"
+              }
+            ],
+            "location": "Notre Dame",
+            "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/87.png",
+            "logos": [
+              {
+                "alt": "",
+                "height": 500,
+                "href": "https://a.espncdn.com/i/teamlogos/ncaa/500/87.png",
+                "lastUpdated": "2025-12-19T22:33Z",
+                "rel": [
+                  "full",
+                  "default"
+                ],
+                "width": 500
+              },
+              {
+                "alt": "",
+                "height": 500,
+                "href": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/87.png",
+                "lastUpdated": "2025-12-19T22:35Z",
+                "rel": [
+                  "full",
+                  "dark"
+                ],
+                "width": 500
+              },
+              {
+                "alt": "",
+                "height": 4096,
+                "href": "https://a.espncdn.com/guid/ebc2999c-2ff4-8435-ca46-9641e9f9ea10/logos/primary_logo_on_white_color.png",
+                "lastUpdated": "2026-07-23T17:37Z",
+                "rel": [
+                  "full",
+                  "primary_logo_on_white_color"
+                ],
+                "width": 4096
+              },
+              {
+                "alt": "",
+                "height": 4096,
+                "href": "https://a.espncdn.com/guid/ebc2999c-2ff4-8435-ca46-9641e9f9ea10/logos/primary_logo_on_black_color.png",
+                "lastUpdated": "2026-07-23T17:37Z",
+                "rel": [
+                  "full",
+                  "primary_logo_on_black_color"
+                ],
+                "width": 4096
+              },
+              {
+                "alt": "",
+                "height": 4096,
+                "href": "https://a.espncdn.com/guid/ebc2999c-2ff4-8435-ca46-9641e9f9ea10/logos/primary_logo_on_primary_color.png",
+                "lastUpdated": "2026-07-23T17:37Z",
+                "rel": [
+                  "full",
+                  "primary_logo_on_primary_color"
+                ],
+                "width": 4096
+              }
+            ],
+            "name": "Fighting Irish",
+            "nickname": "Notre Dame",
+            "uid": "s:20~l:23~t:87"
+          },
+          "trend": "-"
+        },
+        {
+          "current": 4,
+          "date": "2026-11-22T08:00Z",
+          "firstPlaceVotes": 0,
+          "lastUpdated": "2026-11-22T20:55Z",
+          "points": 1569.0,
+          "previous": 6,
+          "recordSummary": "10-1",
+          "team": {
+            "abbreviation": "MIA",
+            "color": "f47423",
+            "groups": {
+              "id": "1",
+              "isConference": true,
+              "parent": {
+                "id": "80",
+                "isConference": false,
+                "shortName": "FBS"
+              },
+              "shortName": "ACC"
+            },
+            "id": "2390",
+            "links": [
+              {
+                "href": "https://www.espn.com/college-football/team/_/id/2390/miami-hurricanes",
+                "rel": [
+                  "clubhouse",
+                  "desktop",
+                  "team"
+                ],
+                "text": "Clubhouse"
+              }
+            ],
+            "location": "Miami",
+            "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2390.png",
+            "logos": [
+              {
+                "alt": "",
+                "height": 500,
+                "href": "https://a.espncdn.com/i/teamlogos/ncaa/500/2390.png",
+                "lastUpdated": "2025-12-19T22:33Z",
+                "rel": [
+                  "full",
+                  "default"
+                ],
+                "width": 500
+              },
+              {
+                "alt": "",
+                "height": 500,
+                "href": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2390.png",
+                "lastUpdated": "2025-12-19T22:35Z",
+                "rel": [
+                  "full",
+                  "dark"
+                ],
+                "width": 500
+              },
+              {
+                "alt": "",
+                "height": 4096,
+                "href": "https://a.espncdn.com/guid/2b3657a5-caae-31a2-899a-0d09df0f7bed/logos/primary_logo_on_white_color.png",
+                "lastUpdated": "2026-07-23T17:33Z",
+                "rel": [
+                  "full",
+                  "primary_logo_on_white_color"
+                ],
+                "width": 4096
+              },
+              {
+                "alt": "",
+                "height": 4096,
+                "href": "https://a.espncdn.com/guid/2b3657a5-caae-31a2-899a-0d09df0f7bed/logos/primary_logo_on_black_color.png",
+                "lastUpdated": "2026-07-23T17:33Z",
+                "rel": [
+                  "full",
+                  "primary_logo_on_black_color"
+                ],
+                "width": 4096
+              },
+              {
+                "alt": "",
+                "height": 4096,
+                "href": "https://a.espncdn.com/guid/2b3657a5-caae-31a2-899a-0d09df0f7bed/logos/primary_logo_on_primary_color.png",
+                "lastUpdated": "2026-07-23T17:33Z",
+                "rel": [
+                  "full",
+                  "primary_logo_on_primary_color"
+                ],
+                "width": 4096
+              }
+            ],
+            "name": "Hurricanes",
+            "nickname": "Miami",
+            "uid": "s:20~l:23~t:2390"
+          },
+          "trend": "+2"
+        },
+        {
+          "current": 5,
+          "date": "2026-11-22T08:00Z",
+          "firstPlaceVotes": 0,
+          "lastUpdated": "2026-11-22T20:55Z",
+          "points": 1465.0,
+          "previous": 7,
+          "recordSummary": "9-2",
+          "team": {
+            "abbreviation": "ALA",
+            "color": "9e1b32",
+            "groups": {
+              "id": "8",
+              "isConference": true,
+              "parent": {
+                "id": "80",
+                "isConference": false,
+                "shortName": "FBS"
+              },
+              "shortName": "SEC"
+            },
+            "id": "333",
+            "links": [
+              {
+                "href": "https://www.espn.com/college-football/team/_/id/333/alabama-crimson-tide",
+                "rel": [
+                  "clubhouse",
+                  "desktop",
+                  "team"
+                ],
+                "text": "Clubhouse"
+              }
+            ],
+            "location": "Alabama",
+            "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/333.png",
+            "logos": [
+              {
+                "alt": "",
+                "height": 500,
+                "href": "https://a.espncdn.com/i/teamlogos/ncaa/500/333.png",
+                "lastUpdated": "2025-12-19T23:48Z",
+                "rel": [
+                  "full",
+                  "default"
+                ],
+                "width": 500
+              },
+              {
+                "alt": "",
+                "height": 500,
+                "href": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/333.png",
+                "lastUpdated": "2025-12-19T23:47Z",
+                "rel": [
+                  "full",
+                  "dark"
+                ],
+                "width": 500
+              },
+              {
+                "alt": "",
+                "height": 4096,
+                "href": "https://a.espncdn.com/guid/258022c1-fed4-a0ce-c017-1f853c81d1a8/logos/primary_logo_on_white_color.png",
+                "lastUpdated": "2026-07-23T17:17Z",
+                "rel": [
+                  "full",
+                  "primary_logo_on_white_color"
+                ],
+                "width": 4096
+              },
+              {
+                "alt": "",
+                "height": 4096,
+                "href": "https://a.espncdn.com/guid/258022c1-fed4-a0ce-c017-1f853c81d1a8/logos/primary_logo_on_black_color.png",
+                "lastUpdated": "2026-07-23T17:17Z",
+                "rel": [
+                  "full",
+                  "primary_logo_on_black_color"
+                ],
+                "width": 4096
+              },
+              {
+                "alt": "",
+                "height": 4096,
+                "href": "https://a.espncdn.com/guid/258022c1-fed4-a0ce-c017-1f853c81d1a8/logos/primary_logo_on_primary_color.png",
+                "lastUpdated": "2026-07-23T17:17Z",
+                "rel": [
+                  "full",
+                  "primary_logo_on_primary_color"
+                ],
+                "width": 4096
+              }
+            ],
+            "name": "Crimson Tide",
+            "nickname": "Alabama",
+            "uid": "s:20~l:23~t:333"
+          },
+          "trend": "+2"
+        }
+      ],
+      "season": {
+        "athletes": {
+          "$ref": "http://sports.core.api.espn.pvt/v2/sports/football/leagues/college-football/seasons/2026/athletes?lang=en&region=us"
+        },
+        "displayName": "2026",
+        "endDate": "2027-01-28T07:59Z",
+        "futures": {
+          "$ref": "http://sports.core.api.espn.pvt/v2/sports/football/leagues/college-football/seasons/2026/futures?lang=en&region=us"
+        },
+        "leaders": {
+          "$ref": "http://sports.core.api.espn.pvt/v2/sports/football/leagues/college-football/seasons/2026/types/2/leaders?lang=en&region=us"
+        },
+        "startDate": "2026-02-01T08:00Z",
+        "type": {
+          "abbreviation": "reg",
+          "name": "Regular Season",
+          "type": 2
+        },
+        "year": 2026
+      },
+      "shortHeadline": "2026 AFCA Coaches Poll: Week 13",
+      "shortName": "AFCA Coaches Poll",
+      "showConferences": false,
+      "type": "usa"
+    }
+  ],
+  "requestedSeason": {
+    "displayName": "2026",
+    "type": {
+      "name": "Regular Season",
+      "type": 2
+    },
+    "week": {
+      "displayValue": "Week 13",
+      "last": false,
+      "number": 13,
+      "type": "week",
+      "value": "13"
+    },
+    "year": 2026
+  },
+  "sports": [
+    {
+      "$ref": "http://sports.core.api.espn.pvt/v2/sports/football?lang=en&region=us",
+      "displayName": "Football",
+      "guid": "60459870-f8fc-3b3a-a6b9-d8af4bf19223",
+      "id": "20",
+      "logos": [
+        {
+          "alt": "",
+          "height": 500,
+          "href": "https://a.espncdn.com/combiner/i?img=/redesign/assets/img/icons/ESPN-icon-football-college.png",
+          "lastUpdated": "2026-11-21T11:45Z",
+          "rel": [
+            "full",
+            "default"
+          ],
+          "width": 500
+        },
+        {
+          "alt": "",
+          "height": 500,
+          "href": "https://a.espncdn.com/guid/60459870-f8fc-3b3a-a6b9-d8af4bf19223/logos/default-dark.png",
+          "rel": [
+            "full",
+            "dark"
+          ],
+          "width": 500
+        }
+      ],
+      "name": "Football",
+      "slug": "football",
+      "uid": "s:20"
+    }
+  ],
+  "weekCounts": [
+    {
+      "type": "2",
+      "weekCount": 13
+    },
+    {
+      "type": "1",
+      "weekCount": 1
+    }
+  ],
+  "weeks": [
+    {
+      "display": "Preseason",
+      "type": "1",
+      "week": "1"
+    },
+    {
+      "display": "Week 1",
+      "type": "2",
+      "week": "1"
+    },
+    {
+      "display": "Week 2",
+      "type": "2",
+      "week": "2"
+    },
+    {
+      "display": "Week 3",
+      "type": "2",
+      "week": "3"
+    },
+    {
+      "display": "Week 4",
+      "type": "2",
+      "week": "4"
+    }
+  ]
+}

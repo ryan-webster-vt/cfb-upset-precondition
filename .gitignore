@@ -1,1 +1,23 @@
 .env
+.env.*
+!.env.example
+.vscode
+
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+.coverage.*
+htmlcov/
+
+# Runtime artifacts (never committed)
+data/
+reports/
+*.db
+*.db-journal
+*.log

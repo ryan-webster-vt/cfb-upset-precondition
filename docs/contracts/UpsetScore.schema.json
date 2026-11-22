@@ -1,0 +1,196 @@
+{
+  "$defs": {
+    "Citation": {
+      "additionalProperties": false,
+      "description": "A resolvable source supporting a claim or a rule.",
+      "properties": {
+        "citation_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Citation Id"
+        },
+        "published_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Published At"
+        },
+        "quote": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Quote"
+        },
+        "source": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source"
+        },
+        "title": {
+          "minLength": 1,
+          "title": "Title",
+          "type": "string"
+        },
+        "url": {
+          "minLength": 1,
+          "title": "Url",
+          "type": "string"
+        }
+      },
+      "required": [
+        "title",
+        "url"
+      ],
+      "title": "Citation",
+      "type": "object"
+    },
+    "ScoreBackend": {
+      "enum": [
+        "d3_mini",
+        "calibrated_rules"
+      ],
+      "title": "ScoreBackend",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "description": "A calibrated-ish upset probability plus the evidence behind it.\n\nPhase 0 uses a deterministic rule-count/base-rate stub. Later phases keep\nthis exact contract while swapping in the ``d3_mini`` or fitted\n``calibrated_rules`` backend.",
+  "properties": {
+    "backend": {
+      "$ref": "#/$defs/ScoreBackend"
+    },
+    "citations": {
+      "items": {
+        "$ref": "#/$defs/Citation"
+      },
+      "title": "Citations",
+      "type": "array"
+    },
+    "confidence": {
+      "default": 0.5,
+      "maximum": 1.0,
+      "minimum": 0.0,
+      "title": "Confidence",
+      "type": "number"
+    },
+    "degraded_reason": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Degraded Reason"
+    },
+    "game_id": {
+      "title": "Game Id",
+      "type": "string"
+    },
+    "key_signals": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Key Signals",
+      "type": "array"
+    },
+    "model_version": {
+      "title": "Model Version",
+      "type": "string"
+    },
+    "probability": {
+      "maximum": 1.0,
+      "minimum": 0.0,
+      "title": "Probability",
+      "type": "number"
+    },
+    "rationale": {
+      "title": "Rationale",
+      "type": "string"
+    },
+    "raw_probability": {
+      "anyOf": [
+        {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Raw Probability"
+    },
+    "score_legend": {
+      "anyOf": [
+        {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Score Legend"
+    },
+    "score_value": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Score Value"
+    },
+    "unstable": {
+      "default": false,
+      "title": "Unstable",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "game_id",
+    "probability",
+    "backend",
+    "model_version",
+    "rationale"
+  ],
+  "title": "UpsetScore",
+  "type": "object"
+}

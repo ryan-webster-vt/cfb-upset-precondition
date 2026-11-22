@@ -1,0 +1,28 @@
+{
+  "answers": {
+    "risk": {
+      "confidence": 0.330606645215628,
+      "legend": {
+        "0": "very unlikely",
+        "1": "unlikely",
+        "2": "possible",
+        "3": "likely",
+        "4": "very likely"
+      },
+      "probabilities": {
+        "0": 0.14007294922255767,
+        "1": 0.5026788590491629,
+        "2": 0.33641384857229223,
+        "3": 0.01751918198665614,
+        "4": 0.0033151611693311807
+      },
+      "score": 1.2413247468310407,
+      "type": "score"
+    }
+  },
+  "model": "vllm-sr/d3-mini",
+  "usage": {
+    "input_tokens": 143,
+    "output_tokens": 0
+  }
+}

@@ -1,0 +1,130 @@
+{
+  "$defs": {
+    "FavoriteSource": {
+      "enum": [
+        "cfbd_open",
+        "espn_open",
+        "strength_proxy"
+      ],
+      "title": "FavoriteSource",
+      "type": "string"
+    },
+    "MarketProbSource": {
+      "enum": [
+        "moneyline",
+        "spread_mapped",
+        "unavailable"
+      ],
+      "title": "MarketProbSource",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Pre-kickoff market context.\n\n``spread`` is from the favourite's perspective (negative = favourite gives\npoints). Opening/closing distinction is carried by ``known_at`` so the\nleakage filter can exclude anything known at or after kickoff.",
+  "properties": {
+    "favorite_source": {
+      "$ref": "#/$defs/FavoriteSource"
+    },
+    "favorite_team_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Favorite Team Id"
+    },
+    "known_at": {
+      "format": "date-time",
+      "title": "Known At",
+      "type": "string"
+    },
+    "line_provider": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Line Provider"
+    },
+    "market_prob": {
+      "anyOf": [
+        {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Market Prob"
+    },
+    "market_prob_source": {
+      "$ref": "#/$defs/MarketProbSource",
+      "default": "unavailable"
+    },
+    "over_under": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Over Under"
+    },
+    "provider": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Provider"
+    },
+    "spread": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Spread"
+    },
+    "spread_open": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Spread Open"
+    }
+  },
+  "required": [
+    "favorite_source",
+    "known_at"
+  ],
+  "title": "OddsInfo",
+  "type": "object"
+}

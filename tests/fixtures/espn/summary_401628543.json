@@ -1,0 +1,2429 @@
+{
+  "boxscore": {
+    "players": [
+      {
+        "displayOrder": 1,
+        "statistics": [
+          {
+            "athletes": [
+              {
+                "athlete": {
+                  "displayName": "Billy Edwards Jr.",
+                  "firstName": "Billy",
+                  "guid": "0c63e30e-0181-35b2-bc2d-bb5516c127d3",
+                  "headshot": {
+                    "alt": "Billy Edwards Jr.",
+                    "href": "https://a.espncdn.com/i/headshots/college-football/players/full/4592532.png"
+                  },
+                  "id": "4592532",
+                  "jersey": "9",
+                  "lastName": "Edwards Jr.",
+                  "links": [
+                    {
+                      "href": "https://www.espn.com/college-football/player/_/id/4592532/billy-edwards-jr",
+                      "rel": [
+                        "playercard",
+                        "desktop",
+                        "athlete"
+                      ],
+                      "text": "Player Card"
+                    }
+                  ],
+                  "uid": "s:20~l:23~a:4592532"
+                },
+                "stats": [
+                  "22/44",
+                  "206",
+                  "4.7",
+                  "1",
+                  "2"
+                ]
+              },
+              {
+                "athlete": {
+                  "displayName": "MJ Morris",
+                  "firstName": "MJ",
+                  "guid": "ad69eff7-7668-3732-92d2-b8a5239cdd7e",
+                  "headshot": {
+                    "alt": "MJ Morris",
+                    "href": "https://a.espncdn.com/i/headshots/college-football/players/full/4685488.png"
+                  },
+                  "id": "4685488",
+                  "jersey": "7",
+                  "lastName": "Morris",
+                  "links": [
+                    {
+                      "href": "https://www.espn.com/college-football/player/_/id/4685488/mj-morris",
+                      "rel": [
+                        "playercard",
+                        "desktop",
+                        "athlete"
+                      ],
+                      "text": "Player Card"
+                    }
+                  ],
+                  "uid": "s:20~l:23~a:4685488"
+                },
+                "stats": [
+                  "0/1",
+                  "0",
+                  "0.0",
+                  "0",
+                  "0"
+                ]
+              }
+            ],
+            "descriptions": [
+              "Completions/Attempts",
+              "Yards",
+              "Yards Per Pass Attempt",
+              "Touchdowns",
+              "Interceptions"
+            ],
+            "keys": [
+              "completions/passingAttempts",
+              "passingYards",
+              "yardsPerPassAttempt",
+              "passingTouchdowns",
+              "interceptions"
+            ],
+            "labels": [
+              "C/ATT",
+              "YDS",
+              "AVG",
+              "TD",
+              "INT"
+            ],
+            "name": "passing",
+            "text": "Maryland Passing",
+            "totals": [
+              "22/45",
+              "206",
+              "4.6",
+              "1",
+              "2"
+            ]
+          },
+          {
+            "athletes": [
+              {
+                "athlete": {
+                  "displayName": "Roman Hemby",
+                  "firstName": "Roman",
+                  "guid": "f83288d8-e96c-31d6-b9bc-86d7bd676900",
+                  "headshot": {
+                    "alt": "Roman Hemby",
+                    "href": "https://a.espncdn.com/i/headshots/college-football/players/full/4688835.png"
+                  },
+                  "id": "4688835",
+                  "jersey": "24",
+                  "lastName": "Hemby",
+                  "links": [
+                    {
+                      "href": "https://www.espn.com/college-football/player/_/id/4688835/roman-hemby",
+                      "rel": [
+                        "playercard",
+                        "desktop",
+                        "athlete"
+                      ],
+                      "text": "Player Card"
+                    }
+                  ],
+                  "uid": "s:20~l:23~a:4688835"
+                },
+                "stats": [
+                  "11",
+                  "34",
+                  "3.1",
+                  "1",
+                  "7"
+                ]
+              },
+              {
+                "athlete": {
+                  "displayName": "Billy Edwards Jr.",
+                  "firstName": "Billy",
+                  "guid": "0c63e30e-0181-35b2-bc2d-bb5516c127d3",
+                  "headshot": {
+                    "alt": "Billy Edwards Jr.",
+                    "href": "https://a.espncdn.com/i/headshots/college-football/players/full/4592532.png"
+                  },
+                  "id": "4592532",
+                  "jersey": "9",
+                  "lastName": "Edwards Jr.",
+                  "links": [
+                    {
+                      "href": "https://www.espn.com/college-football/player/_/id/4592532/billy-edwards-jr",
+                      "rel": [
+                        "playercard",
+                        "desktop",
+                        "athlete"
+                      ],
+                      "text": "Player Card"
+                    }
+                  ],
+                  "uid": "s:20~l:23~a:4592532"
+                },
+                "stats": [
+                  "9",
+                  "26",
+                  "2.9",
+                  "0",
+                  "9"
+                ]
+              },
+              {
+                "athlete": {
+                  "displayName": "Nolan Ray",
+                  "firstName": "Nolan",
+                  "guid": "69148cfb-31f3-3dee-b04f-7b1b258c2afb",
+                  "headshot": {
+                    "alt": "Nolan Ray",
+                    "href": "https://a.espncdn.com/i/headshots/college-football/players/full/4921316.png"
+                  },
+                  "id": "4921316",
+                  "jersey": "25",
+                  "lastName": "Ray",
+                  "links": [
+                    {
+                      "href": "https://www.espn.com/college-football/player/_/id/4921316/nolan-ray",
+                      "rel": [
+                        "playercard",
+                        "desktop",
+                        "athlete"
+                      ],
+                      "text": "Player Card"
+                    }
+                  ],
+                  "uid": "s:20~l:23~a:4921316"
+                },
+                "stats": [
+                  "8",
+                  "18",
+                  "2.3",
+                  "0",
+                  "5"
+                ]
+              },
+              {
+                "athlete": {
+                  "displayName": "MJ Morris",
+                  "firstName": "MJ",
+                  "guid": "ad69eff7-7668-3732-92d2-b8a5239cdd7e",
+                  "headshot": {
+                    "alt": "MJ Morris",
+                    "href": "https://a.espncdn.com/i/headshots/college-football/players/full/4685488.png"
+                  },
+                  "id": "4685488",
+                  "jersey": "7",
+                  "lastName": "Morris",
+                  "links": [
+                    {
+                      "href": "https://www.espn.com/college-football/player/_/id/4685488/mj-morris",
+                      "rel": [
+                        "playercard",
+                        "desktop",
+                        "athlete"
+                      ],
+                      "text": "Player Card"
+                    }
+                  ],
+                  "uid": "s:20~l:23~a:4685488"
+                },
+                "stats": [
+                  "1",
+                  "4",
+                  "4.0",
+                  "0",
+                  "4"
+                ]
+              },
+              {
+                "athlete": {
+                  "displayName": "DeJuan Williams",
+                  "firstName": "DeJuan",
+                  "guid": "04e7349f-21d5-3a9c-a99c-7167041ebf85",
+                  "headshot": {
+                    "alt": "DeJuan Williams",
+                    "href": "https://a.espncdn.com/i/headshots/college-football/players/full/5079650.png"
+                  },
+                  "id": "5079650",
+                  "jersey": "20",
+                  "lastName": "Williams",
+                  "links": [
+                    {
+                      "href": "https://www.espn.com/college-football/player/_/id/5079650/dejuan-williams",
+                      "rel": [
+                        "playercard",
+                        "desktop",
+                        "athlete"
+                      ],
+                      "text": "Player Card"
+                    }
+                  ],
+                  "uid": "s:20~l:23~a:5079650"
+                },
+                "stats": [
+                  "1",
+                  "3",
+                  "3.0",
+                  "0",
+                  "3"
+                ]
+              }
+            ],
+            "descriptions": [
+              "Rushing Attempts",
+              "Yards",
+              "Yards Per Rushing Attempt",
+              "Touchdowns",
+              "Longest Run"
+            ],
+            "keys": [
+              "rushingAttempts",
+              "rushingYards",
+              "yardsPerRushAttempt",
+              "rushingTouchdowns",
+              "longRushing"
+            ],
+            "labels": [
+              "CAR",
+              "YDS",
+              "AVG",
+              "TD",
+              "LONG"
+            ],
+            "name": "rushing",
+            "text": "Maryland Rushing",
+            "totals": [
+              "31",
+              "83",
+              "2.7",
+              "1",
+              "9"
+            ]
+          },
+          {
+            "athletes": [
+              {
+                "athlete": {
+                  "displayName": "Tai Felton",
+                  "firstName": "Tai",
+                  "guid": "35890a95-a2fa-35a7-a063-4e20206ebaec",
+                  "headshot": {
+                    "alt": "Tai Felton",
+                    "href": "https://a.espncdn.com/i/headshots/college-football/players/full/4565185.png"
+                  },
+                  "id": "4565185",
+                  "jersey": "10",
+                  "lastName": "Felton",
+                  "links": [
+                    {
+                      "href": "https://www.espn.com/college-football/player/_/id/4565185/tai-felton",
+                      "rel": [
+                        "playercard",
+                        "desktop",
+                        "athlete"
+                      ],
+                      "text": "Player Card"
+                    }
+                  ],
+                  "uid": "s:20~l:23~a:4565185"
+                },
+                "stats": [
+                  "7",
+                  "72",
+                  "10.3",
+                  "0",
+                  "34"
+                ]
+              },
+              {
+                "athlete": {
+                  "displayName": "Octavian Smith Jr.",
+                  "firstName": "Octavian",
+                  "guid": "a8512db0-b8cd-38e3-b747-0621d6e733c9",
+                  "headshot": {
+                    "alt": "Octavian Smith Jr.",
+                    "href": "https://a.espncdn.com/i/headshots/college-football/players/full/4869520.png"
+                  },
+                  "id": "4869520",
+                  "jersey": "5",
+                  "lastName": "Smith Jr.",
+                  "links": [
+                    {
+                      "href": "https://www.espn.com/college-football/player/_/id/4869520/octavian-smith-jr",
+                      "rel": [
+                        "playercard",
+                        "desktop",
+                        "athlete"
+                      ],
+                      "text": "Player Card"
+                    }
+                  ],
+                  "uid": "s:20~l:23~a:4869520"
+                },
+                "stats": [
+                  "5",
+                  "46",
+                  "9.2",
+                  "1",
+                  "21"
+                ]
+              },
+              {
+                "athlete": {
+                  "displayName": "Shaleak Knotts",
+                  "firstName": "Shaleak",
+                  "guid": "d5bf201e-0e95-3f2c-a199-4f00db127d6b",
+                  "headshot": {
+                    "alt": "Shaleak Knotts",
+                    "href": "https://a.espncdn.com/i/headshots/college-football/players/full/4685416.png"
+                  },
+                  "id": "4685416",
+                  "jersey": "4",
+                  "lastName": "Knotts",
+                  "links": [
+                    {
+                      "href": "https://www.espn.com/college-football/player/_/id/4685416/shaleak-knotts",
+                      "rel": [
+                        "playercard",
+                        "desktop",
+                        "athlete"
+                      ],
+                      "text": "Player Card"
+                    }
+                  ],
+                  "uid": "s:20~l:23~a:4685416"
+                },
+                "stats": [
+                  "2",
+                  "28",
+                  "14.0",
+                  "0",
+                  "27"
+                ]
+              },
+              {
+                "athlete": {
+                  "displayName": "Preston Howard",
+                  "firstName": "Preston",
+                  "guid": "cd441c9f-7be3-30ed-b0a4-a4c11b238780",
+                  "headshot": {
+                    "alt": "Preston Howard",
+                    "href": "https://a.espncdn.com/i/headshots/college-football/players/full/4685393.png"
+                  },
+                  "id": "4685393",
+                  "jersey": "85",
+                  "lastName": "Howard",
+                  "links": [
+                    {
+                      "href": "https://www.espn.com/college-football/player/_/id/4685393/preston-howard",
+                      "rel": [
+                        "playercard",
+                        "desktop",
+                        "athlete"
+                      ],
+                      "text": "Player Card"
+                    }
+                  ],
+                  "uid": "s:20~l:23~a:4685393"
+                },
+                "stats": [
+                  "2",
+                  "22",
+                  "11.0",
+                  "0",
+                  "13"
+                ]
+              },
+              {
+                "athlete": {
+                  "displayName": "Kaden Prather",
+                  "firstName": "Kaden",
+                  "guid": "f7a73efb-a672-30bc-a31a-727fcacc3090",
+                  "headshot": {
+                    "alt": "Kaden Prather",
+                    "href": "https://a.espncdn.com/i/headshots/college-football/players/full/4431509.png"
+                  },
+                  "id": "4431509",
+                  "jersey": "1",
+                  "lastName": "Prather",
+                  "links": [
+                    {
+                      "href": "https://www.espn.com/college-football/player/_/id/4431509/kaden-prather",
+                      "rel": [
+                        "playercard",
+                        "desktop",
+                        "athlete"
+                      ],
+                      "text": "Player Card"
+                    }
+                  ],
+                  "uid": "s:20~l:23~a:4431509"
+                },
+                "stats": [
+                  "2",
+                  "16",
+                  "8.0",
+                  "0",
+                  "10"
+                ]
+              }
+            ],
+            "descriptions": [
+              "Receptions",
+              "Yards",
+              "Yards Per Reception",
+              "Touchdowns",
+              "Longest Reception"
+            ],
+            "keys": [
+              "receptions",
+              "receivingYards",
+              "yardsPerReception",
+              "receivingTouchdowns",
+              "longReception"
+            ],
+            "labels": [
+              "REC",
+              "YDS",
+              "AVG",
+              "TD",
+              "LONG"
+            ],
+            "name": "receiving",
+            "text": "Maryland Receiving",
+            "totals": [
+              "22",
+              "206",
+              "9.4",
+              "1",
+              "34"
+            ]
+          },
+          {
+            "athletes": [
+              {
+                "athlete": {
+                  "displayName": "Billy Edwards Jr.",
+                  "firstName": "Billy",
+                  "guid": "0c63e30e-0181-35b2-bc2d-bb5516c127d3",
+                  "headshot": {
+                    "alt": "Billy Edwards Jr.",
+                    "href": "https://a.espncdn.com/i/headshots/college-football/players/full/4592532.png"
+                  },
+                  "id": "4592532",
+                  "jersey": "9",
+                  "lastName": "Edwards Jr.",
+                  "links": [
+                    {
+                      "href": "https://www.espn.com/college-football/player/_/id/4592532/billy-edwards-jr",
+                      "rel": [
+                        "playercard",
+                        "desktop",
+                        "athlete"
+                      ],
+                      "text": "Player Card"
+                    }
+                  ],
+                  "uid": "s:20~l:23~a:4592532"
+                },
+                "stats": [
+                  "1",
+                  "1",
+                  "0"
+                ]
+              }
+            ],
+            "descriptions": [
+              "Fumbles",
+              "Fumbles Lost",
+              "Fumbles Recovered"
+            ],
+            "keys": [
+              "fumbles",
+              "fumblesLost",
+              "fumblesRecovered"
+            ],
+            "labels": [
+              "FUM",
+              "LOST",
+              "REC"
+            ],
+            "name": "fumbles",
+            "text": "Maryland Fumbles",
+            "totals": [
+              "1",
+              "1",
+              "0"
+            ]
+          },
+          {
+            "athletes": [
+              {
+                "athlete": {
+                  "displayName": "Jalen Huskey",
+                  "firstName": "Jalen",
+                  "guid": "8ec02e9d-4e88-3626-aa9e-01542e010e71",
+                  "headshot": {
+                    "alt": "Jalen Huskey",
+                    "href": "https://a.espncdn.com/i/headshots/college-football/players/full/4912185.png"
+                  },
+                  "id": "4912185",
+                  "jersey": "22",
+                  "lastName": "Huskey",
+                  "links": [
+                    {
+                      "href": "https://www.espn.com/college-football/player/_/id/4912185/jalen-huskey",
+                      "rel": [
+                        "playercard",
+                        "desktop",
+                        "athlete"
+                      ],
+                      "text": "Player Card"
+                    }
+                  ],
+                  "uid": "s:20~l:23~a:4912185"
+                },
+                "stats": [
+                  "10",
+                  "4",
+                  "0",
+                  "0.5",
+                  "0"
+                ]
+              },
+              {
+                "athlete": {
+                  "displayName": "Dante Trader Jr.",
+                  "firstName": "Dante",
+                  "guid": "c968f0ac-7b4f-3a47-a5ca-8dbfd811c9e6",
+                  "headshot": {
+                    "alt": "Dante Trader Jr.",
+                    "href": "https://a.espncdn.com/i/headshots/college-football/players/full/4431664.png"
+                  },
+                  "id": "4431664",
+                  "jersey": "12",
+                  "lastName": "Trader Jr.",
+                  "links": [
+                    {
+                      "href": "https://www.espn.com/college-football/player/_/id/4431664/dante-trader-jr",
+                      "rel": [
+                        "playercard",
+                        "desktop",
+                        "athlete"
+                      ],
+                      "text": "Player Card"
+                    }
+                  ],
+                  "uid": "s:20~l:23~a:4431664"
+                },
+                "stats": [
+                  "9",
+                  "3",
+                  "0",
+                  "0",
+                  "1"
+                ]
+              },
+              {
+                "athlete": {
+                  "displayName": "Daniel Wingate",
+                  "firstName": "Daniel",
+                  "guid": "72e1ad24-0e2b-3f2a-8f23-88a03209daf7",
+                  "headshot": {
+                    "alt": "Daniel Wingate",
+                    "href": "https://a.espncdn.com/i/headshots/college-football/players/full/4921326.png"
+                  },
+                  "id": "4921326",
+                  "jersey": "16",
+                  "lastName": "Wingate",
+                  "links": [
+                    {
+                      "href": "https://www.espn.com/college-football/player/_/id/4921326/daniel-wingate",
+                      "rel": [
+                        "playercard",
+                        "desktop",
+                        "athlete"
+                      ],
+                      "text": "Player Card"
+                    }
+                  ],
+                  "uid": "s:20~l:23~a:4921326"
+                },
+                "stats": [
+                  "6",
+                  "3",
+                  "0",
+                  "0",
+                  "0"
+                ]
+              },
+              {
+                "athlete": {
+                  "displayName": "Quashon Fuller",
+                  "firstName": "Quashon",
+                  "guid": "6a436303-941f-6289-ff68-bbe57247ecc6",
+                  "headshot": {
+                    "alt": "Quashon Fuller",
+                    "href": "https://a.espncdn.com/i/headshots/college-football/players/full/4426445.png"
+                  },
+                  "id": "4426445",
+                  "jersey": "5",
+                  "lastName": "Fuller",
+                  "links": [
+                    {
+                      "href": "https://www.espn.com/college-football/player/_/id/4426445/quashon-fuller",
+                      "rel": [
+                        "playercard",
+                        "desktop",
+                        "athlete"
+                      ],
+                      "text": "Player Card"
+                    }
+                  ],
+                  "uid": "s:20~l:23~a:4426445"
+                },
+                "stats": [
+                  "5",
+                  "3",
+                  "0",
+                  "1.5",
+                  "0"
+                ]
+              },
+              {
+                "athlete": {
+                  "displayName": "Ruben Hyppolite II",
+                  "firstName": "Ruben",
+                  "guid": "4636deed-0974-3893-bada-0b133e26ef30",
+                  "headshot": {
+                    "alt": "Ruben Hyppolite II",
+                    "href": "https://a.espncdn.com/i/headshots/college-football/players/full/4429970.png"
+                  },
+                  "id": "4429970",
+                  "jersey": "4",
+                  "lastName": "Hyppolite II",
+                  "links": [
+                    {
+                      "href": "https://www.espn.com/college-football/player/_/id/4429970/ruben-hyppolite-ii",
+                      "rel": [
+                        "playercard",
+                        "desktop",
+                        "athlete"
+                      ],
+                      "text": "Player Card"
+                    }
+                  ],
+                  "uid": "s:20~l:23~a:4429970"
+                },
+                "stats": [
+                  "5",
+                  "3",
+                  "0",
+                  "0",
+                  "0"
+                ]
+              }
+            ],
+            "descriptions": [
+              "Tackles",
+              "Solo Tackles",
+              "Sacks",
+              "Tackles For Loss",
+              "Passes Defended"
+            ],
+            "keys": [
+              "totalTackles",
+              "soloTackles",
+              "sacks",
+              "tacklesForLoss",
+              "passesDefended"
+            ],
+            "labels": [
+              "TOT",
+              "SOLO",
+              "SACKS",
+              "TFL",
+              "PD"
+            ],
+            "name": "defensive",
+            "text": "Maryland Defense",
+            "totals": [
+              "69",
+              "29",
+              "0",
+              "4",
+              "2"
+            ]
+          }
+        ],
+        "team": {
+          "abbreviation": "MD",
+          "alternateColor": "ffffff",
+          "color": "D5002B",
+          "displayName": "Maryland Terrapins",
+          "id": "120",
+          "location": "Maryland",
+          "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/120.png",
+          "name": "Terrapins",
+          "shortDisplayName": "Maryland",
+          "slug": "maryland-terrapins",
+          "uid": "s:20~l:23~t:120"
+        }
+      },
+      {
+        "displayOrder": 2,
+        "statistics": [
+          {
+            "athletes": [
+              {
+                "athlete": {
+                  "displayName": "Dillon Gabriel",
+                  "firstName": "Dillon",
+                  "guid": "2126efde-bc9b-0168-dd5a-49fe11331807",
+                  "headshot": {
+                    "alt": "Dillon Gabriel",
+                    "href": "https://a.espncdn.com/i/headshots/college-football/players/full/4427238.png"
+                  },
+                  "id": "4427238",
+                  "jersey": "8",
+                  "lastName": "Gabriel",
+                  "links": [
+                    {
+                      "href": "https://www.espn.com/college-football/player/_/id/4427238/dillon-gabriel",
+                      "rel": [
+                        "playercard",
+                        "desktop",
+                        "athlete"
+                      ],
+                      "text": "Player Card"
+                    }
+                  ],
+                  "uid": "s:20~l:23~a:4427238"
+                },
+                "stats": [
+                  "23/34",
+                  "183",
+                  "5.4",
+                  "3",
+                  "0"
+                ]
+              }
+            ],
+            "descriptions": [
+              "Completions/Attempts",
+              "Yards",
+              "Yards Per Pass Attempt",
+              "Touchdowns",
+              "Interceptions"
+            ],
+            "keys": [
+              "completions/passingAttempts",
+              "passingYards",
+              "yardsPerPassAttempt",
+              "passingTouchdowns",
+              "interceptions"
+            ],
+            "labels": [
+              "C/ATT",
+              "YDS",
+              "AVG",
+              "TD",
+              "INT"
+            ],
+            "name": "passing",
+            "text": "Oregon Passing",
+            "totals": [
+              "23/34",
+              "183",
+              "5.4",
+              "3",
+              "0"
+            ]
+          },
+          {
+            "athletes": [
+              {
+                "athlete": {
+                  "displayName": "Noah Whittington",
+                  "firstName": "Noah",
+                  "guid": "61876f86-482f-3de4-b6b3-038a192722be",
+                  "headshot": {
+                    "alt": "Noah Whittington",
+                    "href": "https://a.espncdn.com/i/headshots/college-football/players/full/4432631.png"
+                  },
+                  "id": "4432631",
+                  "jersey": "6",
+                  "lastName": "Whittington",
+                  "links": [
+                    {
+                      "href": "https://www.espn.com/college-football/player/_/id/4432631/noah-whittington",
+                      "rel": [
+                        "playercard",
+                        "desktop",
+                        "athlete"
+                      ],
+                      "text": "Player Card"
+                    }
+                  ],
+                  "uid": "s:20~l:23~a:4432631"
+                },
+                "stats": [
+                  "13",
+                  "77",
+                  "5.9",
+                  "0",
+                  "28"
+                ]
+              },
+              {
+                "athlete": {
+                  "displayName": "Jordan Burch",
+                  "firstName": "Jordan",
+                  "guid": "eabdfb19-f5c9-3dd1-b8af-eab829b3787f",
+                  "headshot": {
+                    "alt": "Jordan Burch",
+                    "href": "https://a.espncdn.com/i/headshots/college-football/players/full/4428996.png"
+                  },
+                  "id": "4428996",
+                  "jersey": "1",
+                  "lastName": "Burch",
+                  "links": [
+                    {
+                      "href": "https://www.espn.com/college-football/player/_/id/4428996/jordan-burch",
+                      "rel": [
+                        "playercard",
+                        "desktop",
+                        "athlete"
+                      ],
+                      "text": "Player Card"
+                    }
+                  ],
+                  "uid": "s:20~l:23~a:4428996"
+                },
+                "stats": [
+                  "1",
+                  "36",
+                  "36.0",
+                  "0",
+                  "36"
+                ]
+              },
+              {
+                "athlete": {
+                  "displayName": "Jordan James",
+                  "firstName": "Jordan",
+                  "guid": "137bdd4e-9ddd-38f4-9a0f-d67add6f57f1",
+                  "headshot": {
+                    "alt": "Jordan James",
+                    "href": "https://a.espncdn.com/i/headshots/college-football/players/full/4685397.png"
+                  },
+                  "id": "4685397",
+                  "jersey": "20",
+                  "lastName": "James",
+                  "links": [
+                    {
+                      "href": "https://www.espn.com/college-football/player/_/id/4685397/jordan-james",
+                      "rel": [
+                        "playercard",
+                        "desktop",
+                        "athlete"
+                      ],
+                      "text": "Player Card"
+                    }
+                  ],
+                  "uid": "s:20~l:23~a:4685397"
+                },
+                "stats": [
+                  "7",
+                  "29",
+                  "4.1",
+                  "1",
+                  "10"
+                ]
+              },
+              {
+                "athlete": {
+                  "displayName": "Dillon Gabriel",
+                  "firstName": "Dillon",
+                  "guid": "2126efde-bc9b-0168-dd5a-49fe11331807",
+                  "headshot": {
+                    "alt": "Dillon Gabriel",
+                    "href": "https://a.espncdn.com/i/headshots/college-football/players/full/4427238.png"
+                  },
+                  "id": "4427238",
+                  "jersey": "8",
+                  "lastName": "Gabriel",
+                  "links": [
+                    {
+                      "href": "https://www.espn.com/college-football/player/_/id/4427238/dillon-gabriel",
+                      "rel": [
+                        "playercard",
+                        "desktop",
+                        "athlete"
+                      ],
+                      "text": "Player Card"
+                    }
+                  ],
+                  "uid": "s:20~l:23~a:4427238"
+                },
+                "stats": [
+                  "4",
+                  "28",
+                  "7.0",
+                  "0",
+                  "19"
+                ]
+              },
+              {
+                "athlete": {
+                  "displayName": "Jayden Limar",
+                  "firstName": "Jayden",
+                  "guid": "6e5e8204-353c-3e73-aaa0-250434632176",
+                  "headshot": {
+                    "alt": "Jayden Limar",
+                    "href": "https://a.espncdn.com/i/headshots/college-football/players/full/4870868.png"
+                  },
+                  "id": "4870868",
+                  "jersey": "27",
+                  "lastName": "Limar",
+                  "links": [
+                    {
+                      "href": "https://www.espn.com/college-football/player/_/id/4870868/jayden-limar",
+                      "rel": [
+                        "playercard",
+                        "desktop",
+                        "athlete"
+                      ],
+                      "text": "Player Card"
+                    }
+                  ],
+                  "uid": "s:20~l:23~a:4870868"
+                },
+                "stats": [
+                  "6",
+                  "10",
+                  "1.7",
+                  "0",
+                  "6"
+                ]
+              }
+            ],
+            "descriptions": [
+              "Rushing Attempts",
+              "Yards",
+              "Yards Per Rushing Attempt",
+              "Touchdowns",
+              "Longest Run"
+            ],
+            "keys": [
+              "rushingAttempts",
+              "rushingYards",
+              "yardsPerRushAttempt",
+              "rushingTouchdowns",
+              "longRushing"
+            ],
+            "labels": [
+              "CAR",
+              "YDS",
+              "AVG",
+              "TD",
+              "LONG"
+            ],
+            "name": "rushing",
+            "text": "Oregon Rushing",
+            "totals": [
+              "31",
+              "180",
+              "5.8",
+              "1",
+              "36"
+            ]
+          },
+          {
+            "athletes": [
+              {
+                "athlete": {
+                  "displayName": "Evan Stewart",
+                  "firstName": "Evan",
+                  "guid": "5063fae6-23c2-3f81-b382-2812437b7c1d",
+                  "headshot": {
+                    "alt": "Evan Stewart",
+                    "href": "https://a.espncdn.com/i/headshots/college-football/players/full/4685565.png"
+                  },
+                  "id": "4685565",
+                  "jersey": "7",
+                  "lastName": "Stewart",
+                  "links": [
+                    {
+                      "href": "https://www.espn.com/college-football/player/_/id/4685565/evan-stewart",
+                      "rel": [
+                        "playercard",
+                        "desktop",
+                        "athlete"
+                      ],
+                      "text": "Player Card"
+                    }
+                  ],
+                  "uid": "s:20~l:23~a:4685565"
+                },
+                "stats": [
+                  "6",
+                  "55",
+                  "9.2",
+                  "1",
+                  "17"
+                ]
+              },
+              {
+                "athlete": {
+                  "displayName": "Terrance Ferguson",
+                  "firstName": "Terrance",
+                  "guid": "897a7b37-1f13-3f52-b2ed-a45faef85eb1",
+                  "headshot": {
+                    "alt": "Terrance Ferguson",
+                    "href": "https://a.espncdn.com/i/headshots/college-football/players/full/4570037.png"
+                  },
+                  "id": "4570037",
+                  "jersey": "3",
+                  "lastName": "Ferguson",
+                  "links": [
+                    {
+                      "href": "https://www.espn.com/college-football/player/_/id/4570037/terrance-ferguson",
+                      "rel": [
+                        "playercard",
+                        "desktop",
+                        "athlete"
+                      ],
+                      "text": "Player Card"
+                    }
+                  ],
+                  "uid": "s:20~l:23~a:4570037"
+                },
+                "stats": [
+                  "6",
+                  "35",
+                  "5.8",
+                  "1",
+                  "9"
+                ]
+              },
+              {
+                "athlete": {
+                  "displayName": "Traeshon Holden",
+                  "firstName": "Traeshon",
+                  "guid": "159011ba-929a-392b-8208-5e6e650ccbfb",
+                  "headshot": {
+                    "alt": "Traeshon Holden",
+                    "href": "https://a.espncdn.com/i/headshots/college-football/players/full/4429172.png"
+                  },
+                  "id": "4429172",
+                  "jersey": "1",
+                  "lastName": "Holden",
+                  "links": [
+                    {
+                      "href": "https://www.espn.com/college-football/player/_/id/4429172/traeshon-holden",
+                      "rel": [
+                        "playercard",
+                        "desktop",
+                        "athlete"
+                      ],
+                      "text": "Player Card"
+                    }
+                  ],
+                  "uid": "s:20~l:23~a:4429172"
+                },
+                "stats": [
+                  "2",
+                  "30",
+                  "15.0",
+                  "0",
+                  "20"
+                ]
+              },
+              {
+                "athlete": {
+                  "displayName": "Justius Lowe",
+                  "firstName": "Justius",
+                  "guid": "7225d0f3-4fd5-3363-9a9d-615830dd9ade",
+                  "headshot": {
+                    "alt": "Justius Lowe",
+                    "href": "https://a.espncdn.com/i/headshots/college-football/players/full/4912135.png"
+                  },
+                  "id": "4912135",
+                  "jersey": "14",
+                  "lastName": "Lowe",
+                  "links": [
+                    {
+                      "href": "https://www.espn.com/college-football/player/_/id/4912135/justius-lowe",
+                      "rel": [
+                        "playercard",
+                        "desktop",
+                        "athlete"
+                      ],
+                      "text": "Player Card"
+                    }
+                  ],
+                  "uid": "s:20~l:23~a:4912135"
+                },
+                "stats": [
+                  "4",
+                  "30",
+                  "7.5",
+                  "0",
+                  "12"
+                ]
+              },
+              {
+                "athlete": {
+                  "displayName": "Jordan James",
+                  "firstName": "Jordan",
+                  "guid": "137bdd4e-9ddd-38f4-9a0f-d67add6f57f1",
+                  "headshot": {
+                    "alt": "Jordan James",
+                    "href": "https://a.espncdn.com/i/headshots/college-football/players/full/4685397.png"
+                  },
+                  "id": "4685397",
+                  "jersey": "20",
+                  "lastName": "James",
+                  "links": [
+                    {
+                      "href": "https://www.espn.com/college-football/player/_/id/4685397/jordan-james",
+                      "rel": [
+                        "playercard",
+                        "desktop",
+                        "athlete"
+                      ],
+                      "text": "Player Card"
+                    }
+                  ],
+                  "uid": "s:20~l:23~a:4685397"
+                },
+                "stats": [
+                  "2",
+                  "27",
+                  "13.5",
+                  "0",
+                  "26"
+                ]
+              }
+            ],
+            "descriptions": [
+              "Receptions",
+              "Yards",
+              "Yards Per Reception",
+              "Touchdowns",
+              "Longest Reception"
+            ],
+            "keys": [
+              "receptions",
+              "receivingYards",
+              "yardsPerReception",
+              "receivingTouchdowns",
+              "longReception"
+            ],
+            "labels": [
+              "REC",
+              "YDS",
+              "AVG",
+              "TD",
+              "LONG"
+            ],
+            "name": "receiving",
+            "text": "Oregon Receiving",
+            "totals": [
+              "23",
+              "183",
+              "8.0",
+              "3",
+              "26"
+            ]
+          },
+          {
+            "athletes": [
+              {
+                "athlete": {
+                  "displayName": "Evan Stewart",
+                  "firstName": "Evan",
+                  "guid": "5063fae6-23c2-3f81-b382-2812437b7c1d",
+                  "headshot": {
+                    "alt": "Evan Stewart",
+                    "href": "https://a.espncdn.com/i/headshots/college-football/players/full/4685565.png"
+                  },
+                  "id": "4685565",
+                  "jersey": "7",
+                  "lastName": "Stewart",
+                  "links": [
+                    {
+                      "href": "https://www.espn.com/college-football/player/_/id/4685565/evan-stewart",
+                      "rel": [
+                        "playercard",
+                        "desktop",
+                        "athlete"
+                      ],
+                      "text": "Player Card"
+                    }
+                  ],
+                  "uid": "s:20~l:23~a:4685565"
+                },
+                "stats": [
+                  "1",
+                  "0",
+                  "0"
+                ]
+              },
+              {
+                "athlete": {
+                  "displayName": "Brandon Johnson",
+                  "firstName": "Brandon",
+                  "guid": "eeed3a9d-3a82-3542-a192-fcde6daea783",
+                  "headshot": {
+                    "alt": "Brandon Johnson",
+                    "href": "https://a.espncdn.com/i/headshots/college-football/players/full/4594338.png"
+                  },
+                  "id": "4594338",
+                  "jersey": "3",
+                  "lastName": "Johnson",
+                  "links": [
+                    {
+                      "href": "https://www.espn.com/college-football/player/_/id/4594338/brandon-johnson",
+                      "rel": [
+                        "playercard",
+                        "desktop",
+                        "athlete"
+                      ],
+                      "text": "Player Card"
+                    }
+                  ],
+                  "uid": "s:20~l:23~a:4594338"
+                },
+                "stats": [
+                  "0",
+                  "0",
+                  "1"
+                ]
+              }
+            ],
+            "descriptions": [
+              "Fumbles",
+              "Fumbles Lost",
+              "Fumbles Recovered"
+            ],
+            "keys": [
+              "fumbles",
+              "fumblesLost",
+              "fumblesRecovered"
+            ],
+            "labels": [
+              "FUM",
+              "LOST",
+              "REC"
+            ],
+            "name": "fumbles",
+            "text": "Oregon Fumbles",
+            "totals": [
+              "1",
+              "0",
+              "1"
+            ]
+          },
+          {
+            "athletes": [
+              {
+                "athlete": {
+                  "displayName": "Kobe Savage",
+                  "firstName": "Kobe",
+                  "guid": "37df4916-8b23-3dcf-a451-420cb41baa85",
+                  "headshot": {
+                    "alt": "Kobe Savage",
+                    "href": "https://a.espncdn.com/i/headshots/college-football/players/full/5081915.png"
+                  },
+                  "id": "5081915",
+                  "jersey": "5",
+                  "lastName": "Savage",
+                  "links": [
+                    {
+                      "href": "https://www.espn.com/college-football/player/_/id/5081915/kobe-savage",
+                      "rel": [
+                        "playercard",
+                        "desktop",
+                        "athlete"
+                      ],
+                      "text": "Player Card"
+                    }
+                  ],
+                  "uid": "s:20~l:23~a:5081915"
+                },
+                "stats": [
+                  "9",
+                  "6",
+                  "0",
+                  "0",
+                  "0"
+                ]
+              },
+              {
+                "athlete": {
+                  "displayName": "Bryce Boettcher",
+                  "firstName": "Bryce",
+                  "guid": "5c7de71e-9425-3801-b949-c034b5ffd31b",
+                  "headshot": {
+                    "alt": "Bryce Boettcher",
+                    "href": "https://a.espncdn.com/i/headshots/college-football/players/full/5088571.png"
+                  },
+                  "id": "5088571",
+                  "jersey": "28",
+                  "lastName": "Boettcher",
+                  "links": [
+                    {
+                      "href": "https://www.espn.com/college-football/player/_/id/5088571/bryce-boettcher",
+                      "rel": [
+                        "playercard",
+                        "desktop",
+                        "athlete"
+                      ],
+                      "text": "Player Card"
+                    }
+                  ],
+                  "uid": "s:20~l:23~a:5088571"
+                },
+                "stats": [
+                  "7",
+                  "3",
+                  "0",
+                  "0",
+                  "0"
+                ]
+              },
+              {
+                "athlete": {
+                  "displayName": "Derrick Harmon",
+                  "firstName": "Derrick",
+                  "guid": "dda3e155-2461-3379-8a26-0218bf5962c7",
+                  "headshot": {
+                    "alt": "Derrick Harmon",
+                    "href": "https://a.espncdn.com/i/headshots/college-football/players/full/4682980.png"
+                  },
+                  "id": "4682980",
+                  "jersey": "55",
+                  "lastName": "Harmon",
+                  "links": [
+                    {
+                      "href": "https://www.espn.com/college-football/player/_/id/4682980/derrick-harmon",
+                      "rel": [
+                        "playercard",
+                        "desktop",
+                        "athlete"
+                      ],
+                      "text": "Player Card"
+                    }
+                  ],
+                  "uid": "s:20~l:23~a:4682980"
+                },
+                "stats": [
+                  "5",
+                  "4",
+                  "0",
+                  "0",
+                  "0"
+                ]
+              },
+              {
+                "athlete": {
+                  "displayName": "Jeffrey Bassa",
+                  "firstName": "Jeffrey",
+                  "guid": "3aac9221-9c7f-3b55-a13f-5037dafd24a1",
+                  "headshot": {
+                    "alt": "Jeffrey Bassa",
+                    "href": "https://a.espncdn.com/i/headshots/college-football/players/full/4602389.png"
+                  },
+                  "id": "4602389",
+                  "jersey": "2",
+                  "lastName": "Bassa",
+                  "links": [
+                    {
+                      "href": "https://www.espn.com/college-football/player/_/id/4602389/jeffrey-bassa",
+                      "rel": [
+                        "playercard",
+                        "desktop",
+                        "athlete"
+                      ],
+                      "text": "Player Card"
+                    }
+                  ],
+                  "uid": "s:20~l:23~a:4602389"
+                },
+                "stats": [
+                  "5",
+                  "2",
+                  "0",
+                  "0",
+                  "0"
+                ]
+              },
+              {
+                "athlete": {
+                  "displayName": "Nikko Reed",
+                  "firstName": "Nikko",
+                  "guid": "d933e369-3349-3987-8f58-cabc729f5a1b",
+                  "headshot": {
+                    "alt": "Nikko Reed",
+                    "href": "https://a.espncdn.com/i/headshots/college-football/players/full/4691043.png"
+                  },
+                  "id": "4691043",
+                  "jersey": "9",
+                  "lastName": "Reed",
+                  "links": [
+                    {
+                      "href": "https://www.espn.com/college-football/player/_/id/4691043/nikko-reed",
+                      "rel": [
+                        "playercard",
+                        "desktop",
+                        "athlete"
+                      ],
+                      "text": "Player Card"
+                    }
+                  ],
+                  "uid": "s:20~l:23~a:4691043"
+                },
+                "stats": [
+                  "4",
+                  "3",
+                  "0",
+                  "0",
+                  "0"
+                ]
+              }
+            ],
+            "descriptions": [
+              "Tackles",
+              "Solo Tackles",
+              "Sacks",
+              "Tackles For Loss",
+              "Passes Defended"
+            ],
+            "keys": [
+              "totalTackles",
+              "soloTackles",
+              "sacks",
+              "tacklesForLoss",
+              "passesDefended"
+            ],
+            "labels": [
+              "TOT",
+              "SOLO",
+              "SACKS",
+              "TFL",
+              "PD"
+            ],
+            "name": "defensive",
+            "text": "Oregon Defense",
+            "totals": [
+              "59",
+              "31",
+              "2",
+              "2",
+              "9"
+            ]
+          }
+        ],
+        "team": {
+          "abbreviation": "ORE",
+          "alternateColor": "fff41b",
+          "color": "007030",
+          "displayName": "Oregon Ducks",
+          "id": "2483",
+          "location": "Oregon",
+          "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2483.png",
+          "name": "Ducks",
+          "shortDisplayName": "Oregon",
+          "slug": "oregon-ducks",
+          "uid": "s:20~l:23~t:2483"
+        }
+      }
+    ],
+    "teams": [
+      {
+        "displayOrder": 1,
+        "homeAway": "away",
+        "statistics": [
+          {
+            "displayValue": "19",
+            "label": "1st Downs",
+            "name": "firstDowns",
+            "value": 19.0
+          },
+          {
+            "displayValue": "6-19",
+            "label": "3rd down efficiency",
+            "name": "thirdDownEff",
+            "value": 0.3157894737
+          },
+          {
+            "displayValue": "1-2",
+            "label": "4th down efficiency",
+            "name": "fourthDownEff",
+            "value": 0.5
+          },
+          {
+            "displayValue": "289",
+            "label": "Total Yards",
+            "name": "totalYards",
+            "value": "-"
+          },
+          {
+            "displayValue": "206",
+            "label": "Passing",
+            "name": "netPassingYards",
+            "value": 206.0
+          }
+        ],
+        "team": {
+          "abbreviation": "MD",
+          "alternateColor": "ffffff",
+          "color": "D5002B",
+          "displayName": "Maryland Terrapins",
+          "id": "120",
+          "location": "Maryland",
+          "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/120.png",
+          "name": "Terrapins",
+          "shortDisplayName": "Maryland",
+          "slug": "maryland-terrapins",
+          "uid": "s:20~l:23~t:120"
+        }
+      },
+      {
+        "displayOrder": 2,
+        "homeAway": "home",
+        "statistics": [
+          {
+            "displayValue": "19",
+            "label": "1st Downs",
+            "name": "firstDowns",
+            "value": 19.0
+          },
+          {
+            "displayValue": "6-15",
+            "label": "3rd down efficiency",
+            "name": "thirdDownEff",
+            "value": 0.4
+          },
+          {
+            "displayValue": "2-3",
+            "label": "4th down efficiency",
+            "name": "fourthDownEff",
+            "value": 0.6666666667
+          },
+          {
+            "displayValue": "363",
+            "label": "Total Yards",
+            "name": "totalYards",
+            "value": "-"
+          },
+          {
+            "displayValue": "183",
+            "label": "Passing",
+            "name": "netPassingYards",
+            "value": 183.0
+          }
+        ],
+        "team": {
+          "abbreviation": "ORE",
+          "alternateColor": "fff41b",
+          "color": "007030",
+          "displayName": "Oregon Ducks",
+          "id": "2483",
+          "location": "Oregon",
+          "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2483.png",
+          "name": "Ducks",
+          "shortDisplayName": "Oregon",
+          "slug": "oregon-ducks",
+          "uid": "s:20~l:23~t:2483"
+        }
+      }
+    ]
+  },
+  "gameInfo": {
+    "attendance": 59245,
+    "venue": {
+      "address": {
+        "city": "Eugene",
+        "country": "USA",
+        "state": "OR",
+        "zipCode": "97401"
+      },
+      "fullName": "Autzen Stadium",
+      "grass": false,
+      "guid": "e4aee157-fcd6-3699-a2d7-e3acf30319e4",
+      "id": "3626",
+      "images": [
+        {
+          "alt": "",
+          "height": 1125,
+          "href": "https://a.espncdn.com/i/venues/college-football/day/3626.jpg",
+          "rel": [
+            "full",
+            "day"
+          ],
+          "width": 2000
+        },
+        {
+          "alt": "",
+          "height": 1125,
+          "href": "https://a.espncdn.com/i/venues/college-football/day/interior/3626.jpg",
+          "rel": [
+            "full",
+            "day",
+            "interior"
+          ],
+          "width": 2000
+        }
+      ]
+    }
+  },
+  "header": {
+    "competitions": [
+      {
+        "boxscoreAvailable": true,
+        "boxscoreMinutes": true,
+        "boxscoreSource": "full",
+        "broadcasts": [
+          {
+            "isNational": true,
+            "lang": "en",
+            "market": {
+              "id": "1",
+              "type": "National"
+            },
+            "media": {
+              "shortName": "BTN"
+            },
+            "region": "us",
+            "type": {
+              "id": "1",
+              "shortName": "TV"
+            }
+          }
+        ],
+        "commentaryAvailable": false,
+        "competitors": [
+          {
+            "homeAway": "home",
+            "id": "2483",
+            "linescores": [
+              {
+                "displayValue": "7"
+              },
+              {
+                "displayValue": "14"
+              },
+              {
+                "displayValue": "8"
+              },
+              {
+                "displayValue": "10"
+              }
+            ],
+            "order": 0,
+            "possession": false,
+            "rank": 1,
+            "record": [
+              {
+                "displayValue": "10-0",
+                "summary": "10-0",
+                "type": "total"
+              },
+              {
+                "displayValue": "6-0",
+                "summary": "6-0",
+                "type": "home"
+              },
+              {
+                "displayValue": "7-0",
+                "summary": "7-0",
+                "type": "vsconf"
+              }
+            ],
+            "score": "39",
+            "team": {
+              "abbreviation": "ORE",
+              "alternateColor": "fff41b",
+              "color": "007030",
+              "displayName": "Oregon Ducks",
+              "groups": {
+                "id": "5"
+              },
+              "guid": "116d333f-cf1a-0c67-d450-36a834af56de",
+              "id": "2483",
+              "links": [
+                {
+                  "href": "https://www.espn.com/college-football/team/_/id/2483/oregon-ducks",
+                  "rel": [
+                    "clubhouse",
+                    "desktop",
+                    "team"
+                  ],
+                  "text": "Clubhouse"
+                }
+              ],
+              "location": "Oregon",
+              "logos": [
+                {
+                  "alt": "",
+                  "height": 500,
+                  "href": "https://a.espncdn.com/i/teamlogos/ncaa/500/2483.png",
+                  "lastUpdated": "2025-12-23T01:44Z",
+                  "rel": [
+                    "full",
+                    "default"
+                  ],
+                  "width": 500
+                },
+                {
+                  "alt": "",
+                  "height": 500,
+                  "href": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2483.png",
+                  "lastUpdated": "2025-12-23T01:44Z",
+                  "rel": [
+                    "full",
+                    "dark"
+                  ],
+                  "width": 500
+                },
+                {
+                  "alt": "",
+                  "height": 4096,
+                  "href": "https://a.espncdn.com/guid/116d333f-cf1a-0c67-d450-36a834af56de/logos/primary_logo_on_white_color.png",
+                  "lastUpdated": "2026-07-23T17:38Z",
+                  "rel": [
+                    "full",
+                    "primary_logo_on_white_color"
+                  ],
+                  "width": 4096
+                },
+                {
+                  "alt": "",
+                  "height": 4096,
+                  "href": "https://a.espncdn.com/guid/116d333f-cf1a-0c67-d450-36a834af56de/logos/primary_logo_on_black_color.png",
+                  "lastUpdated": "2026-07-23T17:38Z",
+                  "rel": [
+                    "full",
+                    "primary_logo_on_black_color"
+                  ],
+                  "width": 4096
+                },
+                {
+                  "alt": "",
+                  "height": 4096,
+                  "href": "https://a.espncdn.com/guid/116d333f-cf1a-0c67-d450-36a834af56de/logos/primary_logo_on_primary_color.png",
+                  "lastUpdated": "2026-07-23T17:38Z",
+                  "rel": [
+                    "full",
+                    "primary_logo_on_primary_color"
+                  ],
+                  "width": 4096
+                }
+              ],
+              "name": "Ducks",
+              "nickname": "Oregon",
+              "uid": "s:20~l:23~t:2483"
+            },
+            "uid": "s:20~l:23~t:2483",
+            "winner": true
+          },
+          {
+            "homeAway": "away",
+            "id": "120",
+            "linescores": [
+              {
+                "displayValue": "3"
+              },
+              {
+                "displayValue": "7"
+              },
+              {
+                "displayValue": "0"
+              },
+              {
+                "displayValue": "8"
+              }
+            ],
+            "order": 1,
+            "possession": false,
+            "record": [
+              {
+                "displayValue": "4-5",
+                "summary": "4-5",
+                "type": "total"
+              },
+              {
+                "displayValue": "1-3",
+                "summary": "1-3",
+                "type": "road"
+              },
+              {
+                "displayValue": "1-5",
+                "summary": "1-5",
+                "type": "vsconf"
+              }
+            ],
+            "score": "18",
+            "team": {
+              "abbreviation": "MD",
+              "alternateColor": "ffffff",
+              "color": "D5002B",
+              "displayName": "Maryland Terrapins",
+              "groups": {
+                "id": "5"
+              },
+              "guid": "7dae6b2a-7a04-6d4d-6e35-a625805c6c0a",
+              "id": "120",
+              "links": [
+                {
+                  "href": "https://www.espn.com/college-football/team/_/id/120/maryland-terrapins",
+                  "rel": [
+                    "clubhouse",
+                    "desktop",
+                    "team"
+                  ],
+                  "text": "Clubhouse"
+                }
+              ],
+              "location": "Maryland",
+              "logos": [
+                {
+                  "alt": "",
+                  "height": 500,
+                  "href": "https://a.espncdn.com/i/teamlogos/ncaa/500/120.png",
+                  "lastUpdated": "2025-12-23T01:44Z",
+                  "rel": [
+                    "full",
+                    "default"
+                  ],
+                  "width": 500
+                },
+                {
+                  "alt": "",
+                  "height": 500,
+                  "href": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/120.png",
+                  "lastUpdated": "2025-12-23T01:44Z",
+                  "rel": [
+                    "full",
+                    "dark"
+                  ],
+                  "width": 500
+                },
+                {
+                  "alt": "",
+                  "height": 4096,
+                  "href": "https://a.espncdn.com/guid/7dae6b2a-7a04-6d4d-6e35-a625805c6c0a/logos/primary_logo_on_white_color.png",
+                  "lastUpdated": "2026-02-13T18:02Z",
+                  "rel": [
+                    "full",
+                    "primary_logo_on_white_color"
+                  ],
+                  "width": 4096
+                },
+                {
+                  "alt": "",
+                  "height": 4096,
+                  "href": "https://a.espncdn.com/guid/7dae6b2a-7a04-6d4d-6e35-a625805c6c0a/logos/primary_logo_on_black_color.png",
+                  "lastUpdated": "2026-02-13T18:02Z",
+                  "rel": [
+                    "full",
+                    "primary_logo_on_black_color"
+                  ],
+                  "width": 4096
+                },
+                {
+                  "alt": "",
+                  "height": 4096,
+                  "href": "https://a.espncdn.com/guid/7dae6b2a-7a04-6d4d-6e35-a625805c6c0a/logos/primary_logo_on_primary_color.png",
+                  "lastUpdated": "2026-02-13T18:02Z",
+                  "rel": [
+                    "full",
+                    "primary_logo_on_primary_color"
+                  ],
+                  "width": 4096
+                }
+              ],
+              "name": "Terrapins",
+              "nickname": "Maryland",
+              "uid": "s:20~l:23~t:120"
+            },
+            "uid": "s:20~l:23~t:120",
+            "winner": false
+          }
+        ],
+        "conferenceCompetition": true,
+        "date": "2024-11-10T00:00Z",
+        "dateValid": true,
+        "groups": {
+          "abbreviation": "big10",
+          "id": "5",
+          "midsizeName": "Big Ten",
+          "name": "Big Ten Conference",
+          "shortName": "Big Ten"
+        },
+        "id": "401628543",
+        "liveAvailable": false,
+        "neutralSite": false,
+        "onWatchESPN": false,
+        "playByPlaySource": "full",
+        "recent": false,
+        "status": {
+          "type": {
+            "completed": true,
+            "description": "Final",
+            "detail": "Final",
+            "id": "3",
+            "name": "STATUS_FINAL",
+            "shortDetail": "Final",
+            "state": "post"
+          }
+        },
+        "uid": "s:20~l:23~e:401628543~c:401628543",
+        "wallclockAvailable": true
+      }
+    ],
+    "id": "401628543",
+    "league": {
+      "abbreviation": "NCAAF",
+      "id": "23",
+      "isTournament": false,
+      "links": [
+        {
+          "href": "https://www.espn.com/college-football/",
+          "rel": [
+            "index",
+            "desktop",
+            "league"
+          ],
+          "text": "Index"
+        },
+        {
+          "href": "sportscenter://x-callback-url/showClubhouse?uid=s:20~l:23",
+          "rel": [
+            "index",
+            "sportscenter",
+            "app",
+            "league"
+          ],
+          "text": "Index"
+        },
+        {
+          "href": "https://www.espn.com/college-football/schedule",
+          "rel": [
+            "schedule",
+            "desktop",
+            "league"
+          ],
+          "text": "Schedule"
+        },
+        {
+          "href": "sportscenter://x-callback-url/showClubhouse?uid=s:20~l:23&section=scores",
+          "rel": [
+            "schedule",
+            "sportscenter",
+            "app",
+            "league"
+          ],
+          "text": "Schedule"
+        },
+        {
+          "href": "https://www.espn.com/college-football/standings",
+          "rel": [
+            "standings",
+            "desktop",
+            "league"
+          ],
+          "text": "Standings"
+        }
+      ],
+      "logos": [
+        {
+          "href": "https://a.espncdn.com/redesign/assets/img/icons/NCAASports_Football.png",
+          "rel": [
+            "full",
+            "default"
+          ]
+        },
+        {
+          "href": "https://a.espncdn.com/redesign/assets/img/icons/NCAASports_Football.png",
+          "rel": [
+            "full",
+            "dark"
+          ]
+        }
+      ],
+      "midsizeName": "NCAA Football",
+      "name": "NCAA - Football",
+      "shortName": "NCAA Football",
+      "slug": "college-football",
+      "uid": "s:20~l:23"
+    },
+    "links": [
+      {
+        "href": "https://www.espn.com/college-football/game/_/gameId/401628543/maryland-oregon",
+        "isExternal": false,
+        "isPremium": false,
+        "rel": [
+          "summary",
+          "desktop",
+          "event"
+        ],
+        "shortText": "Summary",
+        "text": "Gamecast"
+      },
+      {
+        "href": "https://www.espn.com/college-football/recap?gameId=401628543",
+        "isExternal": false,
+        "isPremium": false,
+        "rel": [
+          "recap",
+          "desktop",
+          "event"
+        ],
+        "shortText": "Recap",
+        "text": "Recap"
+      },
+      {
+        "href": "https://www.espn.com/college-football/boxscore/_/gameId/401628543",
+        "isExternal": false,
+        "isPremium": false,
+        "rel": [
+          "boxscore",
+          "desktop",
+          "event"
+        ],
+        "shortText": "Box Score",
+        "text": "Box Score"
+      },
+      {
+        "href": "https://www.espn.com/college-football/playbyplay/_/gameId/401628543",
+        "isExternal": false,
+        "isPremium": false,
+        "rel": [
+          "pbp",
+          "desktop",
+          "event"
+        ],
+        "shortText": "Play-by-Play",
+        "text": "Play-by-Play"
+      },
+      {
+        "href": "https://www.espn.com/college-football/matchup?gameId=401628543",
+        "isExternal": false,
+        "isPremium": false,
+        "rel": [
+          "teamstats",
+          "desktop",
+          "event"
+        ],
+        "shortText": "Team Stats",
+        "text": "Team Stats"
+      }
+    ],
+    "season": {
+      "current": false,
+      "type": 2,
+      "year": 2024
+    },
+    "timeValid": true,
+    "uid": "s:20~l:23~e:401628543",
+    "week": 11
+  },
+  "standings": {
+    "fullViewLink": {
+      "href": "https://www.espn.com/college-football/standings",
+      "text": "Full Standings"
+    },
+    "groups": [
+      {
+        "conferenceHeader": "FBS",
+        "divisionHeader": "Big Ten Conference",
+        "header": "2026 Big Ten Conference Standings",
+        "href": "https://www.espn.com/college-football/standings/_/group/5/view/fbs",
+        "shortDivisionHeader": "Big Ten",
+        "standings": {
+          "entries": [
+            {
+              "id": "26",
+              "link": "https://www.espn.com/college-football/team/_/id/26/ucla-bruins",
+              "logo": [
+                {
+                  "alt": "",
+                  "height": 500,
+                  "href": "https://a.espncdn.com/i/teamlogos/ncaa/500/26.png",
+                  "lastUpdated": "2025-12-23T01:44Z",
+                  "rel": [
+                    "full",
+                    "default"
+                  ],
+                  "width": 500
+                },
+                {
+                  "alt": "",
+                  "height": 500,
+                  "href": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/26.png",
+                  "lastUpdated": "2025-12-23T01:44Z",
+                  "rel": [
+                    "full",
+                    "dark"
+                  ],
+                  "width": 500
+                }
+              ],
+              "stats": [
+                {
+                  "abbreviation": "overall",
+                  "description": "Overall Record",
+                  "displayName": "Overall",
+                  "displayValue": "10-1",
+                  "id": "0",
+                  "name": "overall",
+                  "shortDisplayName": "OVER",
+                  "summary": "10-1",
+                  "type": "total"
+                },
+                {
+                  "abbreviation": "CONF",
+                  "description": "Conference Record",
+                  "displayName": "vs. Conference",
+                  "displayValue": "7-1",
+                  "id": "9",
+                  "name": "vs. Conf.",
+                  "shortDisplayName": "CONF",
+                  "summary": "7-1",
+                  "type": "vsconf"
+                }
+              ],
+              "team": "UCLA",
+              "uid": "s:20~l:23~t:26"
+            },
+            {
+              "id": "84",
+              "link": "https://www.espn.com/college-football/team/_/id/84/indiana-hoosiers",
+              "logo": [
+                {
+                  "alt": "",
+                  "height": 500,
+                  "href": "https://a.espncdn.com/i/teamlogos/ncaa/500/84.png",
+                  "lastUpdated": "2025-12-23T01:44Z",
+                  "rel": [
+                    "full",
+                    "default"
+                  ],
+                  "width": 500
+                },
+                {
+                  "alt": "",
+                  "height": 500,
+                  "href": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/84.png",
+                  "lastUpdated": "2025-12-30T19:45Z",
+                  "rel": [
+                    "full",
+                    "dark"
+                  ],
+                  "width": 500
+                }
+              ],
+              "stats": [
+                {
+                  "abbreviation": "overall",
+                  "description": "Overall Record",
+                  "displayName": "Overall",
+                  "displayValue": "9-2",
+                  "id": "0",
+                  "name": "overall",
+                  "shortDisplayName": "OVER",
+                  "summary": "9-2",
+                  "type": "total"
+                },
+                {
+                  "abbreviation": "CONF",
+                  "description": "Conference Record",
+                  "displayName": "vs. Conference",
+                  "displayValue": "6-2",
+                  "id": "9",
+                  "name": "vs. Conf.",
+                  "shortDisplayName": "CONF",
+                  "summary": "6-2",
+                  "type": "vsconf"
+                }
+              ],
+              "team": "Indiana",
+              "uid": "s:20~l:23~t:84"
+            },
+            {
+              "id": "2294",
+              "link": "https://www.espn.com/college-football/team/_/id/2294/iowa-hawkeyes",
+              "logo": [
+                {
+                  "alt": "",
+                  "height": 500,
+                  "href": "https://a.espncdn.com/i/teamlogos/ncaa/500/2294.png",
+                  "lastUpdated": "2025-12-23T01:44Z",
+                  "rel": [
+                    "full",
+                    "default"
+                  ],
+                  "width": 500
+                },
+                {
+                  "alt": "",
+                  "height": 500,
+                  "href": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2294.png",
+                  "lastUpdated": "2025-12-23T01:44Z",
+                  "rel": [
+                    "full",
+                    "dark"
+                  ],
+                  "width": 500
+                }
+              ],
+              "stats": [
+                {
+                  "abbreviation": "overall",
+                  "description": "Overall Record",
+                  "displayName": "Overall",
+                  "displayValue": "9-2",
+                  "id": "0",
+                  "name": "overall",
+                  "shortDisplayName": "OVER",
+                  "summary": "9-2",
+                  "type": "total"
+                },
+                {
+                  "abbreviation": "CONF",
+                  "description": "Conference Record",
+                  "displayName": "vs. Conference",
+                  "displayValue": "6-2",
+                  "id": "9",
+                  "name": "vs. Conf.",
+                  "shortDisplayName": "CONF",
+                  "summary": "6-2",
+                  "type": "vsconf"
+                }
+              ],
+              "team": "Iowa",
+              "uid": "s:20~l:23~t:2294"
+            },
+            {
+              "id": "2483",
+              "link": "https://www.espn.com/college-football/team/_/id/2483/oregon-ducks",
+              "logo": [
+                {
+                  "alt": "",
+                  "height": 500,
+                  "href": "https://a.espncdn.com/i/teamlogos/ncaa/500/2483.png",
+                  "lastUpdated": "2025-12-23T01:44Z",
+                  "rel": [
+                    "full",
+                    "default"
+                  ],
+                  "width": 500
+                },
+                {
+                  "alt": "",
+                  "height": 500,
+                  "href": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2483.png",
+                  "lastUpdated": "2025-12-23T01:44Z",
+                  "rel": [
+                    "full",
+                    "dark"
+                  ],
+                  "width": 500
+                }
+              ],
+              "stats": [
+                {
+                  "abbreviation": "overall",
+                  "description": "Overall Record",
+                  "displayName": "Overall",
+                  "displayValue": "8-3",
+                  "id": "0",
+                  "name": "overall",
+                  "shortDisplayName": "OVER",
+                  "summary": "8-3",
+                  "type": "total"
+                },
+                {
+                  "abbreviation": "CONF",
+                  "description": "Conference Record",
+                  "displayName": "vs. Conference",
+                  "displayValue": "6-2",
+                  "id": "9",
+                  "name": "vs. Conf.",
+                  "shortDisplayName": "CONF",
+                  "summary": "6-2",
+                  "type": "vsconf"
+                }
+              ],
+              "team": "Oregon",
+              "uid": "s:20~l:23~t:2483"
+            },
+            {
+              "id": "275",
+              "link": "https://www.espn.com/college-football/team/_/id/275/wisconsin-badgers",
+              "logo": [
+                {
+                  "alt": "",
+                  "height": 500,
+                  "href": "https://a.espncdn.com/i/teamlogos/ncaa/500/275.png",
+                  "lastUpdated": "2026-07-01T04:35Z",
+                  "rel": [
+                    "full",
+                    "default"
+                  ],
+                  "width": 500
+                },
+                {
+                  "alt": "",
+                  "height": 500,
+                  "href": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/275.png",
+                  "lastUpdated": "2026-07-01T04:34Z",
+                  "rel": [
+                    "full",
+                    "dark"
+                  ],
+                  "width": 500
+                }
+              ],
+              "stats": [
+                {
+                  "abbreviation": "overall",
+                  "description": "Overall Record",
+                  "displayName": "Overall",
+                  "displayValue": "7-4",
+                  "id": "0",
+                  "name": "overall",
+                  "shortDisplayName": "OVER",
+                  "summary": "7-4",
+                  "type": "total"
+                },
+                {
+                  "abbreviation": "CONF",
+                  "description": "Conference Record",
+                  "displayName": "vs. Conference",
+                  "displayValue": "5-3",
+                  "id": "9",
+                  "name": "vs. Conf.",
+                  "shortDisplayName": "CONF",
+                  "summary": "5-3",
+                  "type": "vsconf"
+                }
+              ],
+              "team": "Wisconsin",
+              "uid": "s:20~l:23~t:275"
+            }
+          ]
+        }
+      }
+    ],
+    "header": "2026 Standings",
+    "isSameConference": true
+  }
+}

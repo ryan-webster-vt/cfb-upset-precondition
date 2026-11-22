@@ -1,0 +1,244 @@
+{
+  "$defs": {
+    "Citation": {
+      "additionalProperties": false,
+      "description": "A resolvable source supporting a claim or a rule.",
+      "properties": {
+        "citation_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Citation Id"
+        },
+        "published_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Published At"
+        },
+        "quote": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Quote"
+        },
+        "source": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source"
+        },
+        "title": {
+          "minLength": 1,
+          "title": "Title",
+          "type": "string"
+        },
+        "url": {
+          "minLength": 1,
+          "title": "Url",
+          "type": "string"
+        }
+      },
+      "required": [
+        "title",
+        "url"
+      ],
+      "title": "Citation",
+      "type": "object"
+    },
+    "MissingPolicy": {
+      "enum": [
+        "unknown",
+        "false"
+      ],
+      "title": "MissingPolicy",
+      "type": "string"
+    },
+    "PreconditionStatus": {
+      "enum": [
+        "validated",
+        "provisional",
+        "rejected"
+      ],
+      "title": "PreconditionStatus",
+      "type": "string"
+    },
+    "RuleOp": {
+      "enum": [
+        "gt",
+        "ge",
+        "lt",
+        "le",
+        "eq",
+        "ne",
+        "in",
+        "not_in",
+        "between",
+        "is_true",
+        "is_false"
+      ],
+      "title": "RuleOp",
+      "type": "string"
+    },
+    "RuleSpec": {
+      "additionalProperties": false,
+      "description": "A whitelisted, deterministic predicate over one admitted field.",
+      "properties": {
+        "field": {
+          "minLength": 1,
+          "title": "Field",
+          "type": "string"
+        },
+        "missing_policy": {
+          "$ref": "#/$defs/MissingPolicy",
+          "default": "unknown"
+        },
+        "op": {
+          "$ref": "#/$defs/RuleOp"
+        },
+        "units": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Units"
+        },
+        "value": {
+          "default": null,
+          "title": "Value"
+        },
+        "value2": {
+          "default": null,
+          "title": "Value2"
+        }
+      },
+      "required": [
+        "field",
+        "op"
+      ],
+      "title": "RuleSpec",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "A versioned, operationalizable upset precondition.",
+  "properties": {
+    "candidate_key": {
+      "minLength": 1,
+      "title": "Candidate Key",
+      "type": "string"
+    },
+    "citations": {
+      "items": {
+        "$ref": "#/$defs/Citation"
+      },
+      "title": "Citations",
+      "type": "array"
+    },
+    "created_at": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Created At"
+    },
+    "min_support": {
+      "default": 30,
+      "minimum": 0,
+      "title": "Min Support",
+      "type": "integer"
+    },
+    "rationale": {
+      "minLength": 1,
+      "title": "Rationale",
+      "type": "string"
+    },
+    "required_fields": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Required Fields",
+      "type": "array"
+    },
+    "rule": {
+      "$ref": "#/$defs/RuleSpec"
+    },
+    "scope": {
+      "default": "FBS-vs-FBS",
+      "title": "Scope",
+      "type": "string"
+    },
+    "source": {
+      "default": "seeded_literature",
+      "title": "Source",
+      "type": "string"
+    },
+    "spec_id": {
+      "minLength": 1,
+      "title": "Spec Id",
+      "type": "string"
+    },
+    "status": {
+      "$ref": "#/$defs/PreconditionStatus",
+      "default": "provisional"
+    },
+    "title": {
+      "minLength": 1,
+      "title": "Title",
+      "type": "string"
+    },
+    "version": {
+      "default": 1,
+      "minimum": 1,
+      "title": "Version",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "spec_id",
+    "candidate_key",
+    "title",
+    "rationale",
+    "rule",
+    "required_fields"
+  ],
+  "title": "PreconditionSpec",
+  "type": "object"
+}

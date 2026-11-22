@@ -1,0 +1,125 @@
+[
+  {
+    "awayClassification": "fcs",
+    "awayTeam": "Southern Utah",
+    "homeClassification": "fbs",
+    "homeTeam": "Arizona State",
+    "id": 401309835,
+    "lines": [
+      {
+        "awayMoneyline": null,
+        "formattedSpread": "Arizona State -44.5",
+        "homeMoneyline": null,
+        "overUnder": 56.5,
+        "overUnderOpen": null,
+        "provider": "consensus",
+        "spread": -44.5,
+        "spreadOpen": null
+      },
+      {
+        "awayMoneyline": null,
+        "formattedSpread": "Arizona State -44.5",
+        "homeMoneyline": null,
+        "overUnder": 56.5,
+        "overUnderOpen": null,
+        "provider": "William Hill (New Jersey)",
+        "spread": -44.5,
+        "spreadOpen": null
+      },
+      {
+        "awayMoneyline": null,
+        "formattedSpread": "Arizona State -45.5",
+        "homeMoneyline": null,
+        "overUnder": 56.5,
+        "overUnderOpen": 55,
+        "provider": "Bovada",
+        "spread": -45.5,
+        "spreadOpen": -45
+      }
+    ],
+    "season": 2021,
+    "week": 1
+  },
+  {
+    "awayClassification": "fcs",
+    "awayTeam": "Houston Christian",
+    "homeClassification": "fbs",
+    "homeTeam": "New Mexico",
+    "id": 401310696,
+    "lines": [
+      {
+        "awayMoneyline": null,
+        "formattedSpread": "New Mexico -25.5",
+        "homeMoneyline": null,
+        "overUnder": 66,
+        "overUnderOpen": null,
+        "provider": "consensus",
+        "spread": -25.5,
+        "spreadOpen": null
+      },
+      {
+        "awayMoneyline": null,
+        "formattedSpread": "New Mexico -25.5",
+        "homeMoneyline": null,
+        "overUnder": 66,
+        "overUnderOpen": null,
+        "provider": "William Hill (New Jersey)",
+        "spread": -25.5,
+        "spreadOpen": null
+      },
+      {
+        "awayMoneyline": null,
+        "formattedSpread": "New Mexico -25.5",
+        "homeMoneyline": null,
+        "overUnder": 66.5,
+        "overUnderOpen": 66.5,
+        "provider": "Bovada",
+        "spread": -25.5,
+        "spreadOpen": -24.5
+      }
+    ],
+    "season": 2021,
+    "week": 1
+  },
+  {
+    "awayClassification": "fcs",
+    "awayTeam": "Eastern Washington",
+    "homeClassification": "fbs",
+    "homeTeam": "UNLV",
+    "id": 401310694,
+    "lines": [
+      {
+        "awayMoneyline": null,
+        "formattedSpread": "Eastern Washington -2",
+        "homeMoneyline": null,
+        "overUnder": 66,
+        "overUnderOpen": null,
+        "provider": "consensus",
+        "spread": 2,
+        "spreadOpen": null
+      },
+      {
+        "awayMoneyline": null,
+        "formattedSpread": "Eastern Washington -2",
+        "homeMoneyline": null,
+        "overUnder": 66,
+        "overUnderOpen": null,
+        "provider": "William Hill (New Jersey)",
+        "spread": 2,
+        "spreadOpen": null
+      },
+      {
+        "awayMoneyline": -130,
+        "formattedSpread": "Eastern Washington -2.0",
+        "homeMoneyline": 110,
+        "overUnder": 66,
+        "overUnderOpen": 67,
+        "provider": "Bovada",
+        "spread": 2,
+        "spreadOpen": -1
+      }
+    ],
+    "season": 2021,
+    "week": 1
+  }
+]

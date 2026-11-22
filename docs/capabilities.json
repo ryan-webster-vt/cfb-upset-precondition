@@ -1,0 +1,742 @@
+{
+  "checks": [
+    {
+      "detail": "HTTP 200; 53 events; odds_present=False",
+      "duration_ms": 72.27953147888184,
+      "evidence": {
+        "events": 53,
+        "kind": "json",
+        "status": 200
+      },
+      "name": "ESPN historical scoreboard",
+      "status": "PASS"
+    },
+    {
+      "detail": "HTTP 200; 53 events; 53 with odds",
+      "duration_ms": 125.46536350250244,
+      "evidence": {
+        "events": 53,
+        "status": 200,
+        "with_odds": 53
+      },
+      "name": "ESPN future slate + odds",
+      "status": "PASS"
+    },
+    {
+      "detail": "HTTP 200; keys=['againstTheSpread', 'article', 'boxscore', 'broadcasts', 'drives', 'format', 'gameInfo', 'header', 'leaders', 'meta']",
+      "duration_ms": 89.05725002288818,
+      "evidence": {
+        "keys": [
+          "againstTheSpread",
+          "article",
+          "boxscore",
+          "broadcasts",
+          "drives",
+          "format",
+          "gameInfo",
+          "header",
+          "leaders",
+          "meta",
+          "news",
+          "odds",
+          "pickcenter",
+          "scoringPlays",
+          "standings",
+          "videos",
+          "wallclockAvailable",
+          "winprobability"
+        ],
+        "status": 200
+      },
+      "name": "ESPN summary",
+      "status": "PASS"
+    },
+    {
+      "detail": "HTTP 200; 2 items; providers=['ESPN BET', 'ESPN Bet - Live Odds']",
+      "duration_ms": 47.10124683380127,
+      "evidence": {
+        "items": 2,
+        "providers": [
+          "ESPN BET",
+          "ESPN Bet - Live Odds"
+        ],
+        "status": 200
+      },
+      "name": "ESPN core odds",
+      "status": "PASS"
+    },
+    {
+      "detail": "HTTP 200; 2 ranking collections; polls=['AP Top 25', 'AFCA Coaches Poll']",
+      "duration_ms": 55.844482421875,
+      "evidence": {
+        "polls": [
+          "AP Top 25",
+          "AFCA Coaches Poll"
+        ],
+        "rankings": 2,
+        "status": 200
+      },
+      "name": "ESPN weekly rankings",
+      "status": "PASS"
+    },
+    {
+      "detail": "HTTP 200; 763 teams",
+      "duration_ms": 44.12827014923096,
+      "evidence": {
+        "status": 200,
+        "teams": 763
+      },
+      "name": "ESPN teams",
+      "status": "PASS"
+    },
+    {
+      "detail": "HTTP 200; name=FBS",
+      "duration_ms": 11.412311553955078,
+      "evidence": {
+        "name": "FBS",
+        "status": 200
+      },
+      "name": "ESPN group 80 (FBS)",
+      "status": "PASS"
+    },
+    {
+      "detail": "HTTP 200; name=FCS",
+      "duration_ms": 10.36204719543457,
+      "evidence": {
+        "name": "FCS",
+        "status": 200
+      },
+      "name": "ESPN group 81 (FCS)",
+      "status": "PASS"
+    },
+    {
+      "detail": "HTTP 200; 14 model ids",
+      "duration_ms": 168.3019323348999,
+      "evidence": {
+        "models": [
+          "vt-arc-llm",
+          "GLM-5.3",
+          "GLM-5.3-thinking-high",
+          "gpt-oss-120b",
+          "gpt-oss-120b-thinking-high",
+          "gpt-oss-120b-thinking-low",
+          "claude-on-arc",
+          "DeepSeek-V4.1-Flash",
+          "DeepSeek-V4.1-Flash-thinking-low",
+          "DeepSeek-V4.1-Flash-thinking-max",
+          "Qwen3-Embedding-4B",
+          "telecom-retention",
+          "decision.vllm-sr/d3-mini",
+          "vt-arc-agentic"
+        ],
+        "status": 200
+      },
+      "name": "ARC /models",
+      "status": "PASS"
+    },
+    {
+      "detail": "HTTP 200; json_parse=True; finish_reason=stop; content='{\"ok\": true}'",
+      "duration_ms": 4193.580904960632,
+      "evidence": {
+        "content_chars": 12,
+        "finish_reason": "stop",
+        "json_parse": true,
+        "kind": "json",
+        "reasoning_chars": 295,
+        "status": 200
+      },
+      "name": "ARC chat JSON mode",
+      "status": "PASS"
+    },
+    {
+      "detail": "HTTP 200; kind=json; answer_keys=['upset_likely']",
+      "duration_ms": 112.9708080291748,
+      "evidence": {
+        "status": 200,
+        "usage": {
+          "input_tokens": 134,
+          "output_tokens": 0
+        }
+      },
+      "name": "systemone noul",
+      "status": "PASS"
+    },
+    {
+      "detail": "HTTP 200; kind=json; answer_keys=['confirm']",
+      "duration_ms": 109.50869083404541,
+      "evidence": {
+        "status": 200,
+        "usage": {
+          "input_tokens": 161,
+          "output_tokens": 0
+        }
+      },
+      "name": "systemone choice",
+      "status": "PASS"
+    },
+    {
+      "detail": "HTTP 200; kind=json; answer_keys=['risk']",
+      "duration_ms": 117.4806604385376,
+      "evidence": {
+        "status": 200,
+        "usage": {
+          "input_tokens": 143,
+          "output_tokens": 0
+        }
+      },
+      "name": "systemone score",
+      "status": "PASS"
+    },
+    {
+      "detail": "values=[0.02825084428381916, 0.02825084428381916, 0.02825084428381916]; latencies_ms=[113, 113, 110]",
+      "duration_ms": null,
+      "evidence": {
+        "latencies_ms": [
+          113.29902458190918,
+          112.86637115478516,
+          109.94038200378418
+        ],
+        "values": [
+          0.02825084428381916,
+          0.02825084428381916,
+          0.02825084428381916
+        ]
+      },
+      "name": "systemone determinism (noul x3)",
+      "status": "PASS"
+    },
+    {
+      "detail": "values=[0.35116546408574767, 0.35116546408574767]; latencies_ms=[844, 828]",
+      "duration_ms": null,
+      "evidence": {
+        "chars": 20099,
+        "latencies_ms": [
+          844.1589002609253,
+          828.0099010467529
+        ],
+        "usage": [
+          {
+            "input_tokens": 4291,
+            "output_tokens": 0
+          },
+          {
+            "input_tokens": 4291,
+            "output_tokens": 0
+          }
+        ],
+        "values": [
+          0.35116546408574767,
+          0.35116546408574767
+        ]
+      },
+      "name": "systemone determinism (long payload x2)",
+      "status": "PASS"
+    },
+    {
+      "detail": "HTTP 400; body={'error': {'code': 400, 'message': '\"questions\" must be a non-empty object', 'type': 'invalid_request_error'}}",
+      "duration_ms": 59.357370376586914,
+      "evidence": {
+        "body": {
+          "error": {
+            "code": 400,
+            "message": "\"questions\" must be a non-empty object",
+            "type": "invalid_request_error"
+          }
+        },
+        "status": 400
+      },
+      "name": "systemone 400 envelope",
+      "status": "PASS"
+    },
+    {
+      "detail": "HTTP 404; body={'error': 'd3 is a decision model and cannot chat or complete text: use POST /v1/systemone with a state and questions'}",
+      "duration_ms": 46.01015853881836,
+      "evidence": {
+        "body": {
+          "error": "d3 is a decision model and cannot chat or complete text: use POST /v1/systemone with a state and questions"
+        },
+        "status": 404
+      },
+      "name": "systemone 404 on /chat/completions",
+      "status": "PASS"
+    },
+    {
+      "detail": "statuses=[200, 200, 200, 200, 200]; 429_observed=False",
+      "duration_ms": 174.7192783355713,
+      "evidence": {
+        "results": [
+          {
+            "body": "{'model': 'vllm-sr/d3-mini', 'answers': {'upset_likely': {'type': 'noul', 'noul': 0.03036596393867679}}, 'usage': {'input_tokens': 141, 'output_tokens': 0}}",
+            "status": 200
+          },
+          {
+            "body": "{'model': 'vllm-sr/d3-mini', 'answers': {'upset_likely': {'type': 'noul', 'noul': 0.02632255576954074}}, 'usage': {'input_tokens': 141, 'output_tokens': 0}}",
+            "status": 200
+          },
+          {
+            "body": "{'model': 'vllm-sr/d3-mini', 'answers': {'upset_likely': {'type': 'noul', 'noul': 0.026151513400913096}}, 'usage': {'input_tokens': 141, 'output_tokens': 0}}",
+            "status": 200
+          },
+          {
+            "body": "{'model': 'vllm-sr/d3-mini', 'answers': {'upset_likely': {'type': 'noul', 'noul': 0.026627641451289263}}, 'usage': {'input_tokens': 141, 'output_tokens': 0}}",
+            "status": 200
+          },
+          {
+            "body": "{'model': 'vllm-sr/d3-mini', 'answers': {'upset_likely': {'type': 'noul', 'noul': 0.02660868937528055}}, 'usage': {'input_tokens': 141, 'output_tokens': 0}}",
+            "status": 200
+          }
+        ]
+      },
+      "name": "systemone 5-way burst (429)",
+      "status": "PARTIAL"
+    },
+    {
+      "detail": "HTTP 413; body={'detail': 'Request body too large'}",
+      "duration_ms": 160.3847770690918,
+      "evidence": {
+        "body": {
+          "detail": "Request body too large"
+        },
+        "status": 413
+      },
+      "name": "systemone oversized body (413)",
+      "status": "PASS"
+    },
+    {
+      "detail": "chars=30000; HTTP 200; usage={'input_tokens': 6091, 'output_tokens': 0}",
+      "duration_ms": 1597.065689086914,
+      "evidence": {
+        "chars": 30000,
+        "status": 200,
+        "usage": {
+          "input_tokens": 6091,
+          "output_tokens": 0
+        }
+      },
+      "name": "systemone near-8k input",
+      "status": "PASS"
+    },
+    {
+      "detail": "opt-in --deep-limits; holding four requests for 30 s would consume the shared window",
+      "duration_ms": null,
+      "evidence": {},
+      "name": "systemone queue timeout (503)",
+      "status": "SKIP"
+    },
+    {
+      "detail": "HTTP 200; dims=[4096, 4096, 4096]; norms=[1.000001, 1.0, 1.0]",
+      "duration_ms": 180.6781187057495,
+      "evidence": {
+        "dims": [
+          4096,
+          4096,
+          4096
+        ],
+        "expected_dim": 4096,
+        "kind": "json",
+        "norms": [
+          1.0000008629661503,
+          0.9999997378543456,
+          0.9999998014046935
+        ],
+        "status": 200
+      },
+      "name": "Ollama qwen3-embedding:8b width/norm",
+      "status": "PASS"
+    },
+    {
+      "detail": "results=[{'size': 1, 'status': 200, 'returned': 1}, {'size': 4, 'status': 200, 'returned': 4}, {'size': 8, 'status': 200, 'returned': 8}, {'size': 16, 'status': 200, 'returned': 16}, {'size': 32, 'status': 200, 'returned': 32}]",
+      "duration_ms": null,
+      "evidence": {
+        "batches": [
+          {
+            "returned": 1,
+            "size": 1,
+            "status": 200
+          },
+          {
+            "returned": 4,
+            "size": 4,
+            "status": 200
+          },
+          {
+            "returned": 8,
+            "size": 8,
+            "status": 200
+          },
+          {
+            "returned": 16,
+            "size": 16,
+            "status": 200
+          },
+          {
+            "returned": 32,
+            "size": 32,
+            "status": 200
+          }
+        ]
+      },
+      "name": "Ollama qwen3-embedding:8b batch cap",
+      "status": "PASS"
+    },
+    {
+      "detail": "chars=144000; HTTP 200; dim=4096",
+      "duration_ms": 3479.4088315963745,
+      "evidence": {
+        "chars": 144000,
+        "dim": 4096,
+        "status": 200
+      },
+      "name": "Ollama qwen3-embedding:8b over-context",
+      "status": "PASS"
+    },
+    {
+      "detail": "cosine(raw, instruct)=0.672282",
+      "duration_ms": null,
+      "evidence": {
+        "cosine": 0.6722816516176133,
+        "template": "Instruct: \u2026\\nQuery: \u2026"
+      },
+      "name": "Ollama qwen3-embedding:8b instruction prefix",
+      "status": "PASS"
+    },
+    {
+      "detail": "HTTP 200; dims=[2560, 2560, 2560]; norms=[1.0, 1.0, 1.0]",
+      "duration_ms": 82.55997848510742,
+      "evidence": {
+        "dims": [
+          2560,
+          2560,
+          2560
+        ],
+        "expected_dim": 2560,
+        "kind": "json",
+        "norms": [
+          0.9999999535694962,
+          0.9999999634967504,
+          0.9999999745842773
+        ],
+        "status": 200
+      },
+      "name": "ARC Qwen3-Embedding-4B width/norm",
+      "status": "PASS"
+    },
+    {
+      "detail": "results=[{'size': 1, 'status': 200, 'returned': 1}, {'size': 4, 'status': 200, 'returned': 4}, {'size': 8, 'status': 200, 'returned': 8}, {'size': 16, 'status': 200, 'returned': 16}, {'size': 32, 'status': 200, 'returned': 32}]",
+      "duration_ms": null,
+      "evidence": {
+        "batches": [
+          {
+            "returned": 1,
+            "size": 1,
+            "status": 200
+          },
+          {
+            "returned": 4,
+            "size": 4,
+            "status": 200
+          },
+          {
+            "returned": 8,
+            "size": 8,
+            "status": 200
+          },
+          {
+            "returned": 16,
+            "size": 16,
+            "status": 200
+          },
+          {
+            "returned": 32,
+            "size": 32,
+            "status": 200
+          }
+        ]
+      },
+      "name": "ARC Qwen3-Embedding-4B batch cap",
+      "status": "PASS"
+    },
+    {
+      "detail": "chars=144000; HTTP 400; dim=0",
+      "duration_ms": 90.53350734710693,
+      "evidence": {
+        "chars": 144000,
+        "dim": 0,
+        "status": 400
+      },
+      "name": "ARC Qwen3-Embedding-4B over-context",
+      "status": "PARTIAL"
+    },
+    {
+      "detail": "HTTP 200; games=89; lines=353; spreadOpen_null=268 (75.9%); providers=['Bovada', 'Caesars (Pennsylvania)', 'William Hill (New Jersey)', 'consensus', 'numberfire', 'teamrankings']",
+      "duration_ms": 606.5850887298584,
+      "evidence": {
+        "games": 89,
+        "lines": 353,
+        "over_under_open_null": 268,
+        "providers": [
+          "Bovada",
+          "Caesars (Pennsylvania)",
+          "William Hill (New Jersey)",
+          "consensus",
+          "numberfire",
+          "teamrankings"
+        ],
+        "spread_open_null": 268,
+        "spread_open_null_rate": 0.7592067988668555,
+        "status": 200
+      },
+      "name": "CFBD /lines 2021 week 1",
+      "status": "PASS"
+    },
+    {
+      "detail": "HTTP 200; games=127; lines=270; spreadOpen_null=31 (11.5%); providers=['Bovada', 'DraftKings', 'ESPN Bet']",
+      "duration_ms": 85.25125694274902,
+      "evidence": {
+        "games": 127,
+        "lines": 270,
+        "over_under_open_null": 33,
+        "providers": [
+          "Bovada",
+          "DraftKings",
+          "ESPN Bet"
+        ],
+        "spread_open_null": 31,
+        "spread_open_null_rate": 0.11481481481481481,
+        "status": 200
+      },
+      "name": "CFBD /lines 2025 week 1",
+      "status": "PASS"
+    },
+    {
+      "detail": "HTTP 200; venues=854; non_null={'latitude': 806, 'longitude': 806, 'elevation': 379, 'dome': 851, 'timezone': 364}",
+      "duration_ms": 134.78187084197998,
+      "evidence": {
+        "non_null": {
+          "dome": 851,
+          "elevation": 379,
+          "latitude": 806,
+          "longitude": 806,
+          "timezone": 364
+        },
+        "rates": {
+          "dome": 0.9964871194379391,
+          "elevation": 0.44379391100702575,
+          "latitude": 0.9437939110070258,
+          "longitude": 0.9437939110070258,
+          "timezone": 0.4262295081967213
+        },
+        "status": 200,
+        "venues": 854
+      },
+      "name": "CFBD /venues",
+      "status": "PASS"
+    },
+    {
+      "detail": "HTTP 200; hours=24; variables=['cloud_cover', 'precipitation', 'temperature_2m', 'time', 'wind_speed_10m']",
+      "duration_ms": 539.7955074310303,
+      "evidence": {
+        "generationtime_ms": 0.1176595687866211,
+        "hours": 24,
+        "kind": "json",
+        "status": 200,
+        "variables": [
+          "cloud_cover",
+          "precipitation",
+          "temperature_2m",
+          "time",
+          "wind_speed_10m"
+        ]
+      },
+      "name": "Open-Meteo historical forecast 2021-09-04",
+      "status": "PASS"
+    },
+    {
+      "detail": "HTTP 200; hours=24; variables=['cloud_cover', 'precipitation', 'temperature_2m', 'time', 'wind_speed_10m']",
+      "duration_ms": 135.41286182403564,
+      "evidence": {
+        "generationtime_ms": 0.17976760864257812,
+        "hours": 24,
+        "kind": "json",
+        "status": 200,
+        "variables": [
+          "cloud_cover",
+          "precipitation",
+          "temperature_2m",
+          "time",
+          "wind_speed_10m"
+        ]
+      },
+      "name": "Open-Meteo historical forecast 2025-11-15",
+      "status": "PASS"
+    },
+    {
+      "detail": "HTTP 200; hourly_keys=['temperature_2m', 'time']",
+      "duration_ms": 564.0888261795044,
+      "evidence": {
+        "hourly_keys": [
+          "temperature_2m",
+          "time"
+        ],
+        "status": 200
+      },
+      "name": "Open-Meteo previous-runs archive",
+      "status": "PASS"
+    },
+    {
+      "detail": "HTTP 422; key_configured=False; results=0",
+      "duration_ms": 192.03604316711426,
+      "evidence": {
+        "results": 0,
+        "status": 422
+      },
+      "name": "Brave Search",
+      "status": "SKIP"
+    },
+    {
+      "detail": "FETCH_BASE_URL is empty",
+      "duration_ms": null,
+      "evidence": {},
+      "name": "Fetch MCP",
+      "status": "SKIP"
+    },
+    {
+      "detail": "DEEP_RESEARCH_BASE_URL is empty",
+      "duration_ms": null,
+      "evidence": {},
+      "name": "Deep Research MCP",
+      "status": "SKIP"
+    },
+    {
+      "detail": "runtime adapters (D9) are used; no harness-level MCP servers are configured",
+      "duration_ms": null,
+      "evidence": {},
+      "name": "MCP transport",
+      "status": "SKIP"
+    },
+    {
+      "detail": "not installed (P1.11 adds it)",
+      "duration_ms": null,
+      "evidence": {},
+      "name": "chromadb import",
+      "status": "FAIL"
+    },
+    {
+      "detail": "free=2811.0 GiB; total=3753.4 GiB",
+      "duration_ms": null,
+      "evidence": {
+        "free_gib": 2811.0
+      },
+      "name": "Disk space",
+      "status": "PASS"
+    },
+    {
+      "detail": ".env=True; .env.example=True; git_check_ignore_exit=0",
+      "duration_ms": null,
+      "evidence": {
+        "git_check_ignore": ".env"
+      },
+      "name": "Secret hygiene",
+      "status": "PASS"
+    },
+    {
+      "detail": "quarto=True; npx=True; pandoc=True",
+      "duration_ms": null,
+      "evidence": {
+        "npx": true,
+        "pandoc": true,
+        "quarto": true
+      },
+      "name": "Docs toolchain",
+      "status": "PASS"
+    }
+  ],
+  "chosen_backends": {
+    "MCP transport (D9)": "runtime HTTP adapters with recorded fixtures; no harness MCP",
+    "embeddings (D8)": "ollama qwen3-embedding:8b (4096-d, primary); ARC Qwen3-Embedding-4B (2560-d, optional)",
+    "odds / venues (D17)": "CFBD /lines + /venues primary; ESPN open + strength proxy fallback",
+    "research provider (D2)": "seeded_literature (no MCP endpoint configured)",
+    "scorer (D1)": "d3_mini via POST /systemone (primary); calibrated_rules fallback",
+    "weather (D3)": "open_meteo historical forecast; WEATHER_LEAD_HOURS_MAX=6 (recorded actual lead)"
+  },
+  "environment": {
+    "platform": "Linux-6.17.0-1032-oem-x86_64-with-glibc2.39",
+    "python": "3.13.5",
+    "settings": {
+      "brave_configured": false,
+      "cfbd_configured": true,
+      "demo_mode": "live",
+      "embed_backend": "ollama",
+      "embed_dim": 4096,
+      "llm_mode": "required",
+      "log_level": "INFO",
+      "mcp_research_configured": false,
+      "ollama_base_url": "http://localhost:11434/v1",
+      "ollama_embed_model": "qwen3-embedding:8b",
+      "scorer_backend": "auto",
+      "systemone_max_concurrency": 4,
+      "vt_arc_api_key": "***",
+      "vt_arc_base_url": "https://llm-api.arc.vt.edu/api/v1",
+      "vt_arc_decision_model": "decision.vllm-sr/d3-mini",
+      "vt_arc_model": "GLM-5.3",
+      "weather_backend": "open_meteo",
+      "weather_lead_hours_max": 6,
+      "worker_count": 2
+    }
+  },
+  "fixtures": [
+    "tests/fixtures/arc/chat_json.json",
+    "tests/fixtures/cfbd/lines_2021_w1.json",
+    "tests/fixtures/cfbd/lines_2025_w1.json",
+    "tests/fixtures/cfbd/venues.json",
+    "tests/fixtures/embeddings/arc_qwen3-embedding-4b_over_context.json",
+    "tests/fixtures/embeddings/arc_qwen3-embedding-4b_response.json",
+    "tests/fixtures/embeddings/ollama_qwen3-embedding-8b_over_context.json",
+    "tests/fixtures/embeddings/ollama_qwen3-embedding-8b_response.json",
+    "tests/fixtures/espn/odds_401628543.json",
+    "tests/fixtures/espn/rankings_2024_w10.json",
+    "tests/fixtures/espn/scoreboard_20251115.json",
+    "tests/fixtures/espn/scoreboard_20261128.json",
+    "tests/fixtures/espn/summary_401628543.json",
+    "tests/fixtures/systemone/README.md",
+    "tests/fixtures/systemone/choice_request.json",
+    "tests/fixtures/systemone/choice_response.json",
+    "tests/fixtures/systemone/error_400_empty_questions_request.json",
+    "tests/fixtures/systemone/error_400_empty_questions_response.json",
+    "tests/fixtures/systemone/error_404_chat_completions_request.json",
+    "tests/fixtures/systemone/error_404_chat_completions_response.json",
+    "tests/fixtures/systemone/limit_413_payload.json",
+    "tests/fixtures/systemone/limit_429_burst.json",
+    "tests/fixtures/systemone/limit_input.json",
+    "tests/fixtures/systemone/noul_request.json",
+    "tests/fixtures/systemone/noul_response.json",
+    "tests/fixtures/systemone/score_request.json",
+    "tests/fixtures/systemone/score_response.json",
+    "tests/fixtures/weather/historical_2021-09-04.json",
+    "tests/fixtures/weather/historical_2025-11-15.json"
+  ],
+  "notes": [
+    "Golden `systemone` fixtures are committed under `tests/fixtures/systemone/`.",
+    "The 5-way burst, oversized-body, and queue-timeout probes are best-effort because `systemone` is a shared per-user service.",
+    "A fifth concurrent `systemone` request returned 429 `user_concurrent` in the first 2026-11-22 run; a later run accepted all five. The 429 path is therefore verified but not reproducible on demand; the 4-request semaphore remains mandatory.",
+    "CFBD 2021 week-1 open-line coverage is measured live; the strength proxy remains the fallback when `spreadOpen` is null.",
+    "No credential is written to the report or fixtures."
+  ],
+  "operating_envelope": {
+    "endpoint": "https://llm-api.arc.vt.edu/api/v1/systemone",
+    "max_concurrency": 4,
+    "max_input_tokens_per_question": 8192,
+    "max_request_bytes": 8388608,
+    "model": "decision.vllm-sr/d3-mini",
+    "questions_per_game_cap": 2,
+    "queue_wait_s": 30
+  },
+  "probe_version": "p0.1",
+  "status_counts": {
+    "FAIL": 1,
+    "PARTIAL": 2,
+    "PASS": 34,
+    "SKIP": 5
+  },
+  "timestamp": "2026-11-22T20:29:32.518572+00:00"
+}

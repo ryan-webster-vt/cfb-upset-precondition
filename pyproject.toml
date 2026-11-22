@@ -1,0 +1,59 @@
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+exclude = [
+    ".git",
+    ".venv",
+    "__pycache__",
+    "data",
+    "docs/contracts",
+    "reference_documents",
+    "reports",
+]
+
+[tool.ruff.lint]
+# Keep the initial rule set deliberately small so the Phase 0 gate is about
+# correctness, not style churn. More rules can be added in P11.
+select = ["E", "F", "I", "UP"]
+# UP042: the enum classes intentionally subclass ``str`` so JSON/Pydantic
+# serialisation yields plain string values. ``StrEnum`` is not required.
+ignore = ["E501", "UP042"]
+
+[tool.black]
+line-length = 100
+target-version = ["py311"]
+extend-exclude = '''
+/(
+    \.git
+  | \.venv
+  | data
+  | docs/contracts
+  | reference_documents
+  | reports
+)/
+'''
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+markers = [
+    "live: hits a real external provider (never run by default)",
+    "slow: statistical or otherwise long-running test",
+]
+filterwarnings = [
+    "ignore::DeprecationWarning",
+]
+
+[tool.coverage.run]
+source = ["cfb_upset"]
+branch = true
+omit = [
+    "cfb_upset/pipelines/capabilities.py",
+    "cfb_upset/contracts/export.py",
+]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true

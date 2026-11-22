@@ -1,0 +1,6 @@
+# Optional / phase-gated dependencies.
+#
+# chromadb is intentionally kept out of requirements.txt until P1.11/P6.9.
+# It pulls native wheels and is not needed for the Phase 0 walking skeleton,
+# but the capability probe records whether it is importable.
+chromadb>=0.5

@@ -1,0 +1,10 @@
+{
+  "model": "decision.vllm-sr/d3-mini",
+  "questions": {
+    "upset_likely": {
+      "instructions": "Will the home team win outright?",
+      "type": "noul"
+    }
+  },
+  "state": "Virginia Tech hosts Miami on Saturday. Miami is a 7-point favorite. Virginia Tech is 7-4 and Miami is 10-1. Kickoff is at 12:00 ET."
+}

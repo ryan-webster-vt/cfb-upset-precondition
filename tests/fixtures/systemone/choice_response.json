@@ -1,0 +1,19 @@
+{
+  "answers": {
+    "confirm": {
+      "choice": "insufficient",
+      "confidence": 0.4070938861909952,
+      "probabilities": {
+        "confirmed": 0.0065185402837140355,
+        "contradicted": 0.3042742256619381,
+        "insufficient": 0.6892072340543478
+      },
+      "type": "choice"
+    }
+  },
+  "model": "vllm-sr/d3-mini",
+  "usage": {
+    "input_tokens": 161,
+    "output_tokens": 0
+  }
+}

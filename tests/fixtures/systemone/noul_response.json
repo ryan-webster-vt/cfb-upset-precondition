@@ -1,0 +1,13 @@
+{
+  "answers": {
+    "upset_likely": {
+      "noul": 0.02825084428381916,
+      "type": "noul"
+    }
+  },
+  "model": "vllm-sr/d3-mini",
+  "usage": {
+    "input_tokens": 134,
+    "output_tokens": 0
+  }
+}

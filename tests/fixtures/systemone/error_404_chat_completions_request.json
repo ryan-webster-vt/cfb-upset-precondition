@@ -1,0 +1,9 @@
+{
+  "messages": [
+    {
+      "content": "test",
+      "role": "user"
+    }
+  ],
+  "model": "decision.vllm-sr/d3-mini"
+}

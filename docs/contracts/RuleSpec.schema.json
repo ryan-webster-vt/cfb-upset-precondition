@@ -1,0 +1,71 @@
+{
+  "$defs": {
+    "MissingPolicy": {
+      "enum": [
+        "unknown",
+        "false"
+      ],
+      "title": "MissingPolicy",
+      "type": "string"
+    },
+    "RuleOp": {
+      "enum": [
+        "gt",
+        "ge",
+        "lt",
+        "le",
+        "eq",
+        "ne",
+        "in",
+        "not_in",
+        "between",
+        "is_true",
+        "is_false"
+      ],
+      "title": "RuleOp",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "description": "A whitelisted, deterministic predicate over one admitted field.",
+  "properties": {
+    "field": {
+      "minLength": 1,
+      "title": "Field",
+      "type": "string"
+    },
+    "missing_policy": {
+      "$ref": "#/$defs/MissingPolicy",
+      "default": "unknown"
+    },
+    "op": {
+      "$ref": "#/$defs/RuleOp"
+    },
+    "units": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Units"
+    },
+    "value": {
+      "default": null,
+      "title": "Value"
+    },
+    "value2": {
+      "default": null,
+      "title": "Value2"
+    }
+  },
+  "required": [
+    "field",
+    "op"
+  ],
+  "title": "RuleSpec",
+  "type": "object"
+}
