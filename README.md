@@ -559,6 +559,12 @@ python -m cfb_upset.pipelines.ingest_corpus --seasons 2021 2022 2023 2024 2025
 # Gate check: dedupe, zero leaked fields, and an independent +/-5% count per season
 python scripts/verify_corpus.py --db data/cfb.db --seasons 2021 2022 2023 2024 2025
 
+# Phase 3 — leakage-safe features, favourite policy, splits, and labels
+python -m cfb_upset.pipelines.build_features --db data/cfb.db
+# optional one-time enrichment (already cached in data/cfb.db after the first run):
+#   --live-venues  CFBD /venues for travel/altitude/timezone
+#   --cfbd-lines   CFBD spreadOpen, the primary favourite source (D4)
+
 # Phase 2 — one-time precondition discovery, labeling, and validation
 python -m cfb_upset.research.build_preconditions
 

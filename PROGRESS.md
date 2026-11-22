@@ -3,13 +3,18 @@
 **Persistent state for implementation.** Read `IMPLEMENTATION_PLAN.md` first; this file records
 what is actually done, what is next, what is blocked, and why decisions were made.
 **Plan version:** 1.3 (2026-11-22)
-**Status:** `P2 COMPLETE` (2026-11-22) — Pipeline 1 is implemented and gated: a **3,730-game**
-2021–2025 regular-season FBS-vs-FBS corpus (732/734/750/752/762 per season) with dedupe, zero
-leaked admissible fields, complete provenance, coverage reports, fault isolation, and a measured
-2-worker speedup of **0.54×** one worker (R6 limit 1.5×). `P1 COMPLETE` and `P0 COMPLETE` remain
-the baseline. P1 gate was **301 passed · 9 skipped** in the canonical `ads_5984` env
-(Python 3.12.13, `chromadb==1.1.1`); current suite: **316 passed · 11 skipped** (live tests skip
-unless `RUN_LIVE=1`); `ruff` + `black --check` clean; `store.db --verify` → `status: OK`.
+**Status:** `P3 COMPLETE` (2026-11-22) — leakage-safe features, the favourite policy, the
+mandated 2021–23/2024/2025 splits, and evaluation-only labels are built from the **3,730-game**
+corpus. `game_features` holds **212,610** rows with **0** admissible values at/after kickoff;
+`data/features_v1.parquet` and `data/labels_v1.parquet` are reproducible offline. Market context:
+CFBD open **2,215**, ESPN open **3**, strength proxy **1,512**; moneyline **2,131**, spread-mapped
+**87**, unavailable **1,512**; labels **1,140** upsets. `P2 COMPLETE`, `P1 COMPLETE`, and
+`P0 COMPLETE` remain the baseline. Current suite: **332 passed · 11 skipped** in the canonical
+`ads_5984` env (Python 3.12.13, `chromadb==1.1.1`; live tests skip unless `RUN_LIVE=1`);
+`ruff` + `black --check` clean; `store.db --verify` → `status: OK` (3,730 games, 212,610 feature
+rows, 79,737 field rows, 856 venues).
+**Owner hold (2026-11-22):** do **not** start Phase 4 until explicitly approved. Work stops at the
+committed P3 gate.
 Capability matrix: **36 PASS · 1 PARTIAL · 5 SKIP · 0 FAIL**, regenerated during P0 in the same
 env. Pre-flight and live capability capture are recorded in §5; generated evidence is in
 `docs/CAPABILITIES.md`.
@@ -43,7 +48,7 @@ env. Pre-flight and live capability capture are recorded in §5; generated evide
 | P0 | Probe, scaffold, walking skeleton | `[x]` | capability matrix + fixture e2e |
 | P1 | Contracts, SQLite, adapters, provenance | `[x]` | 0001 schema init/verify + 301 tests + adapter parity |
 | P2 | Historical corpus ingestion | `[x]` | 3,730 games (732–762/season), 0 leaked fields, dedupe PASS, coverage reports, fault isolation + R6 timing |
-| P3 | Leakage-safe features, favourite, splits | `[ ]` | leakage audit + availability report |
+| P3 | Leakage-safe features, favourite, splits | `[x]` | 212,610 rows / 0 leaked, CFBD→ESPN→proxy market, disjoint splits, availability + sentinel/delete audits |
 | P4 | Precondition research + spec store | `[ ]` | ≥12 operational specs, 1 call/candidate |
 | P5 | Deterministic labeler + screen | `[ ]` | full label table, identical hashes ×3 |
 | P6 | Stats validation, audit, Chroma | `[ ]` | FDR table + promotions + precision/recall |
@@ -72,11 +77,42 @@ env. Pre-flight and live capability capture are recorded in §5; generated evide
 
 ## 3. Resume here
 
-**Next action:** start **P3.1** — implement `cfb_upset/domain/features.py` rolling, strictly
-pre-game features from the committed 3,730-game corpus. The P2 gate passes, so P3 is unblocked.
-Compute features from prior games only (`known_at < kickoff`), then P3.2 favourite/strength proxy
-and P3.3 chronological splits. Do not start P4 until the P3 leakage audit and availability report
-are recorded.
+**Next action:** **hold at the P3 gate.** P3 is implemented, gated, and committed; the owner has
+asked us **not to start Phase 4**. When work resumes, P4.1 is the first task (create
+`configs/preconditions/candidates.yaml` with ~20 candidates plus research briefs, then the
+`Research Worker`/`Research-Orchestrator` skeleton behind the existing `ResearchProvider` seam),
+but only on explicit owner approval. Resolve B3 (MCP vs the approved seeded fallback) before any
+live research path. Do not start P5 until every candidate has an active `precondition_spec` or a
+recorded rejection reason.
+
+**P3 close-out facts to carry forward:**
+- Build with `make features` /
+  `python -m cfb_upset.pipelines.build_features --db data/cfb.db`; the command is idempotent and
+  replaces only `feature_version=features_v1` rows. Optional enrichment flags are `--live-venues`
+  (CFBD `/venues`) and `--cfbd-lines` (CFBD `spreadOpen`); both cache into `game_fields`, so later
+  offline rebuilds are bit-identical. `configs/features.yaml` holds the version/tunables.
+- `domain/features.py` releases a result into rolling state only when
+  `prior.kickoff + game_duration < current.kickoff` (strict). Elo uses the same release queue, so a
+  same-slate game can never contaminate an earlier feature. Every feature `known_at` is the latest
+  contributing result end (or the 7-day schedule lead) and the audit calls `leakage.admit`.
+- Feature set (57 numeric columns): wins/losses/win_pct, point differential, offensive/defensive
+  scoring, SOS, last-3 win pct/point diff, pace, rest/short-week/post-bye, travel km, timezone
+  delta, altitude, neutral/conference/home-away, poll rank/rank delta/is-ranked, look-ahead
+  opponent rank, season game number, Elo/strength, favourite flags, home market probability, open
+  spread. `look_ahead_*` uses the future opponent and that opponent's *current-week* rank, both
+  pre-game schedule facts; the delete-after-cutoff test removes future results, not the schedule.
+- Market policy (D4): CFBD `spreadOpen` → ESPN `spread_open` → strength proxy (`elo_diff` + home
+  field). Moneyline probabilities are vig-removed; otherwise a normal-CDF spread map
+  (`sigma=13.5`). `market_prob_source=unavailable` is mandatory for every strength-proxy game.
+- Corpus reality: CFBD has no usable `spreadOpen` for 2021/2022 in this tier, so those **1,466**
+  games are strength proxy; 2023–25 are 2,215 CFBD + 3 ESPN open. Open-line quote used →
+  `line_provider` is present. `market_prob_home` is null exactly when the source is unavailable.
+- `upset = favourite loses`, `margin = home_score − away_score`. Both live only in
+  `data/labels_v1.parquet`; `game_features` is feature-only, so the P3 gate stays literal.
+- P3.4 splits are season-based: dev 2021–23 (2,216), val 2024 (752), test 2025 (762). The builder
+  runs `assert_disjoint_order`, per-row split membership, and dev < val < test boundary checks.
+- CFBD `/lines` requires `year=`, not `season=`; the P1 adapter sent the wrong name, hidden by
+  fixtures. Fixed in P3 and covered by the fixture transport assertion (AD-038).
 
 **P2 close-out facts to carry forward:**
 - Enumeration is `GET site.api.espn.com/.../scoreboard?dates={season}&week={n}&seasontype={t}&groups=80`;
@@ -176,6 +212,8 @@ on the B3 decision (seeded fallback vs MCP endpoint).
 | AD-034 | 2026-11-22 | **P2 enumeration paths.** FBS membership comes from the core season group endpoint (`/seasons/{s}/types/2/groups/80/teams`, team id parsed from each `$ref`); week numbers from `/seasons/{s}/types/{t}/weeks` (the items are `$ref`s, so the number is parsed from the URL); week fixtures from the site scoreboard with `dates={season}&week={n}&seasontype={t}&groups=80`; historical polls from the core `/seasons/{s}/types/2/weeks/{n}/rankings/{poll}` path. The site `/scoreboard` and `/rankings` endpoints **ignore** `season`, so any code path that trusted them would silently serve the current season. | Live probes on 2026-11-22 showed site `rankings?season=2024&week=5` returning `requestedSeason 2026 week 13`, and site `scoreboard?season=2024` returning 2026. The core endpoints pin the season and return the same event shape the P1 scoreboard parser already handles. `groups=80` is required: without it the week payload is a small top-events subset. | R4, R8, R10 | plan |
 | AD-035 | 2026-11-22 | **Post-game fields are marked at the provenance layer, not by a schema migration.** Box scores (`home_score`, `away_score`, `winner_team_id`, `team_stats`) are written with `source="espn_postgame"` and `known_at = kickoff`; `domain.leakage.policy_for` already declares them `admissible=False`. The P2 leakage gate counts **policy-admissible** fields with `known_at >= kickoff` (expected 0) and reports the post-game rows separately as label-only evidence. | The P2 task requires box scores to be "explicitly marked post-game so they can never be admitted", while the acceptance line "zero fields with `known_at >= kickoff`" cannot literally include label fields stored at kickoff. Marking at the source plus the existing policy table satisfies both readings without adding a column and invalidating the P1 `applied == ["0001"]` migration evidence. | R10, R24 | plan |
 | AD-036 | 2026-11-22 | **Default corpus = regular season, completed games.** `ingest_corpus` defaults to `season_type=2` and stores only `FINAL` games; `--include-postseason` appends type 3, and `--include-unplayed` is deliberately not offered (a corpus for labels needs results). | Keeps the per-season count near the ≈700 FBS-vs-FBS gate and prevents 2025 in-progress weeks from inflating `games` with unlabelled rows. Postseason remains available for the P8 backtest without changing the default. | R4, R8, R24 | plan |
+| AD-037 | 2026-11-22 | **P3 releases a result into rolling state only when `prior.kickoff + game_duration < current.kickoff` (strict, 4 h default).** Elo uses the same release queue; every feature row carries an explicit conservative `known_at` and is checked by `leakage.admit`. `upset`/`margin` live only in `data/labels_v1.parquet`. Splits are season-keyed: dev 2021–23, val 2024, test 2025, with disjoint/order/boundary assertions in the builder. Market priority is CFBD `spreadOpen` → ESPN `spread_open` → strength proxy; a proxy game records `market_prob_source=unavailable` instead of inventing a probability. | A same-slate or post-game result must not contaminate an earlier feature; a 4 h allowance covers regulation, halftime, and a small OT delay while keeping `known_at < kickoff` provable. Keeping labels out of `game_features` makes the P3 leakage gate literal. Season-keyed splits prevent row-order shuffles from crossing the dev/val/test boundary. | R10, R24 | plan |
+| AD-038 | 2026-11-22 | **CFBD `/lines` takes `year=`, not `season=`.** The P1 adapter sent `season=`; live calls return HTTP 400. P3 fixes the parameter and the fixture-transport test now asserts `year=2025`. | The bug was hidden by fixtures that ignored unknown query names. Open lines are the primary favourite source, so a silent 400 would have forced every game onto the strength proxy and corrupted the market feature. | R10, R24, R25 | plan |
 
 ---
 
@@ -264,14 +302,22 @@ user_concurrent` in two of three probes; the live 503 hold is still intentionall
   probability 2,557/3,730 (68.6%; the rest are spread-only). `weather` remains P7.
 
 ### P3 — Features, favourite, splits
-- [ ] P3.1 Rolling pre-game features (form, rest, travel, altitude, rank, look-ahead, pace…)
-- [ ] P3.2 Odds: CFBD `spreadOpen` → ESPN `open` → strength proxy; implied probability (moneyline or fixed spread map); record `favorite_source`, `line_provider`, `market_prob_source`
-- [ ] P3.3 Upset label + margin (evaluation only)
-- [ ] P3.4 Chronological splits + hard assertions
-- [ ] P3.5 `game_features` + `data/features_v1.parquet`
-- [ ] P3.6 Feature availability + missing-data report
-- [ ] P3.7 Leakage tests (sentinel + delete-after-cutoff recompute)
-- [ ] P3 GATE: 0 leaked feature rows; splits disjoint; availability report
+- [x] P3.1 Rolling pre-game features (`wins/losses/win_pct/point_diff/scoring/defensive/sos/last3/pace`,
+  `rest_days/short_week/post_bye`, `travel_km/tz_delta/altitude_m`, `rank/rank_delta/look_ahead`,
+  `home_away`, `season_game_number`, Elo strength); every row carries `known_at` and `feature_version`
+- [x] P3.2 Odds priority CFBD `spreadOpen` → ESPN `open` → strength proxy; moneyline else normal-CDF
+  spread map; `favorite_source` / `line_provider` / `market_prob_source` stored in `game_fields`
+- [x] P3.3 `upset` + `margin` built for evaluation only in `data/labels_v1.parquet`, never in `game_features`
+- [x] P3.4 `domain/splits.py`: dev 2021–23, val 2024, test 2025; disjoint/order/boundary assertions run in the builder
+- [x] P3.5 `game_features` (212,610 rows) + `data/features_v1.parquet` (3,730 × 65 incl. split)
+- [x] P3.6 Availability report by feature × season and worst team coverage (`reports/features_20261122T213846Z.md`/`.json`)
+- [x] P3.7 Leakage tests: same-kickoff exclusion, Elo release ordering, sentinel result, delete-post-cutoff
+  recompute, permutation invariance
+- [x] P3 GATE: **0** leaked feature rows (SQL + admission audit); splits **2,216/752/762**, disjoint and
+  ordered; feature rows **212,610**; offline rebuild of `features_v1.parquet` + labels is bit-identical;
+  market CFBD **2,215** / ESPN **3** / proxy **1,512**; moneyline **2,131** / spread-mapped **87** /
+  unavailable **1,512**; travel **100%**, timezone **99.6%**, altitude **99.6%**, rank **21.5%**;
+  labels **3,730** (1,140 upsets, 0 unavailable).
 
 ### P4 — Research + spec store
 - [ ] P4.1 `configs/preconditions/candidates.yaml` (~20 candidates with briefs + citations)
@@ -384,6 +430,7 @@ user_concurrent` in two of three probes; the live 503 hold is still intentionall
 | 6 | 2026-11-22 | P0 correction | **Environment correction.** `chromadb` was reported missing only because the probe ran in base Anaconda Python 3.13.5. The canonical `ads_5984` conda env already has `chromadb==1.1.1` (Python 3.12.13, Streamlit 1.60). Installed the missing dev formatter (`black 25.12`) in that env, regenerated the matrix there, and synced docs/requirements/AD-030. | `/opt/anaconda3/envs/ads_5984/bin/python scripts/probe.py --write` → **36 PASS / 1 PARTIAL / 5 SKIP / 0 FAIL**, incl. `chromadb import PASS` and a reproduced `429`; env pytest → **160 passed**; env ruff/black clean; env coverage `rules.py` 97%, `screen.py` 100% | commit correction; start P1.1 |
 | 7 | 2026-11-22 | P1 | **Phase 1 implemented and gated.** Added the full contract catalogue (history/research/labels/tools + monitor/scoring extensions; 34 exported schemas); `0001_init.sql` for every §4.7 table/index plus `precondition_spec.rationale`; typed repositories; content-addressed gzip/SHA-256 evidence store; CFBD/ESPN venue and team seed with checked-in fallback CSV; leakage policy as data; fixture-backed ESPN/CFBD/weather/geocode/search/fetch/Deep Research/LLM/embeddings/Chroma adapters behind a `Transport` seam; JSONL + SQLite trace sinks and run budgets; contract-rejection, leakage, trace/budget, adapter, parity, and live-skipped tests. Fixed CFBD provider matching so `ESPN_BET` matches `ESPN Bet`. | `python -m pytest` → **301 passed, 9 skipped** (live suite); `ruff check` clean; `black --check` → 83 files unchanged; `python -m cfb_upset.store.db --init` → `applied migrations: 0001`, `--verify` → all table counts + `status: OK`; `python -m cfb_upset.contracts.export` → **34 schemas**; Chroma round-trip passes with the 256-d hashing embedder in `ads_5984` | commit P1; start P2.1 |
 | 8 | 2026-11-22 | P2 | **Phase 2 implemented and gated.** Added `Data-Orchestrator` (core group-80/week enumeration, dedupe, week contexts, batching, `IngestOptions`) and `Historical-Stats Worker` (summary+odds+poll merge, `known_at`, validation, per-game quarantine); extended the ESPN adapter with historical scoreboard/group/weeks/rankings paths and postgame provenance; added `CoverageRepository`, `domain/coverage.py`, the idempotent `ingest_corpus` CLI, `scripts/verify_corpus.py`, P2 fixtures (2024 week 5), fault-isolation/resume/dedupe/leakage/timing tests, and live smoke tests. Logged AD-034–AD-036. | Live ingest `--seasons 2021 2022 2023 2024 2025 --db ./data/cfb.db --report-dir reports --resume` → **3,730 games** (732/734/750/752/762), 0 quarantined; `python scripts/verify_corpus.py` → per-season recount exact (+0.0%), dedupe PASS, 0 leaked admissible fields, 0 provenance gaps; `reports/coverage_20261122T212903Z.md/.json` (odds 99.7–100%, venue 100%, moneyline 2,557/3,730); timing test 40 games **1.233s vs 0.669s, ratio 0.54**; `store.db --verify` → `status: OK` (3,730 games / 136 teams / 167 venues); offline suite **316 passed, 11 skipped**; ruff + black clean | commit P2; start P3.1 |
+| 9 | 2026-11-22 | P3 | **Phase 3 implemented and gated; holding before P4 by owner direction.** Added `domain/features.py` (rolling form/SOS/last-3, rest/short-week/post-bye, travel/tz-delta/altitude, rank + rank-delta + look-ahead, pace, Elo/strength; strict `prior.kickoff + 4h < current.kickoff` release queue), `domain/splits.py` (season-keyed dev/val/test with disjoint/order assertions), `domain/feature_report.py` (availability + leakage report), `pipelines/build_features.py` (idempotent DB load, optional cached CFBD venue/line enrichment, parquet + labels), and `configs/features.yaml`. Extended the leakage policy, `GameFeaturesRepository`/`GameFieldsRepository`, fixed CFBD `/lines` to send `year=` (AD-038), and updated Makefile/README/requirements. Logged AD-037–AD-038. | `python -m cfb_upset.pipelines.build_features --db data/cfb.db` (first run also `--live-venues --cfbd-lines`) → **3,730 games / 212,610 feature rows / 65 columns incl. split**, leakage **PASS** (0 leaked, 0 unknown fields), market `cfbd_open=2215, espn_open=3, strength_proxy=1512`, probabilities `moneyline=2131, spread_mapped=87, unavailable=1512`, labels **3,730** (1,140 upsets, 0 unavailable), splits **2,216 / 752 / 762**; report `reports/features_20261122T213846Z.md/.json`. Offline rebuild from cached `game_fields` (`reports/features_20261122T214030Z.*`) produced **identical SHA-256** for `data/features_v1.parquet` (`ef87689d…`) and `data/labels_v1.parquet` (`27aea816…`). Suite **332 passed, 11 skipped**; ruff + black clean (99 files); `store.db --verify` → `status: OK` (212,610 feature rows / 79,737 field rows / 856 venues). | commit P3; **hold (do not start P4)** |
 
 **Template**
 ```

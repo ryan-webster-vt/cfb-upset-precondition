@@ -88,7 +88,7 @@ class CfbdAdapter:
         season_type: str = "regular",
         team: str | None = None,
     ) -> list[CfbdGameLines]:
-        params: dict[str, Any] = {"season": season, "seasonType": season_type}
+        params: dict[str, Any] = {"year": season, "seasonType": season_type}
         if week is not None:
             params["week"] = week
         if team is not None:

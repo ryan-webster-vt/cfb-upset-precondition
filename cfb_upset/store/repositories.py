@@ -398,6 +398,11 @@ class GameFieldsRepository:
         with self.database.session() as connection:
             return int(connection.execute("SELECT COUNT(*) FROM game_fields").fetchone()[0])
 
+    def delete_source(self, source: str) -> int:
+        with self.database.session() as connection:
+            cursor = connection.execute("DELETE FROM game_fields WHERE source = ?", (source,))
+            return int(cursor.rowcount)
+
     @staticmethod
     def _from_row(row: sqlite3.Row) -> StoredField:
         return StoredField(
@@ -436,6 +441,29 @@ class GameFeaturesRepository:
                 ),
             )
 
+    def record_many(self, features: list[StoredFeature]) -> None:
+        with self.database.session() as connection:
+            connection.executemany(
+                """
+                INSERT INTO game_features (
+                    game_id, feature_name, value, known_at_utc, feature_version
+                ) VALUES (?, ?, ?, ?, ?)
+                ON CONFLICT(game_id, feature_name, feature_version) DO UPDATE SET
+                    value = excluded.value,
+                    known_at_utc = excluded.known_at_utc
+                """,
+                [
+                    (
+                        feature.game_id,
+                        feature.feature_name,
+                        feature.value,
+                        utc_iso(feature.known_at_utc),
+                        feature.feature_version,
+                    )
+                    for feature in features
+                ],
+            )
+
     def get(self, game_id: str, feature_version: str | None = None) -> dict[str, StoredFeature]:
         sql = "SELECT * FROM game_features WHERE game_id = ?"
         params: list[Any] = [game_id]
@@ -450,6 +478,23 @@ class GameFeaturesRepository:
     def count(self) -> int:
         with self.database.session() as connection:
             return int(connection.execute("SELECT COUNT(*) FROM game_features").fetchone()[0])
+
+    def delete_version(self, feature_version: str) -> int:
+        """Remove one feature version so a rebuild has no stale names."""
+
+        with self.database.session() as connection:
+            cursor = connection.execute(
+                "DELETE FROM game_features WHERE feature_version = ?", (feature_version,)
+            )
+            return int(cursor.rowcount)
+
+    def count_by_version(self, feature_version: str) -> int:
+        with self.database.session() as connection:
+            row = connection.execute(
+                "SELECT COUNT(*) FROM game_features WHERE feature_version = ?",
+                (feature_version,),
+            ).fetchone()
+            return int(row[0])
 
     @staticmethod
     def _from_row(row: sqlite3.Row) -> StoredFeature:

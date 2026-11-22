@@ -112,7 +112,7 @@ async def test_fetch_lines_and_venues_use_fixture_transport() -> None:
     assert len(games) == 3
     assert len(venues) == 5
     assert transport.calls[0].url.startswith("/lines?")
-    assert "season=2025" in transport.calls[0].url
+    assert "year=2025" in transport.calls[0].url
     assert "week=1" in transport.calls[0].url
     assert transport.calls[1].method == "GET"
 

@@ -1,0 +1,31 @@
+# P3 feature build policy. Changing any value changes the modelling table, so
+# bump feature_version when a value here changes. The pipeline records this
+# file's values in the availability report for reproducibility.
+
+feature_version: features_v1
+
+# A result is released into rolling state only when kickoff + this duration is
+# strictly before the next kickoff. Four hours is the conservative CFB game
+# length (regulation plus halftime and a small weather/OT allowance).
+game_duration_hours: 4
+
+# Schedule facts (season, week, venue) are treated as known this far before
+# kickoff. This is also the fallback known_at for a team's first game.
+schedule_lead_days: 7
+
+# Rolling form window (also exposed as last3_*).
+form_window: 3
+
+# Elo strength proxy. Home-field advantage is added to the home side before
+# the favourite is chosen; Elo carries across seasons with regression to 1500.
+home_field_elo: 65
+elo_k: 20
+season_regression: 0.75
+
+# Normal-CDF spread -> favourite win probability. Only used when a moneyline
+# is absent and an admissible open spread exists.
+spread_sigma: 13.5
+
+# Rest thresholds. A Saturday -> Thursday turnaround is 5 rest days.
+short_week_days: 7
+post_bye_days: 14
