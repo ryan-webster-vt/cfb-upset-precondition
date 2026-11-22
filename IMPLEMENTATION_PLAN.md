@@ -112,13 +112,13 @@ satisfied. **Verification** = the objective check that it works.
 | R5 | Research workers use Deep Research; Monitor workers use Brave + Fetch | F | P4/P7 | Adapter tests + live smoke; provenance shows provider per evidence item |
 | R6 | Parallelize orchestrator work to cut latency | N | P2/P4/P7 | Timing test: 2 workers < 1.5× single-worker wall clock on fixed batch |
 | R7 | Research-Orchestrator aggregates findings; enforces and validates Pydantic JSON | F | P4 | Unit: invalid/partial reports rejected with reason, valid ones aggregated |
-| R8 | SQLite stores corpus, specs, `labeled_games`, `validated_preconditions`; ChromaDB holds accepted citations | F | P1/P6 | Schema test + Chroma round-trip; retrieval returns stored chunk |
+| R8 | SQLite stores corpus, specs, `labeled_games`, `validated_preconditions`; ChromaDB holds accepted citations | F | P1/P6 | Schema test + Chroma round-trip with measured `EMBED_DIM`; retrieval returns stored chunk |
 | R9 | Deterministic labeler + statistical tools decide which researched preconditions are real signal | F | P5/P6 | Planted-signal corpus: known effect discovered; noise rejected |
-| R10 | Batch pipeline for the day's slate from ESPN: FBS-vs-FBS only, teams, location, stats, weather, odds/favorite | F | P3/P7 | Fixture + live test: FCS filtered out; all six field groups present or explicitly `unavailable` |
+| R10 | Batch pipeline for the day's slate from ESPN (and CFBD for lines/venues): FBS-vs-FBS only, teams, location, stats, weather, odds/favorite | F | P3/P7 | Fixture + live test: FCS filtered out; all six field groups present or explicitly `unavailable` |
 | R11 | Retrieve daily matchups for Monitor-Orchestrator and the UI slate | F | P7 | Integration: UI and orchestrator consume the same `SlateGame` records |
 | R12 | Monitor-Orchestrator assigns only selected games to parallel workers; Brave+Fetch confirm/drop + citations; return confirmed flags | F | P7 | Integration with mocked search: only selected games processed; flags carry evidence |
 | R13 | Rationale for every confirmed flag | F | P7 | Contract test: every `ConfirmedFlag` has non-empty rationale + ≥1 evidence ref |
-| R14 | Upset-Scorer consumes Monitor output and uses VT ARC d3-mini to score/rank | F | P8 | Capability probe + scorer contract test; fallback documented if unavailable |
+| R14 | Upset-Scorer consumes Monitor output and uses VT ARC d3-mini to score/rank | F | P8 | `noul` answer → calibrated probability on 2024; `score` answer recorded; contract tests; fallback documented |
 | R15 | Research pipeline writes `precondition_spec`, `spec_store`, `labeled_games`, `validated_preconditions` | F | P1/P4/P5/P6 | Table existence + row counts after Phase-2 build |
 | R16 | Well-structured code with descriptive comments and run instructions | N | all/P12 | Ruff/format clean, docstrings on public modules, README run-through on clean venv |
 | R17 | Two Monitor Workers run in parallel | F | P7 | Concurrency test asserts two distinct worker ids interleaved |
@@ -177,7 +177,8 @@ scorer fallback; the seed literature catalog; open-meteo weather; the blinded ad
 talk only to their orchestrator; orchestrators are the validation and persistence boundary.
 
 **Deterministic collaborators.** `Pydantic Validator`, `Spec Store`, `Deterministic Labeler`,
-`Deterministic Rule Screen`, `Statistical Validation Tools`, `Cache`, `qwen3-embedding:8b`.
+`Deterministic Rule Screen`, `Statistical Validation Tools`, `Cache`, `qwen3-embedding:8b`
+(reached through `POST /api/v1/embeddings`; see D8/D16 and §4.9.2).
 
 **Tools.** ESPN API (historical + daily slate + odds), Deep Research MCP, Brave Search MCP,
 Fetch MCP, VT ARC d3-mini.
@@ -193,10 +194,10 @@ loop with deterministic screen, `par` monitor workers, `alt` empty/confirmed bra
 
 | ID | Finding | Evidence | Consequence if unaddressed |
 |---|---|---|---|
-| F1 | **d3-mini is not discoverable** through the configured VT ARC provider. The provider exposes four chat models only (`GLM-5.3`, `gpt-oss-120b`, `MiniMax-M2.7`, `vt-arc-llm`) and no decision/embedding model. | `models` query on 2026-11-22; `~/.config/opencode/opencode.json` | R14/R19 cannot be met as written; scorer would be blocked at the end of the critical path |
+| F1 | **d3-mini is served from a separate, non-OpenAI-compatible endpoint.** The project owner confirmed decision models are available only via `POST /api/v1/systemone`; they do not appear in `/v1/models`. The request/response schema, model selection, and temperature semantics are not documented in the repo. (The same provider lists four chat models: `GLM-5.3`, `gpt-oss-120b`, `MiniMax-M2.7`, `vt-arc-llm`.) | owner confirmation 2026-11-22; `models` query; `~/.config/opencode/opencode.json` | R14 is achievable, but the `systemone` contract must be captured in P0 or the scorer will fail at the end of the critical path; R19 still needs a consistency check on that path |
 | F2 | **No MCP servers or provider credentials are configured** in the environment (no Brave/Deep Research/Fetch endpoints; no env keys). | `~/.config/opencode/opencode.json`, `env` scan | R5/R12/R30 blocked; app cannot be demoed or tested deterministically |
-| F3 | **`qwen3-embedding:8b` serves no reachable endpoint**, and `chromadb` is not installed. | import/probe 2026-11-22 | R8 partially blocked; citation index cannot be built |
-| F4 | **ESPN historical scoreboards contain no odds and no weather.** Odds exist only in the per-event `core` odds endpoint; `open` lines are present for 2023+ but absent in sampled 2021 games. | probes of `20210904`, `20231118`, `20251115`, `20241109`; core odds for `401281942`, `401628543` | R10 "weather, betting odds" and the architecture's "closing lines and weather ... captured before kickoff" are not satisfiable from ESPN alone; favorite determination for 2021 needs a documented proxy |
+| F3 | **`qwen3-embedding:8b` is reachable only through `POST /api/v1/embeddings`**, not `/v1/models`, and `chromadb` is not installed. The provider catalogue describes a Qwen3-Embedding model with 2560-d vectors and 8,192-token inputs, but the requested id `qwen3-embedding:8b` is natively 4096-d, so the returned width must be measured, never inferred. | provider catalogue + owner confirmation 2026-11-22; `models` query | R8 is unblocked, but a wrong dimension silently breaks the Chroma collection; wire shape, batch cap, and width must be captured in P0 |
+| F4 | **ESPN historical scoreboards contain no odds and no weather.** Odds exist only in the per-event `core` odds endpoint; `open` lines are present for 2023+ but absent in sampled 2021 games. CFBD `/lines` exposes `spreadOpen`/`overUnderOpen` with a provider for the mandated seasons on the free academic tier (3,000 calls/mo, ~75 calls for five seasons), and `/venues` supplies lat/lon/elevation/dome/timezone that ESPN omits. | probes of `20210904`, `20231118`, `20251115`, `20241109`; core odds for `401281942`, `401628543`; CFBD API docs 2026-11-22 | R10 "weather, betting odds" is not satisfiable from ESPN alone; CFBD is the preferred odds/venue source with ESPN as fallback, and the 2021 open-line null rate must be probed |
 | F5 | **Weather post-kickoff observations leak.** Any historical weather source keyed by game time is, by construction, known after kickoff. | by definition | R24 violation if raw observed weather is admitted |
 | F6 | **ESPN season-level team statistics are end-of-season.** Using them to describe an in-season game leaks the future. | endpoint semantics | Silent leakage into almost every feature if used naively |
 | F7 | **R15's four tables overlap conceptually**: `precondition_spec` and `spec_store` are not distinguished anywhere. | R8, R15, R27 | Schema churn late in the project; ambiguous R27 "versioning" |
@@ -218,19 +219,23 @@ loop with deterministic screen, `par` monitor workers, `alt` empty/confirmed bra
 
 | ID | Deviation | Justification | Requirement impact |
 | --- | --- | --- | --- |
-| **D1** | `Upset-Scorer` uses an adapter with two backends: `d3_mini` (preferred, if the probe passes) and `calibrated_rules` (deterministic logistic/Platt scorer over market probability, matched-rule indicators, strength/rest/travel features). The agent still owns scoring, ranking, and rationale. | F1; R19 makes consistency a hard requirement, and a blocked decision model cannot be the critical path. A deterministic scorer also supplies the required baseline comparison (Pr10). | R14 satisfied literally only if d3-mini is reachable; otherwise documented fallback. R19 *strengthened*. |
+| **D1** | `Upset-Scorer` uses an adapter with two backends: `d3_mini` via `POST /api/v1/systemone` (primary) and `calibrated_rules` (deterministic logistic/Platt scorer over market probability, matched-rule indicators, strength/rest/travel features). The agent still owns scoring, ranking, and rationale. | F1: d3-mini exists but on a separate API surface, so its contract must be isolated; the deterministic backend is the mandated simple baseline (Pr10) and the outage/mismatch fallback. | R14 satisfied through `systemone`; R19 checked on both backends; fallback used only on contract failure or timeout, and recorded. |
 | **D2** | `Deep Research` is accessed through a `ResearchProvider` adapter: `mcp_deep_research` when configured, else `seeded_literature` (a versioned YAML catalog of ~20 preconditions with public citations) plus optional LLM normalisation. Source is stored per spec and surfaced in the UI. | F2; R26 (one pass per candidate) is preserved either way. A seeded catalog is cheaper, auditable, and deterministic. | R5 satisfied when the MCP is configured; otherwise degraded and labelled. R7/R26/R27 unaffected. |
-| **D3** | Weather comes from an **archived forecast** (Open-Meteo historical-forecast API) joined on venue coordinates from a seeded stadium CSV; `known_at = kickoff − 24h`. If a spec requires weather, that spec is only promoted when weather coverage is adequate. | F4/F5; the forecast archive is the only keyless source that is approximately pre-kickoff. | R10 gains a real weather field; **R24 preserved** (observed weather is never admitted). |
-| **D4** | Odds: prefer `open` spread/moneyline; if absent (e.g., sampled 2021), derive the favorite from a pre-game strength proxy (rolling point differential / Elo) and record `favorite_source`. Closing lines are stored but `known_at = kickoff`, so the strict filter excludes them. | F4; strict `known_at < kickoff` cannot admit closing lines, and R10 needs a favorite. | R10 satisfied with explicit provenance; R24 fully preserved. R25 baseline uses the same favorite definition. |
+| **D3** | Weather comes from the **Open-Meteo Historical Forecast API** (GFS `gfs_seamless`, archived from 2021-03-23) joined on venue coordinates. That archive is a stitched series with an **effective lead ≤ 6 h**, so `weather_source` and `weather_lead_hours` are recorded and `known_at` is derived from the model cadence — never labelled 24 h. The live slate uses the standard Open-Meteo forecast API at fetch time (`known_at = fetched_at`). IEM archived MOS (MAV/MET, station-based, ~2003+) is an optional strict-24 h robustness check. Observed/reanalysis weather (ERA5) and CFBD "Weather Data" are never admitted. If a spec requires weather, that spec is only promoted when weather coverage is adequate. | F4/F5; the historical-forecast archive is the only keyless source with all variables across 2021–2025, and its real lead must be stated honestly; ERA5/observed data leaks post-kickoff conditions. | R10 gains a real weather field; **R24 preserved** (post-kickoff weather never admitted); provenance is accurate rather than nominal. |
+| **D4** | Odds: **CFBD `/lines`** `spreadOpen`/`overUnderOpen` (multi-provider) is primary for 2021–2025; ESPN core-odds `open` is the fallback; a pre-game strength proxy (rolling point differential / Elo) is last. Provider precedence is configurable and recorded per game as `line_provider`; `favorite_source ∈ {cfbd_open, espn_open, strength_proxy}` and `market_prob_source ∈ {moneyline, spread_mapped}` are stored. Closing lines are stored but `known_at = kickoff`, so the strict filter excludes them. | F4; strict `known_at < kickoff` cannot admit closing lines, R10 needs a favorite, and ESPN alone has 2021 gaps. One definition across seasons avoids feature drift. | R10 satisfied with explicit provenance; R24 fully preserved. R25 baseline uses the same favorite definition. |
 | **D5** | Tables (names preserved): `precondition_spec` = immutable research report + proposed rule (raw candidates, all versions); `spec_store` = active-spec registry (`spec_id`, `version`, `is_active`, `promoted_at`); plus side tables `label_audits`, `stat_results`, `evidence`, `evidence_links`, `analysis_runs`, `analysis_cache`, `agent_events`, `game_fields`, `quarantine`. | F7; separates immutable history from mutable state, which R27's versioning needs. | R8/R15/R27 clarified; no table removed. |
 | **D6** | R25 evaluation replays the **structured-feature path** of the system (screen → scorer) for all games; the evidence-confirmation stage is evaluated separately on a subset with archived evidence. The report states both numbers and never claims the full pipeline was replayed. | F8/F9; honest and reproducible. The conservative claim is defensible at Q&A and is stronger than an inflated synthetic number. | R25 partially satisfied by construction; report contains Brier/log loss/calibration on 2025 for the shipped scorer. |
 | **D7** | Promotion has three states — `validated`, `provisional`, `rejected` — and the rule screen uses `validated`; if fewer than three specs validate, it uses the strongest `provisional` specs with a visible banner and a `provisional` flag on every alert. | F10; otherwise the product can legitimately produce no output. Thresholds stay pre-registered. | R9/R29 preserved; UI and README disclose status. |
-| **D8** | Embeddings: `qwen3_embedding` when reachable, else a deterministic local hashing/TF-IDF embedder behind the same interface; ChromaDB is mandatory either way. | F3; keeps R8 satisfied without a network dependency. Retrieval quality difference is documented. | R8 satisfied; retrieval quality degraded and labelled. |
+| **D8** | Embeddings: `qwen3_embedding` via `POST /api/v1/embeddings` is the primary path; a deterministic local hashing/TF-IDF embedder is the offline fallback behind the same interface. ChromaDB is mandatory either way. `EMBED_DIM` is measured in P0, pinned in config and collection metadata, and asserted on every response; real and fallback vectors never share a collection. | F3; the documented neural path now exists, and the fallback keeps tests and the offline demo network-free. | R8 satisfied; the width ambiguity is contained to one probe and one runtime assertion. |
 | **D9** | "MCP tools" are implemented as **runtime tool adapters** (HTTP JSON-RPC/MCP client with mock transport), not as OpenCode-host MCP servers. Workers call these adapters; tests use recorded fixtures. | F2; the application must run standalone (`streamlit run app.py`) and be testable offline. Harness-level MCP would make grading and CI depend on the developer's editor. | R5/R12 satisfied at the tool-contract level; the MCP transport is preserved. |
 | **D10** | Add a blinded `Adjudicator` (separate model, fresh context, no access to worker reasoning) for R30 label audits. The `Research-Orchestrator` still computes precision/recall and owns the tuning gate. | Pr3/Pr6/Pr7; a worker grading its own labels is exactly the failure mode the doctrine warns about. | R30 strengthened; "orchestrator computes" preserved. |
 | **D11** | UI runs orchestration in a background thread with an event queue (`agent_events`), polled by a Streamlit fragment; runs are cancellable and resumable from cache. | F12. | R1/R3 satisfied without duplicated runs. |
 | **D12** | UI adds a **date selector** (default: today) and a pre-warmed offline demo slate. | F14. | R11 unaffected (today is the default); demo risk removed. |
 | **D13** | Corpus may optionally extend to 2016–2020 for descriptive/power purposes, but promotion, tuning, and evaluation use only the mandated 2021–2025 window. | F10. | R25/R31 unaffected; increases power without contaminating splits. **Open question — default off.** |
+| **D14** | R25 full-corpus replay uses `calibrated_rules`. `d3_mini` is calibrated on **all 2024 candidate games** and evaluated on **all 2025 candidate games** (expected a few hundred requests); if the service is saturated, degrade to a stratified sample and report the reduced n. | Sub-second decisions at 4 concurrency make candidate-set scoring practical, but the service is shared; scoring every historical game (including non-candidates) would be wasteful and unfair. | R25 satisfied with a faithful candidate-set evaluation and an explicit population definition. |
+| **D15** | Primary probability = calibrated `noul` `P(yes)`; a 5-level `score` question is a secondary signal; the monitor worker uses a `choice` question with `{confirmed, contradicted, insufficient}`. | The API provides probabilities directly for `noul`; `score`/`choice` add graded and categorical decisions without inventing a mapping. Calibration on 2024 addresses the provider's own advice to fit cutoffs empirically. | R14 satisfied; consistency improved (distribution scoring, not token sampling); R30's labelled sample sets the thresholds. |
+| **D16** | The embedding model id sent to the gateway is `qwen3-embedding:8b` (the name in the design docs), while the provider catalogue describes a Qwen3-Embedding model at 2560 dimensions with an 8,192-token limit. The adapter treats the **returned width as authoritative**, pins it in `EMBED_DIM` and collection metadata, and never assumes 2560 or 4096. Embeddings are used only for the citation index — never for chat, rationale, monitor confirmation, or scoring. | Owner instruction 2026-11-22; the 4B model card (2560-d, instruction-aware, not a chat model) conflicts with the `:8b` id's native 4096-d. Measuring once in P0 removes the ambiguity for every later phase. | R8 satisfied; the named tool is preserved; the deviation and the measured width are disclosed in `docs/ARCHITECTURE.md` and the README. |
+| **D17** | **CFBD** is a secondary structured source through `adapters/cfbd.py`: historical lines (`/lines`) and venue geodata (`/venues`: lat/lon, elevation, dome, timezone). It requires a free academic API key (3,000 calls/mo); responses are cached and fixtures recorded. Without the key the app degrades to ESPN + strength proxy, and the offline demo never calls CFBD. | F4 plus ESPN's missing venue coordinates; CFBD is the only free source that supplies both open lines and stadium coordinates for the mandated window. | R10/R24 satisfied with better coverage; R8 unaffected; adds one optional credential (B6). |
 
 ### 4.4 Layered runtime architecture
 
@@ -264,9 +269,9 @@ adapters never import agents. This is enforced by an import-linter test.
 | `Research-Orchestrator` | candidate catalog, corpus | `SpecStoreState`, `StatsReport`, `AuditReport` | workers, validator, labeler, stats, search, embeddings | no (summarisation only) | deterministic control flow |
 | `Research Worker` | `ResearchBrief` | `ResearchReport` (+proposed rule) | research provider, LLM extractor | **yes** | stochastic input, validated output |
 | `Monitor-Orchestrator` | game ids, spec set | `RunResult` (alerts or empty reason) | screen, workers, scorer, cache, trace | rationale templating only | deterministic control flow |
-| `Monitor Worker` | `MonitorTask` (game + matched specs) | `MonitorDecision` | search, fetch, LLM adjudicator | **yes** | 3-sample majority + confidence; stable tie-break |
-| `Upset-Scorer` | confirmed flags + context | `RankedAlert[]` | d3-mini **or** calibrated model | rationale only | score deterministic given inputs |
-| `Adjudicator` | anonymised evidence + claim | `HOLD` / `NOT_HOLD` / `UNKNOWN` | none | **yes** | blinded, separate model, fixed rubric |
+| `Monitor Worker` | `MonitorTask` (game + matched specs) | `MonitorDecision` | search, fetch, d3-mini `choice` question | **yes** (decision model) | deterministic given input; thresholds calibrated on labelled audits |
+| `Upset-Scorer` | confirmed flags + context | `RankedAlert[]` | `/api/v1/systemone` **or** calibrated model | rationale only | score deterministic given inputs |
+| `Adjudicator` | anonymised evidence + claim | `HOLD` / `NOT_HOLD` / `UNKNOWN` | none | **yes** (chat model, distinct family) | blinded, separate model from the monitor worker, fixed rubric |
 
 ### 4.6 Pydantic contract catalogue (all in `cfb_upset/contracts/`)
 
@@ -312,15 +317,19 @@ evidence_links(evidence_id, ref_type, ref_id, supports, quote, created_at)
 analysis_runs(run_id PK, slate_date, games_json, spec_set_hash, config_hash, status,
               started_at, finished_at, budget_seconds, trace_path)
 analysis_cache(cache_key PK, game_id, spec_set_hash, evidence_hash, scorer_version,
-               result_json, created_at, expires_at)
+               embedding_version, result_json, created_at, expires_at)
 agent_events(event_id PK, run_id, agent, phase, event_type, payload_json, ts)
 quarantine(record_id PK, payload_json, errors_json, created_at)
 schema_migrations(version PK, applied_at)
 ```
 
 Raw evidence snapshots live in `data/evidence/<hash>.txt.gz`; SQLite stores the pointer and hash.
-Chroma collection `citation_chunks` stores `{chunk_text, embedding}` with metadata
-`{spec_id, evidence_id, domain, published_at, known_at}`.
+Chroma collections are created **per embedding space** (`citation_chunks__<model>__<dim>__<instr_hash>`)
+and store `{chunk_text, embedding}` with metadata
+`{spec_id, evidence_id, domain, published_at, known_at}`; collection metadata records
+`{model, dim, instruction_template, normalized}`. `analysis_cache.cache_key` hashes the game,
+`spec_set_hash`, `evidence_hash`, `scorer_version`, `embedding_version`, and retrieval config, so a
+model/dimension/chunking change invalidates cached rationale instead of silently reusing it.
 
 ### 4.8 Provenance and leakage model
 
@@ -345,17 +354,26 @@ downstream change.
 
 ### 4.9 Decision model design
 
-`UpsetScorer.score(request) -> UpsetScore` with `backend ∈ {d3_mini, calibrated_rules}`:
+`UpsetScorer.score(request) -> UpsetScore` with `backend ∈ {d3_mini, calibrated_rules}`. `d3_mini`
+is reached through a dedicated `SystemOneClient` (`POST {VT_ARC_BASE_URL}/systemone`), **not** the
+chat-completions path:
 
 1. **Candidate definition.** A game is scoreable if it is FBS-vs-FBS, has a favorite, and trips ≥1
    active spec. Non-candidates receive the slate base rate (they are still scored so evaluation can
    cover the full slate).
-2. **`d3_mini` backend (preferred).** One call per game with a fixed rubric: candidate probability
-   over `{upset, no upset}` conditioned on (market implied probability, matched specs with
-   thresholds and observed values, evidence citations, rest/travel/venue context). Output parsed
-   into a strict `UpsetScore` schema (`probability`, `confidence`, `key_signals`, `citations`).
-   Temperature 0; 3 samples; report median and dispersion; if dispersion > 0.10 mark
-   `unstable=true`.
+2. **`d3_mini` backend (preferred).** Model id `decision.vllm-sr/d3-mini`. `SystemOneClient`
+   sends **one HTTP request per candidate game** — a bounded text `input` (market context, matched
+   specs with observed values, up to three short quotes) plus named questions:
+   - `upset_likely` (`noul`): "Will the underdog win outright?" → the answer is `P(yes)`, which is
+     the primary `UpsetScore.probability`.
+   - `risk_level` (`score`, optional, budget-gated): 5 ordered level descriptions from
+     *very unlikely* to *very likely* → a probability-weighted value in `[0, 4]`, used as a
+     secondary ranking/explanation signal.
+   The response supplies probabilities, `confidence`, and per-level legends; it is parsed into
+   `UpsetScore` (`probability`, `confidence`, `key_signals`, `citations`, `raw_answers`,
+   `request_hash`). Each question re-reads the full input, so the payload budgeter caps questions
+   and total tokens (§4.9.1). Routine runs issue one request per game; repeat sampling is reserved
+   for R19 (§8.4).
 3. **`calibrated_rules` backend (fallback/baseline).** Logistic regression on
    `[logit(market_prob), strength_diff, matched_spec_count, each validated spec indicator,
    rest_diff, travel_km, altitude, neutral_site]`, fit on 2021–23, calibrated on 2024 (Platt or
@@ -367,8 +385,77 @@ downstream change.
    evidence; an LLM may rewrite prose but the numeric score and citation set are immutable and
    verified after rewriting.
 
-**Shadow mode.** When `d3_mini` is available, the calibrated backend always runs too; the run
+**Shadow mode.** When `d3_mini` is reachable, the calibrated backend always runs too; the run
 record stores both scores. This gives the "measure honestly" comparison and protects the demo.
+
+#### 4.9.1 `systemone` API semantics and operating envelope (owner-provided, 2026-11-22)
+
+| Element | Contract |
+| --- | --- |
+| Model | `decision.vllm-sr/d3-mini` — a decision model, not a chat model; unavailable in the web UI |
+| Request | `input` (text or JSON) + one or more **named questions**; optional `images` as data URLs |
+| `noul` question | `instructions` is a yes/no question; the answer is `P(yes) = P(true)` |
+| `choice` question | `instructions` + `criteria` (option name → description, description may be null); answer = most likely option, probabilities for every option, confidence |
+| `score` question | `instructions` + `criteria` (2–10 level descriptions, lowest first); answer = probability-weighted level in `[0, n−1]`, per-level probabilities, legend, confidence |
+| `confidence` | 0 when all options are equally likely → 1 when one option holds all probability |
+| Invalid request | HTTP 400 with a specific message (unknown type, malformed criteria, …); validate locally first |
+| Cost | every question re-reads the whole input: cost ∝ input length × number of questions |
+| Latency | short requests under a second; larger inputs slower |
+
+Operating limits:
+
+| Limit | Value | Consequence for this system |
+| --- | --- | --- |
+| Queued or running decision requests per user | **4** | Hard **process-wide** semaphore of 4; a fifth request returns 429 `user_concurrent` |
+| Queue wait before start | 30 s | Unstarted requests return 503 `queue_timeout`; honour `error.retry_after_s` |
+| Input per question | 8,192 tokens (~35 KB English) | Deterministic payload budgeter truncates evidence before sending; hard check |
+| Request body size | 8 MiB | Byte check; HTTP 413 is permanent, never blind-retry |
+| Images | ≤8, ≤1,700 tokens each | Unused — this system is text-only |
+| Fair share | one request per waiting user per round | Concurrency above 4 gains nothing; the cap is a constant, not a tuning knob |
+
+**Error handling.** 429 → wait `retry_after_s` (body first, then header), retry ≤2; 502
+`replica_unavailable` → exponential retry ≤2; 503 `queue_timeout` → wait `retry_after_s`, retry ≤2,
+then mark the game `scoring_degraded`; 413 → shrink the payload and retry once, else degrade;
+500 (input limit) → validate the token budget, never blind-retry. Every attempt is recorded with
+attempt number, reason, wait time, and final outcome.
+
+**Throughput.** A slate of N candidates takes ⌈N/4⌉ waves. Under nominal latency this is fast, but
+one 30 s queue timeout consumes most of a 300 s run budget. The orchestrator therefore scores in
+screened-priority order, stops issuing new decision requests at `RUN_BUDGET_SECONDS −
+SCORE_TIMEOUT_S`, and scores any remainder with `calibrated_rules`, flagged
+`score_source=fallback_budget`. `MAX_SCORED_GAMES` bounds the work; the UI shows
+scored / queued / dropped counts.
+
+**Mapping answers to a calibrated probability.** `noul` already returns a probability, so
+`UpsetScore.probability` is its raw `P(yes)` **after** isotonic/Platt calibration fit on the 2024
+validation season (versioned artifact, reported in `docs/EVALUATION.md`). The raw value is always
+stored alongside the calibrated one. The optional `score` answer is not converted into a competing
+probability; it is a secondary ordering/explanation signal, and ties in the ranking break on the
+calibrated probability, then matched-spec count, then `game_id` so 1..n stays total and stable.
+Before sending, `SystemOneClient` validates the request against a local Pydantic model to avoid
+spending quota on a 400. An unknown response shape raises `ContractError` and degrades the game —
+the adapter never guesses.
+
+#### 4.9.2 Embeddings API envelope (R8)
+
+| Element | Contract | Status |
+| --- | --- | --- |
+| Endpoint | `POST {VT_ARC_BASE_URL}/embeddings` (default base `https://llm-api.arc.vt.edu/api/v1`) | owner-confirmed 2026-11-22 |
+| Auth | same credential as the chat models (`Authorization: Bearer $VT_ARC_API_KEY`) | owner-confirmed; verify in probe |
+| Model id | `qwen3-embedding:8b` | owner instruction 2026-11-22 |
+| Request | OpenAI-style `{model, input}`; `input` is a string or a list of strings | probe shape; store a golden fixture |
+| Response | `data[i].embedding` plus `usage`; vector length **measured**, not assumed (catalogue says 2560; the `:8b` id is natively 4096) | probe → `EMBED_DIM` |
+| Input limit | 8,192 tokens per input, enforced by the gateway (native card context is larger) | probe the overflow case (400 vs 413 vs truncation) |
+| Similarity | cosine; if the gateway does not L2-normalise, normalise client-side | probe ‖v‖ ≈ 1 |
+| Instruction format | Qwen3-Embedding cards use `Instruct: {task}\nQuery: {query}` for **queries** and raw text for **documents**; the template is stored in collection metadata | probe the retrieval effect; `EMBED_INSTRUCTION_TEMPLATE` |
+| Batching | batch chunks per request up to the probe-measured cap; shrink once on 413/400 | probe; `EMBED_BATCH_SIZE` |
+| Use | citation retrieval only (Chroma `citation_chunks`); **never** chat, rationale, monitor confirmation, or scoring | architecture rule (import-linter + review) |
+| Failure | 429/5xx → retry with jitter, then use the hashing embedder **for that batch only** and flag the run; never mix widths or models inside one collection | mirrors §4.9.1 error policy |
+| Versioning | collection name/metadata carries `{model, dim, instruction_template, normalized}`; the embedding version is part of `analysis_cache.cache_key` | so re-embedding invalidates retrieval-dependent caches deterministically |
+
+**Chunking.** Accepted citations are split into ~512–1,000-token chunks with a small overlap; the
+adapter token-counts before send and refuses a batch that exceeds 8,192 tokens per input rather
+than letting the gateway truncate silently.
 
 ### 4.10 Concurrency model
 
@@ -377,6 +464,14 @@ record stores both scores. This gives the "measure honestly" comparison and prot
 `return_exceptions=True`; each task writes `AgentEvent`s and returns a typed result or a typed
 failure. Orchestrators never `await` inside a loop without gathering batches. Wall-clock budget
 propagates as a deadline; tasks past the deadline are cancelled and reported as `skipped_budget`.
+
+**`systemone` is a shared per-user resource.** Enforce a semaphore of 4 for the whole process (not
+per run), and allow only one active analysis run per process; the UI disables **Analyze** while a
+run is live and queues additional requests. Fair-share scheduling means extra concurrency buys
+nothing, so 4 is a hard constant (`SYSTEMONE_MAX_CONCURRENCY`) and any configured value above 4 is
+rejected at startup. Monitor confirmation and scoring share the same four slots, but the phases are
+sequential (confirm → score), so contention is bounded: at most two monitor workers and at most
+four scorer requests in flight.
 
 ---
 
@@ -390,16 +485,20 @@ propagates as a deadline; tasks past the deadline are cancelled and reported as 
 | HTTP | `httpx` (async) + `tenacity` | timeouts, retries, connection pooling |
 | Storage | SQLite via stdlib `sqlite3` + SQL migrations | R8/R15; zero-ops, auditable |
 | Vectors | ChromaDB (persistent client) | R8; metadata filtering for spec citations |
+| Embeddings | `qwen3-embedding:8b` via `POST /api/v1/embeddings` (VT ARC, same key/base as chat); local hashing/TF-IDF fallback | D8/D16; neural retrieval for Chroma with a network-free path; embedding-only model kept out of the chat client |
+| Secondary data | CFBD REST (`/lines`, `/venues`) via `adapters/cfbd.py` | historical open lines plus stadium lat/lon/elevation/indoor; free academic key; optional, cached, fixture-tested |
 | Stats | `numpy`, `pandas`, `scipy`, `statsmodels`, `scikit-learn` | effect sizes, CIs, BH-FDR, calibration, logistic model |
 | UI | Streamlit 1.45+ (`st.fragment`, `AppTest`) | R1; testable |
 | Orchestration | plain `asyncio` classes | fewer moving parts, explicit contracts, easy to audit; a graph framework adds opacity for no requirement |
 | LLM client | `httpx` against VT ARC OpenAI-compatible endpoint | avoids extra SDK; full control of timeouts/JSON |
+| Decision model | `decision.vllm-sr/d3-mini` via `SystemOneClient` → `POST /api/v1/systemone` | Served outside the OpenAI-compatible surface; returns option probabilities (`noul`/`choice`/`score`), which are more repeatable than token sampling; isolate the contract behind one adapter |
 | Diagrams | Mermaid (`.mmd`) + Quarto/Typst → PDF | F15; no LaTeX/Graphviz needed |
 | Tests | `pytest`, `pytest-asyncio`, `respx` (HTTP mocking), `streamlit.testing` | offline determinism |
 | Quality | `ruff`, `black`, `mypy` (advisory) | R16 |
 | Packaging | `make` targets + `zip` script | submission artifact |
 
-Dependency additions required: `chromadb`, `respx` (dev). `openai` is **not** required — use httpx.
+Dependency additions required: `chromadb`, `respx` (dev). No OpenAI or embedding SDK — chat,
+`systemone`, and `/embeddings` all use `httpx` and share retry/trace/snapshot plumbing.
 
 ---
 
@@ -437,14 +536,15 @@ cfb-upset-precondition/
 │   ├── adapters/
 │   │   ├── http.py                 # retry, timeout, circuit breaker, budget, response cache
 │   │   ├── espn.py                 # scoreboard, summary, odds, rankings, teams, venues
-│   │   ├── weather.py              # open-meteo historical forecast
-│   │   ├── geocode.py              # static stadium CSV + fallback
+│   │   ├── cfbd.py                 # optional: historical lines + venue geodata
+│   │   ├── weather.py              # open-meteo historical (2021+) + live forecast
+│   │   ├── geocode.py              # CFBD venue coordinates + CSV fallback
 │   │   ├── search.py               # Brave adapter + mock/fixture transport
 │   │   ├── fetch.py                # fetch adapter, domain whitelist, extraction, snapshots
 │   │   ├── deep_research.py        # MCP client + seeded-literature provider
 │   │   ├── llm.py                  # VT ARC chat client, JSON mode, retries, token ledger
-│   │   ├── embeddings.py           # qwen3 / hashing fallback
-│   │   └── chroma.py
+│   │   ├── embeddings.py           # qwen3-embedding:8b (VT ARC /embeddings) + hashing fallback
+│   │   └── chroma.py               # one collection per embedding space
 │   ├── agents/
 │   │   ├── base.py                 # AgentContext (trace, budget, repos), AgentResult
 │   │   ├── data_orchestrator.py
@@ -506,9 +606,12 @@ cfb-upset-precondition/
 - **IDs and time.** ULIDs for run/event ids; SHA-256 for content/cache keys; UTC everywhere
   (`datetime.now(timezone.utc)` behind a `Clock` protocol so tests are time-travelable).
 - **Error taxonomy.** `TransientProviderError`, `PermanentProviderError`, `ContractError`,
-  `BudgetExhausted`, `LeakageError`. Adapters raise; agents translate into typed degraded results.
+  `BudgetExhausted`, `LeakageError`, plus `SystemOneThrottled` (429/503 with `retry_after_s`),
+  `SystemOneOverloaded` (502), `SystemOnePayloadTooLarge` (413), `SystemOneInputLimit` (500).
+  Adapters raise; agents translate into typed degraded results.
 - **Retry policy.** 3 attempts, exponential backoff with jitter, `Retry-After` honoured; circuit
-  breaker opens per provider after 5 consecutive failures for 60s; every retry emits an event.
+  breaker opens per provider after 5 consecutive failures for 60 s; every retry emits an event.
+  `systemone` retries are capped separately and always respect the owner-provided limits (§4.9.1).
 - **Caching.** HTTP response cache (URL + params hash, TTL per provider); evidence snapshot store
   (content hash); analysis cache (§4.7). All keys deterministic and versioned.
 - **Prompt injection.** Fetched content is untrusted: strip HTML to text, cap length, wrap in a
@@ -534,7 +637,7 @@ cfb-upset-precondition/
 | Pr2 Draft independently | Monitor workers receive tasks independently and never see each other's output; research workers own disjoint precondition batches | Integration test: worker payloads contain no peer data |
 | Pr3 Strip identities | Label audit evidence is anonymised (no agent name, no model name, shuffled ids) before adjudication | Unit test on prompt builder |
 | Pr4 Real diversity | Two model families where available (`GLM-5.3` for extraction, `gpt-oss-120b`/`MiniMax` for adjudication); otherwise different prompts **plus** different evidence retrieval | Config test asserts distinct `extractor_model`/`adjudicator_model` |
-| Pr5 Ask critics to falsify | Monitor worker prompt asks "find the strongest evidence this flag is wrong"; adjudicator must cite a contradicting passage to return `NOT_HOLD` | Prompt snapshot test; audit report includes falsification attempts |
+| Pr5 Ask critics to falsify | The monitor worker's `choice` criteria include an explicit `contradicted` option defined as "the strongest evidence says this flag is false"; a `contradicted` answer requires the quoted passage. The adjudicator must cite a contradicting passage to return `NOT_HOLD`. | Criteria snapshot test; audit report includes falsification attempts |
 | Pr6 Separate judge | `Adjudicator` is a different model, fresh context, no access to worker reasoning; stats are computed by code | Test asserts adjudicator input excludes `MonitorDecision.rationale` |
 | Pr7 Hard-to-game verifier | Tests and thresholds are not agent-writable; held-out 2025 season never used for tuning; planted-error suite validates the validator | `tests/eval/test_detects_planted_errors.py` |
 | Pr8 Provenance | `evidence` + `evidence_links`; every alert renders citations; unsourced flags dropped | E2E: every alert has ≥1 resolvable `evidence_id` |
@@ -565,7 +668,9 @@ Pre-registered before any result is inspected (committed in `configs/eval.yaml`)
 
 ### 8.3 System predictive evaluation protocol (R25)
 
-- **Splits:** fit 2021–2023, calibrate/select on 2024, report on 2025. No exception.
+- **Splits:** fit 2021–2023, calibrate/select on 2024, report on 2025. No exception. For
+  `d3_mini`, which is pre-trained and has no fit step, the 2021–2023 window is used only for
+  descriptive comparisons; **2024 is the calibration set** and **2025 is the untouched test set**.
 - **Population:** every FBS-vs-FBS game in the split, not only flagged games. Unflagged games get
   the base-rate probability. This prevents the classic "score only the candidates" inflation.
 - **Metrics:** Brier score (primary), log loss, 10-bin reliability curve + ECE, AUC (secondary),
@@ -580,13 +685,26 @@ Pre-registered before any result is inspected (committed in `configs/eval.yaml`)
 - **R25 scope statement (deviation D6):** the 2021–2025 replay covers the structured path
   (features → screen → scorer). The evidence-confirmation stage is evaluated on 2025 only, using
   archived evidence, and reported separately as "full-pipeline subset."
+- **Decision-model evaluation (deviation D14).** The full 2021–2025 replay uses
+  `calibrated_rules` (local, deterministic, free). `d3_mini` is calibrated on **all 2024 candidate
+  games** and evaluated on **all 2025 candidate games**; non-candidates receive the slate base rate
+  in both backends, so the population definition is identical. Expected volume is a few hundred
+  requests (sub-second each at 4 concurrency). Report Brier/log loss with bootstrap CIs,
+  calibration, raw-vs-calibrated probability, and agreement with the calibrated backend. If the
+  service is saturated or rate-limited, degrade to a stratified sample, report the reduced n, and
+  state it; never imply full coverage that did not happen.
 
 ### 8.4 Repeatability protocol (R19)
 
 5 identical runs on a frozen slate + frozen spec set + frozen cache state; metrics:
 flag-set Jaccard, Kendall τ and Spearman ρ of rankings, max-min probability spread, and
 decision-flip count. Pass: Jaccard ≥ 0.90, τ ≥ 0.80, spread ≤ 0.03 for ≥90% of games, zero
-non-deterministic label differences. Report by backend (`d3_mini` vs `calibrated_rules`).
+non-deterministic label differences. `calibrated_rules` is tested on the full frozen slate.
+`d3_mini` is tested on an **8-game frozen subset with 3 repeats** and one decision request per game
+per repeat, staying inside the 4-request per-user limit; report dispersion, flips, and any
+`queue_timeout` losses. Probe determinism first: if the same input reproduces the same
+probabilities, 2 repeats suffice; if not, report the observed spread. If the decision path is
+unstable, alerts are flagged `unstable=true` and the report says so rather than hiding it.
 
 ### 8.5 Label-quality protocol (R30)
 
@@ -597,6 +715,12 @@ quote. Orchestrator computes precision, recall (using planted positives to estim
 natural positives are selected deliberately), Wilson CIs, and per-spec disagreement rates.
 Any spec with precision < 0.80 is ineligible for `validated` regardless of statistics. At most
 **one** tuning round is allowed; the new thresholds are re-tested on dev and logged.
+
+The same labelled audit set is used, following the decision-model provider's guidance, to choose
+the monitor worker's `CONFIRM_THRESHOLD` and `DROP_THRESHOLD` (and the optional alert cutoff) by
+maximising agreement with human labels on 2024-derived data. The chosen cutoffs, the curve, and the
+sample size are stored in `label_audits`/`validated_preconditions` metadata and reported in
+`docs/EVALUATION.md`.
 
 ### 8.6 Human gates
 
@@ -625,7 +749,21 @@ the repo, and prove one end-to-end path from fixture data to a ranked Streamlit 
 **Tasks.**
 1. `scripts/probe.py` + `cfb_upset/pipelines/capabilities.py`: probe ESPN scoreboard/summary/odds/
    rankings/teams/groups; VT ARC `/v1/models` + one chat completion with JSON-only instruction;
-   `d3-mini` candidate endpoints (record 404/401 distinctly); embedding endpoint; Brave/Fetch/Deep
+   `POST /api/v1/systemone` with `decision.vllm-sr/d3-mini`: capture the exact JSON field names and
+   record golden responses for one `noul`, one `choice`, and one `score` question; verify
+   named-question batching; send a malformed question → expect 400 with a specific message; send
+   the same request twice → record determinism; measure latency for a small and a near-8,192-token
+   input; **limit probes**: 5 simultaneous requests → 429 `user_concurrent`, oversized body → 413,
+   a request held past the queue window → 503 with `retry_after_s`, and confirm the `Retry-After`
+   header and body field agree; **embeddings probe** (`POST /api/v1/embeddings` with
+   `qwen3-embedding:8b` under the chat credential): capture request/response golden fixture,
+   measure the returned vector length (catalogue says 2560; `:8b` is natively 4096), test the
+   batch cap, force an over-8,192-token input to learn 400-vs-413-vs-truncation, check whether
+   vectors are L2-normalised, compare raw vs `Instruct: …\nQuery: …` query prefixes, and record
+   429/latency; **CFBD probe** (`/lines` for 2021 week 1: `spreadOpen` null rate and provider mix;
+   `/venues`: lat/lon/elevation/dome/timezone; no key → SKIP); **weather probe** (Open-Meteo
+   Historical Forecast for one 2021 and one 2025 venue-date: variable coverage, actual lead/run
+   cadence; compare Previous Runs `_previous_day1`); Brave/Fetch/Deep
    Research endpoints or MCP handshake; `import chromadb`; disk space. Emit
    `docs/CAPABILITIES.md` with PASS/FAIL/SKIP + timestamp + redacted evidence.
 2. Scaffold the repository tree, `requirements*.txt`, `.env.example`, `Makefile`, `ruff`/`black`/
@@ -638,7 +776,7 @@ the repo, and prove one end-to-end path from fixture data to a ranked Streamlit 
    `domain/screen.py` → `domain/scoring.py` (rule-count + base rate) → `app.py` Streamlit table.
    Wire `agent_events` to an in-memory trace for the timeline.
 6. Record the capability matrix outcome in `PROGRESS.md` → Decisions log (which backends are in
-   play: D1/D2/D3/D8).
+   play: D1/D2/D3/D8, plus the measured `EMBED_DIM`).
 
 **Files.** `scripts/probe.py`, `cfb_upset/{config.py,logging_setup.py,ids.py}`, `cfb_upset/contracts/
 {__init__,slate,spec,monitor,scoring}.py`, `cfb_upset/domain/{rules,screen,scoring}.py`,
@@ -650,7 +788,13 @@ the repo, and prove one end-to-end path from fixture data to a ranked Streamlit 
 
 **Acceptance criteria.**
 - `docs/CAPABILITIES.md` exists and every external dependency is marked PASS/FAIL with a chosen
-  backend recorded.
+  backend recorded, including a captured `systemone` request/response contract and a fixture
+  under `tests/fixtures/systemone/`.
+- The `systemone` probe is repeatable: the same request twice yields the same decision payload
+  (or the observed dispersion is documented).
+- The probe records the 4-request cap, 30 s queue window, 8,192-token input limit, 8 MiB body limit,
+  and the exact `400/429/502/503` payloads, plus golden fixtures for all three question types and
+  the measured determinism/latency of `decision.vllm-sr/d3-mini`.
 - `pytest` passes with ≥90% coverage on `domain/rules.py` and `domain/screen.py`.
 - The Streamlit app renders the fixture slate, accepts an Analyze click, and shows a ranked game
   with a timeline containing at least three `agent` values.
@@ -679,11 +823,11 @@ provenanced, every provider behind a fault-tolerant adapter with fixtures.
    export to `docs/contracts/`.
 2. SQLite schema + migration runner implementing §4.7 (all tables, indexes on `game_id`,
    `(spec_id, version)`, `analysis_cache.cache_key`, `agent_events.run_id`). Seed `teams`, `venues`
-   (with lat/lon/altitude from a static CSV of FBS stadiums).
+   (lat/lon/altitude/dome/timezone from CFBD `/venues`, with a checked-in CSV fallback).
 3. Repositories with typed methods per aggregate; forbid raw SQL outside `store/`.
 4. `evidence.py`: snapshot writer (gzip + sha256), `evidence_links` writer.
 5. Adapters with fixture transports: `espn.py` (typed parse of scoreboard, summary, core odds,
-   weekly rankings, groups/FBS), `weather.py`, `geocode.py`, `search.py`, `fetch.py` (whitelist +
+   weekly rankings, groups/FBS), `cfbd.py` (lines + venues, optional key), `weather.py`, `geocode.py`, `search.py`, `fetch.py` (whitelist +
    text extraction + snapshot), `deep_research.py` (MCP client + seeded provider), `llm.py`
    (JSON-only, retries, token ledger), `embeddings.py`, `chroma.py`.
 6. `observability/trace.py`: JSONL trace + `agent_events` writer; `budget.py` with deadlines.
@@ -775,8 +919,10 @@ kickoff, with explicit provenance and the mandated splits.
    travel distance (venue lat/lon haversine), time-zone delta, altitude, neutral site, conference
    game, poll rank, rank delta, home/away, short-week flag, look-ahead flag (next opponent rank),
    and season-to-date pace. All with `feature_version` and `known_at`.
-2. Favorite/odds: open spread → implied probability (with vig removal); if absent, strength proxy
-   (`elo_diff` / rolling margin) and `favorite_source`; store `market_prob` only when admitted.
+2. Favorite/odds: CFBD `spreadOpen` → favorite, then ESPN `open`, then strength proxy
+   (`elo_diff` / rolling margin); open lines → implied probability (moneyline when present, else a
+   fixed spread→probability mapping); record `favorite_source`, `line_provider`,
+   `market_prob_source`; store `market_prob` only when admitted.
 3. Label definition: `upset = favorite_loses`; store `upset` and `margin` for evaluation only.
 4. `domain/stats.py` split helper: `dev=2021–2023`, `val=2024`, `test=2025`; assert no overlap and
    no post-cutoff rows. Write `game_features` and a modelling view/parquet
@@ -796,7 +942,8 @@ policy.
 - Zero rows in the modelling table have a feature with `known_at >= kickoff` (SQL + code audit).
 - Deleting all games after a cutoff and recomputing does not change features for games before it.
 - `market_prob` coverage reported; for seasons without open lines, `favorite_source=strength_proxy`
-  is recorded on every affected game.
+  and `market_prob_source=unavailable` are recorded on every affected game; `line_provider` is set
+  whenever a book quote was used.
 - Split assertions pass: 2021–23 / 2024 / 2025 disjoint and ordered.
 - Feature availability report lists non-null % by feature × season.
 
@@ -930,8 +1077,8 @@ FDR control and out-of-sample checks; promote only what survives.
    write `label_audits` and `reports/label_audit_<ts>.md`.
 4. One tuning round: adjust thresholds for specs with precision < 0.80; re-label; re-test; log
    before/after. Requires `--approve` when `REQUIRE_APPROVAL=1`.
-5. Citation index: embed accepted citations (provider per D8), upsert into Chroma with metadata;
-   verify by retrieving top-3 for each spec.
+5. Citation index: embed accepted citations with the real embedder (fallback per D8, disclosed),
+   upsert into Chroma with model/dim/instruction metadata; verify by retrieving top-3 for each spec.
 6. CLI: `build_preconditions --stage validate [--approve]`.
 
 **Files.** `domain/stats.py`, `domain/calibration.py` (shared), `domain/promotion.py`,
@@ -973,17 +1120,20 @@ demonstrate the flow.
 
 **Tasks.**
 1. `adapters/espn.py` slate reader: scoreboard for date (default today) → filter FBS-vs-FBS →
-   `SlateGame` with teams, records, venue, kickoff, odds (pre-kickoff only), broadcast, logo, color;
-   weather via D3 with `known_at`; mark `unavailable` explicitly rather than omitting.
+   `SlateGame` with teams, records, venue, kickoff, odds (pre-kickoff only, ESPN scoreboard),
+   broadcast, logo, color; live weather via Open-Meteo forecast with `known_at = fetched_at`; mark
+   `unavailable` explicitly rather than omitting. CFBD is not required at runtime.
 2. `Monitor-Orchestrator`: load active specs; build per-game context from features/slate; run
    `screen`; emit events; handle empty shortlist; partition shortlist across workers; aggregate
    and dedupe; then hand confirmed flags to the scorer.
 3. `Monitor Worker`: per game — seed query from matched specs + Chroma similar citations, Brave
-   search (whitelist), fetch ≤`MAX_FETCHES_PER_GAME` pages, snapshot evidence, build an
-   anonymised evidence bundle, call the LLM adjudicator 3× with a falsification-oriented prompt,
-   majority vote with confidence, return `MonitorDecision` with `dissent`; deterministic fallback
-   mode (`LLM_MODE=off`) confirms only when a whitelisted source is found that explicitly contains
-   the required predicate phrase, else returns UNKNOWN.
+   search (whitelist), fetch ≤`MAX_FETCHES_PER_GAME` pages, snapshot evidence, build an anonymised
+   evidence bundle, and ask `decision.vllm-sr/d3-mini` one `choice` question with criteria
+   `{confirmed, contradicted, insufficient}`; `confirmed` requires `P ≥ CONFIRM_THRESHOLD`,
+   `contradicted` requires `P ≥ DROP_THRESHOLD`, otherwise `insufficient`. The criteria frame
+   `contradicted` as "the strongest evidence says this flag is false" (Pr5). Return
+   `MonitorDecision` with probabilities, confidence, quotes, and `dissent`; `LLM_MODE=off` confirms
+   only when a whitelisted source explicitly contains the required predicate phrase.
 4. Rationale builder: template with matched specs, observed values, quotes, URLs; LLM rewrite
    optional and verified against the citation set.
 5. `analysis_cache`: key = hash(game, active spec versions, context hash, scorer version, prompt
@@ -1032,21 +1182,25 @@ build the backtest harness that will produce R25 evidence.
    with market probability, matched specs + observed values, evidence refs, context; validate
    `UpsetScore`; force `probability ∈ [0,1]`, `confidence`, `key_signals`, `citations`,
    `backend`, `model_version`, `unstable`.
-2. `d3_mini_backend.py`: strict rubric prompt, JSON schema, 3 samples, median + dispersion;
-   deterministic parsing; timeout/fallback to `calibrated_rules` on repeated failure (flagged).
+2. `adapters/systemone.py` + `d3_mini_backend.py`: `SystemOneClient` with a process-wide semaphore of
+   4, local Pydantic request validation (avoid 400s), strict builder for `noul`/`choice`/`score`
+   questions, deterministic payload budgeter (≤8,192 tokens per question, ≤8 MiB body, question cap),
+   raw + calibrated probability, request/response snapshots, and the §4.9.1 retry matrix; fallback
+   to `calibrated_rules` on repeated failure (flagged).
 3. `calibrated_rules` backend: feature matrix builder; logistic fit on 2021–23; model selection
    (Platt vs isotonic) on 2024 by log loss; artifact persistence (`data/models/scorer_v1.json`
    with coefficients, feature list, calibration knots, training window, git SHA).
 4. Ranking: total order with tie-breaks; `rank` assigned over candidates; non-candidates excluded
    from the alert list but scored for evaluation.
-5. `pipelines/backtest.py`: replay the structured path for 2021–2025, compute all §8.3 metrics and
-   baselines, bootstrap CIs, calibration plot, confusion at thresholds, precision@k; write
+5. `pipelines/backtest.py`: replay the structured path for 2021–2025 with `calibrated_rules`, compute
+   all §8.3 metrics and baselines, bootstrap CIs, calibration plot, confusion at thresholds,
+   precision@k; run the stratified `d3_mini` sample (D14) separately; write
    `reports/eval_<ts>/{metrics.json,calibration.png,report.md}`.
 6. Repeatability harness: `pipelines/repeatability.py` runs N=5 on a frozen slate and reports
    Jaccard/τ/spread.
 7. Wire scorer into `Monitor-Orchestrator` (confirmed flags → ranked alerts → `RunResult`).
 
-**Files.** `agents/upset_scorer.py`, `agents/scoring_backends/{d3_mini,calibrated}.py`,
+**Files.** `agents/upset_scorer.py`, `agents/scoring_backends/{d3_mini,calibrated}.py`, `adapters/systemone.py`,
 `domain/scoring.py`, `pipelines/{backtest,repeatability}.py`, `configs/eval.yaml`, tests.
 
 **Deliverables.** Scoring + ranking + rationale; fitted model artifact; evaluation harness
@@ -1054,8 +1208,18 @@ runnable in < 5 minutes on cached features; repeatability report.
 
 **Acceptance criteria.**
 - `probability ∈ [0,1]` for every scored game; ranks are unique and contiguous 1..n (R14/R18).
-- Backend is recorded per score; if `d3_mini` is unreachable the run still succeeds and is marked
-  `backend=calibrated_rules, degraded_reason=d3_unavailable` (R22).
+- Backend is recorded per score; a `systemone` contract mismatch or repeated timeout degrades to
+  `backend=calibrated_rules` with `degraded_reason` set and is surfaced in the UI (R22).
+- A recorded `systemone` golden fixture parses into a valid `UpsetScore`; a schema change fails the
+  test rather than silently producing a score.
+- Concurrency test: 20 queued games never exceed 4 in-flight `systemone` requests; a simulated 429
+  waits exactly `retry_after_s` and retries; 413 shrinks the payload once; 503 after two retries
+  degrades that game only.
+- Payload budgeter test: a maximal evidence bundle is truncated deterministically below 8,192
+  tokens and the truncation is recorded (`truncated=true`, dropped evidence ids).
+- Question-type tests: `noul` maps to `probability = calibrated P(yes)`; `choice` maps to an enum
+  with probabilities and confidence; `score` maps to a finite value in `[0, n−1]` with a legend; a
+  malformed criteria payload raises before any network call.
 - Baseline metrics exist for all five baselines on 2025; the market baseline uses only admitted
   odds (R25).
 - Repeatability with the deterministic backend: τ = 1.0 and probability spread = 0 by construction;
@@ -1285,7 +1449,9 @@ background while P9 is built.
 ### 10.3 Scope ladder (cut from the bottom when behind)
 
 1. Weather features (D3) — keep the column as `unavailable`; no spec requires it.
-2. `d3_mini` integration (D1) — ship `calibrated_rules` with shadow logging disabled.
+2. `d3_mini` integration (D1) — ship `calibrated_rules` with shadow logging disabled (only if the
+   P0 `systemone` contract cannot be established, or if the service is saturated during the demo;
+   saturation is recorded, not hidden).
 3. Deep Research live provider (D2) — ship seeded literature with citations.
 4. Chroma semantic retrieval — keep storage + display of accepted citations (R8 still satisfied);
    drop "seed queries from similar citations".
@@ -1354,13 +1520,13 @@ table, and the limitations. This is the answer to "are the results meaningful?" 
 
 | # | Risk | L | I | Mitigation / trigger | Fallback |
 | --- | --- | --- | --- | --- | --- |
-| 1 | d3-mini unreachable | H | H | P0 probe; adapter + shadow mode | `calibrated_rules` (D1) |
+| 1 | `systemone` (d3-mini) contract undocumented or unstable | M | H | P0 probe captures schema + golden fixture; contract test + shadow mode; dispersion check | `calibrated_rules` (D1), degraded flag |
 | 2 | Deep Research/Brave/Fetch unavailable or costly | H | H | Provider adapters, fixtures, budgets | Seeded literature (D2); offline evidence |
-| 3 | Historical pre-kickoff odds missing (2021) | H | M | Record `favorite_source`; sensitivity analysis | Strength proxy (D4) |
-| 4 | Weather leakage or no coverage | M | M | Forecast archive with `known_at`; coverage gate | Drop weather specs (D3) |
+| 3 | Historical pre-kickoff odds missing (2021) | M | M | CFBD `/lines` backfill + 2021 null-rate probe; record `favorite_source`/`line_provider`; sensitivity analysis | Strength proxy (D4) |
+| 4 | Weather leakage or no coverage | M | M | Archived forecast with recorded actual lead (≤6 h) and `known_at`; coverage gate; optional IEM MOS check | Drop weather specs (D3) |
 | 5 | No precondition passes FDR | M | H | Power extension option; report honestly | `provisional` tier (D7) |
 | 6 | Statistical overfitting via tuning | M | H | One tuning round; dev-only tuning; 2025 held out | Reject tuned specs |
-| 7 | LLM nondeterminism breaks R19 | M | H | Temperature 0, 3-sample majority, dispersion flag | Deterministic backend |
+| 7 | Nondeterminism breaks R19 | M | H | Decision-model probabilities replace token sampling; determinism probe in P0; 3-repeat subset; dispersion flag | Deterministic `calibrated_rules` backend |
 | 8 | Streamlit long-run UI breakage | M | M | Background thread + events (D11) | CLI run + cached result display |
 | 9 | Showcase night has no slate | M | H | Date selector + pre-warmed demo slate | Offline demo (D12) |
 | 10 | Leakage sneaks in | M | H | Sentinel tests, admission policy, audit | Block promotion |
@@ -1369,6 +1535,7 @@ table, and the limitations. This is the answer to "are the results meaningful?" 
 | 13 | ESPN rate limiting / schema drift | M | M | Concurrency caps, fixture parity tests, quarantine | Resume + cached raw |
 | 14 | Prompt injection from fetched pages | M | M | Whitelist, delimit, no tool instructions, snapshots | Deterministic fallback |
 | 15 | Disk/DB growth (raw summaries) | M | L | Store extracted fields only; compress snapshots | Retention policy |
+| 16 | `systemone` saturation or queue timeouts during demo/eval | M | H | Hard cap 4, Retry-After handling, budget + priority ordering, D14 sampling, pre-warmed demo cache | `calibrated_rules` with `scoring_degraded` flag |
 
 ---
 
@@ -1377,6 +1544,10 @@ table, and the limitations. This is the answer to "are the results meaningful?" 
 **Assumptions.**
 - VT ARC credentials and an OpenAI-compatible chat endpoint are available (a key exists in the
   course context; `.env` is currently empty).
+- The VT ARC gateway serves embeddings at `POST /api/v1/embeddings` under the same credential as
+  chat, with an 8,192-token input cap; the actual vector width is measured in P0.1.
+- A free CFBD academic key is obtainable (3,000 calls/mo); the app still runs without it.
+- Open-Meteo's non-commercial free tier with attribution is acceptable for coursework.
 - ESPN public endpoints remain accessible and unauthenticated for scoreboard/summary/odds/rankings.
 - Open-Meteo historical-forecast and geocoding endpoints remain keyless and rate-tolerant for
   ≈3,500 games (one request per game-venue-date, cached).
@@ -1386,17 +1557,24 @@ table, and the limitations. This is the answer to "are the results meaningful?" 
   requirement's intent.
 
 **Open questions (resolve in P0 and record in `PROGRESS.md`).**
-1. Is `d3-mini` reachable through a VT ARC endpoint not exposed by the OpenAI-compatible model
-   list? If yes, what is its request/response contract?
-2. Are Brave Search, Fetch, and Deep Research available as MCP endpoints with credentials, and
+1. What are the exact JSON field names for `POST /api/v1/systemone` (`input`/`state`, `questions`,
+   `criteria`, `images`, model selector)? Semantics, question types, and response fields are known;
+   only the wire-level schema and auth details remain for P0.
+2. Is the 4-request-per-user limit shared with other teammates/apps running under the same VT ARC
+   identity at showcase time, and should the demo reserve headroom (e.g., run at 2)?
+3. Are Brave Search, Fetch, and Deep Research available as MCP endpoints with credentials, and
    what are their quotas?
-3. Is there an embedding endpoint for `qwen3-embedding:8b`, or should D8's fallback be permanent?
-4. May the corpus extend to 2016–2020 for statistical power (D13), given R25's mandated splits?
-5. Should closing lines be admitted with `known_at = kickoff` (violates strict `<`) for the market
+4. Does `POST /api/v1/embeddings` accept `qwen3-embedding:8b` and return 2560 or 4096 dimensions?
+   (Measure in P0.1; leave `EMBED_DIM` unset until then. Also confirm whether an instruction prefix
+   is expected and whether vectors are L2-normalised.)
+5. May the corpus extend to 2016–2020 for statistical power (D13), given R25's mandated splits?
+6. Should closing lines be admitted with `known_at = kickoff` (violates strict `<`) for the market
    baseline, or is the open line / strength proxy the only admissible market signal?
-6. Does the instructor require the four SQLite tables to be exactly those names with no side
+7. Does the instructor require the four SQLite tables to be exactly those names with no side
    tables (D5), or is a superset acceptable?
-7. For R30, is a fixed sample of 50 spec-game pairs acceptable, or is a specific n required?
+8. For R30, is a fixed sample of 50 spec-game pairs acceptable, or is a specific n required?
+9. When CFBD returns several books, which precedence is canonical (e.g., consensus > DraftKings >
+   ESPN BET), and is a spread-derived `market_prob` acceptable when open moneylines are absent?
 
 ---
 
@@ -1432,8 +1610,14 @@ These are facts gathered while planning; they justify D1–D4 and must be re-run
 | ESPN rankings | PASS — weekly ranking collections exist | `seasons/2024/types/2/weeks/10/rankings` |
 | FBS classification | PASS — group `80` = FBS, `81` = FCS | `.../groups/80`, `.../groups/81` |
 | Venue coordinates | FAIL — ESPN venue has city/state only | `.../venues/3626` |
-| Open-Meteo forecast archive | PASS — keyless hourly forecast for a past date | `historical-forecast-api.open-meteo.com` |
-| VT ARC model list | PARTIAL — four chat models; **no d3-mini, no embedding model** | provider `models` query |
+| Open-Meteo forecast archive | PASS — keyless hourly forecast for a past date; GFS archive starts 2021-03-23; the stitched series has an effective lead ≤6 h (not 24 h); Previous Runs `_previous_day1` has full-variable coverage only from 2024 | `historical-forecast-api.open-meteo.com`; Open-Meteo docs 2026-11-22 |
+| CFBD lines | PASS (documented) — `/lines` returns `spreadOpen`, `overUnderOpen`, `spread`, moneylines, and provider; free academic tier 3,000 calls/mo; 2021 open-line null rate unverified | `api.collegefootballdata.com` docs 2026-11-22 |
+| CFBD venues | PASS (documented) — `/venues` returns lat/lon/elevation/dome/timezone | `api.collegefootballdata.com` docs 2026-11-22 |
+| VT ARC model list | PARTIAL — four chat models; no decision/embedding model listed (both are served outside `/v1/models`) | provider `models` query |
+| VT ARC embeddings | **PASS (provider-confirmed)** — Qwen3-Embedding family at `POST /api/v1/embeddings`, same credential as chat; catalogue describes 2560-d vectors, 8,192-token inputs, instruction-aware queries; model id requested as `qwen3-embedding:8b`; not chat-capable and not in the web UI; **returned width unverified** | provider catalogue + owner 2026-11-22; `models` query |
+| VT ARC decision models | **PASS (owner-confirmed)** — served at `POST /api/v1/systemone`, exposed through the API only, not `/v1/models`; schema not yet captured | owner confirmation 2026-11-22 |
+| `systemone` limits | 4 queued/running per user; 30 s queue wait; 8,192 input tokens; 8 MiB body; ≤8 images; 429/502/503 semantics with `retry_after_s` | owner-provided limits 2026-11-22 |
+| `systemone` model/API | `decision.vllm-sr/d3-mini`; input + named questions; types `noul` (P yes), `choice` (option probabilities), `score` (0..n−1 weighted level); confidence 0..1; 400 on malformed requests; cost ∝ input × questions | owner-provided semantics 2026-11-22 |
 | Brave endpoint reachable | PARTIAL — HTTP 422 without a key (endpoint exists) | `api.search.brave.com` |
 | MCP servers configured | FAIL — none in `opencode.json`; no env keys | config + env scan |
 | ChromaDB installed | FAIL — not importable (installable from PyPI; PyPI reachable) | import probe |
@@ -1449,8 +1633,19 @@ VT_ARC_BASE_URL=https://llm-api.arc.vt.edu/api/v1
 VT_ARC_MODEL=GLM-5.3
 VT_ARC_EXTRACTOR_MODEL=GLM-5.3
 VT_ARC_ADJUDICATOR_MODEL=gpt-oss-120b
-VT_ARC_DECISION_MODEL=d3-mini            # optional; empty => calibrated_rules backend
+VT_ARC_DECISION_ENDPOINT=/api/v1/systemone  # decision models are served here, not via /models
+VT_ARC_DECISION_MODEL=d3-mini              # optional; empty => calibrated_rules backend
 SCORER_BACKEND=auto                      # auto | d3_mini | calibrated_rules
+SYSTEMONE_MAX_CONCURRENCY=4              # hard cap; values >4 are rejected at startup
+SYSTEMONE_MAX_INPUT_TOKENS=8192
+SYSTEMONE_MAX_REQUEST_BYTES=8388608
+SYSTEMONE_QUEUE_WAIT_S=30
+SYSTEMONE_SCORE_TIMEOUT_S=45
+SYSTEMONE_MAX_QUESTIONS_PER_GAME=2
+MAX_SCORED_GAMES=20
+CONFIRM_THRESHOLD=0.60                    # monitor worker: P(confirmed) cutoff, fitted on audits
+DROP_THRESHOLD=0.40                       # monitor worker: P(contradicted) cutoff
+ALERT_THRESHOLD=0.50                      # optional display cutoff; probabilities always shown
 
 # --- Research / web tools ---
 BRAVE_API_KEY=
@@ -1461,9 +1656,15 @@ RESEARCH_PROVIDER=auto                   # auto | mcp_deep_research | seeded_lit
 ALLOWED_DOMAINS=espn.com,sports-reference.com,cbssports.com,si.com
 
 # --- Embeddings / vector store ---
-EMBEDDING_BASE_URL=
-EMBEDDING_MODEL=qwen3-embedding:8b
-EMBEDDING_BACKEND=auto                   # auto | qwen3 | hashing
+EMBED_BASE_URL=                          # default: VT_ARC_BASE_URL
+EMBED_API_KEY=                           # default: VT_ARC_API_KEY
+EMBED_MODEL=qwen3-embedding:8b
+EMBED_DIM=                               # REQUIRED before first embed; measured in P0.1, asserted on every response
+EMBED_BACKEND=auto                       # auto | qwen3 | hashing
+EMBED_MAX_INPUT_TOKENS=8192
+EMBED_BATCH_SIZE=32                      # lower if the probe finds a smaller gateway cap
+EMBED_MAX_CONCURRENCY=4
+EMBED_INSTRUCTION_TEMPLATE=              # query prefix; empty => send raw text
 CHROMA_PATH=./data/chroma
 
 # --- Data / storage ---
@@ -1473,6 +1674,19 @@ EVIDENCE_PATH=./data/evidence
 TRACE_PATH=./data/traces
 ESPN_API_BASE_URL=https://site.api.espn.com/apis/site/v2/sports/football/college-football
 ESPN_CORE_BASE_URL=https://sports.core.api.espn.com/v2/sports/football/leagues/college-football
+
+# --- Secondary structured data (optional) ---
+CFBD_API_KEY=                            # free academic key; absent => ESPN + strength proxy
+CFBD_BASE_URL=https://api.collegefootballdata.com
+CFBD_LINE_PROVIDERS=consensus,DraftKings,ESPN_BET   # precedence; first available wins
+CFBD_MAX_CONCURRENCY=2
+
+# --- Weather ---
+WEATHER_BACKEND=open_meteo               # open_meteo | unavailable
+WEATHER_HIST_BASE_URL=https://historical-forecast-api.open-meteo.com/v1/forecast
+WEATHER_FORECAST_BASE_URL=https://api.open-meteo.com/v1/forecast
+WEATHER_MODEL=gfs_seamless
+WEATHER_LEAD_HOURS_MAX=6                 # recorded provenance for the stitched archive
 
 # --- Runtime ---
 WORKER_COUNT=2

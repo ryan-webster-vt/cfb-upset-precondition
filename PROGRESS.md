@@ -2,7 +2,7 @@
 
 **Persistent state for implementation.** Read `IMPLEMENTATION_PLAN.md` first; this file records
 what is actually done, what is next, what is blocked, and why decisions were made.
-**Plan version:** 1.0 (2026-11-22)
+**Plan version:** 1.2 (2026-11-22)
 **Status:** `P0 NOT STARTED` — no application code exists yet (design-only repo).
 **Feature freeze:** 2026-12-01 · **Showcase:** 2026-12-03 17:00
 
@@ -52,10 +52,11 @@ what is actually done, what is next, what is blocked, and why decisions were mad
 | ID | Blocker | Impact | Owner action | Status |
 | --- | --- | --- | --- | --- |
 | B1 | `.env` is empty; no VT ARC / Brave / Deep Research credentials present | P0 probe will SKIP live checks; P4/P7 live modes unavailable | obtain keys; run `python scripts/probe.py --live` | `[!]` |
-| B2 | `d3-mini` not in the configured VT ARC model list | R14 blocked; fallback D1 required unless a separate endpoint exists | confirm with VT ARC docs/support; probe candidate paths | `[!]` |
+| B2 | `systemone` wire schema/auth not yet captured (semantics + limits confirmed: `d3-mini`, `noul`/`choice`/`score`, 4 concurrent, 30 s queue, 8,192 tokens, 8 MiB) | P8 cannot start without golden fixtures; scoring throughput is capped at 4 | P0.1: capture field names + golden responses for all three question types, 400/429/413/503 probes, determinism/latency | `[~]` |
 | B3 | No MCP servers configured (Brave/Fetch/Deep Research) | R5/R12/R30 live paths blocked | decide endpoints; otherwise approve D2/D9 | `[!]` |
-| B4 | `qwen3-embedding:8b` endpoint unknown; `chromadb` not installed | R8 embedding path blocked | probe; if none, approve D8 fallback permanently | `[!]` |
+| B4 | Embedding endpoint known (`POST /api/v1/embeddings`, same VT ARC key/base, model id `qwen3-embedding:8b`) but the returned width, batch cap, overflow behaviour, and normalisation are unverified; `chromadb` not installed | Cannot create the Chroma collection with a safe dimension | P0.1: capture wire fixture, **measure `EMBED_DIM`** (catalogue says 2560, `:8b` is natively 4096), test batch/overflow/norm/instruction prefix; add `chromadb` in P1 | `[~]` |
 | B5 | Showcase night (2026-12-03) may have no FBS slate | live demo risk | approve D12 + pre-warm a real slate | `[~]` (planned) |
+| B6 | No CFBD academic API key; 2021 `spreadOpen` null rate and provider mix unverified | Odds coverage falls back to ESPN + strength proxy; venue lat/lon falls back to CSV | register .edu key (3,000 calls/mo); P0.1 CFBD probe | `[!]` |
 
 ---
 
@@ -65,7 +66,9 @@ what is actually done, what is next, what is blocked, and why decisions were mad
 `docs/CAPABILITIES.md`. Then **P0.2** scaffold, **P0.5** walking skeleton.
 
 **Do not start** P1 until the capability matrix records a chosen backend for:
-scorer (D1), research provider (D2), weather (D3), embeddings (D8), and MCP transport (D9).
+scorer (D1: `systemone` contract captured + fixture), research provider (D2), weather (D3:
+`WEATHER_LEAD_HOURS_MAX` recorded), embeddings (D8: `EMBED_DIM` measured + golden fixture), odds/venues
+(D17: CFBD key probed, or ESPN+proxy approved), and MCP transport (D9).
 
 **Working state:** no DB, no corpus, no specs, no UI. Fresh start.
 
@@ -77,7 +80,7 @@ scorer (D1), research provider (D2), weather (D3), embeddings (D8), and MCP tran
 | --- | --- | --- | --- | --- | --- |
 | AD-001 | 2026-11-22 | Plan produced; three pipelines, agents, and stores preserved from the design doc | Requirements are explicit about topology | all | pending |
 | AD-002 | 2026-11-22 | Use plain `asyncio` orchestration, not a graph framework | Reliability, auditability, fewer dependencies; no requirement mandates a framework | R6, R22 | plan |
-| AD-003 | 2026-11-22 | Deterministic `calibrated_rules` scorer available behind the `Upset-Scorer` agent (D1) | d3-mini unverified; R19 consistency is a hard requirement; also serves as the Pr10 baseline | R14, R19, R25 | **needs sign-off if d3-mini absent** |
+| AD-003 | 2026-11-22 | `d3_mini` is the primary scorer backend, reached via `POST /api/v1/systemone`; `calibrated_rules` is the deterministic baseline and outage/mismatch fallback (D1) | Owner confirmed decision models are API-only at `/api/v1/systemone`; R19 needs a consistency check and Pr10 needs a simple baseline | R14, R19, R25 | owner (endpoint) / plan (fallback) |
 | AD-004 | 2026-11-22 | `ResearchProvider` adapter with seeded-literature fallback (D2) | No MCP configured; one pass per candidate preserved | R5, R26 | **needs sign-off if MCP absent** |
 | AD-005 | 2026-11-22 | Weather from archived forecast, `known_at = kickoff − 24h` (D3) | ESPN has no weather; observed weather leaks | R10, R24 | plan |
 | AD-006 | 2026-11-22 | Prefer open odds; fall back to strength proxy, record `favorite_source` (D4) | Open lines missing in sampled 2021; closing lines violate strict `<` | R10, R24, R25 | plan |
@@ -88,6 +91,15 @@ scorer (D1), research provider (D2), weather (D3), embeddings (D8), and MCP tran
 | AD-011 | 2026-11-22 | Background-thread run controller for Streamlit (D11) | Streamlit reruns cancel async work | R1, R3 | plan |
 | AD-012 | 2026-11-22 | Date selector + offline demo slate (D12) | Showcase-night slate risk | R11 (default unchanged) | plan |
 | AD-013 | 2026-11-22 | Corpus extension to 2016–2020 disabled by default (D13) | Power vs. split cleanliness; keep mandated window | R25, R31 | open question |
+| AD-014 | 2026-11-22 | Process-wide semaphore of 4 for `systemone`; one active analysis run per process; hard constant | Owner limits: 4 queued/running per user, fair-share scheduling; excess concurrency returns 429 | R1, R14, R19, R22 | plan |
+| AD-015 | 2026-11-22 | R25 full replay uses `calibrated_rules`; `d3_mini` evaluated on a stratified 100–150-game 2025 sample (D14) | Shared 4-request service; thousands of historical decisions are neither fair nor necessary | R25 | plan |
+| AD-016 | 2026-11-22 | Primary probability = calibrated `noul` `P(yes)`; 5-level `score` is a secondary signal; raw + calibrated values both stored (D15) | `noul` returns a probability directly; calibration on 2024 follows the provider's guidance to fit cutoffs empirically | R14, R19, R25 | plan (confirm field names in P0) |
+| AD-017 | 2026-11-22 | Monitor worker confirm/drop uses one d3-mini `choice` question with `{confirmed, contradicted, insufficient}`; thresholds fitted on labelled audits | Distribution scoring is more repeatable than token sampling and reuses one API contract; `contradicted` preserves falsification framing | R12, R13, R19, R30 | plan |
+| AD-018 | 2026-11-22 | R30's 50-pair labelled audit also sets `CONFIRM_THRESHOLD`, `DROP_THRESHOLD`, and the optional alert cutoff | Provider guidance: choose cutoffs from labelled examples rather than guessing | R19, R30 | plan |
+| AD-019 | 2026-11-22 | Adjudicator uses a chat model from a different family than the monitor worker's decision model | Pr6: the judge must be separate from the author | R30 | plan |
+| AD-020 | 2026-11-22 | Embeddings use `qwen3-embedding:8b` at `POST /api/v1/embeddings` with the VT ARC chat credential; the width is measured and pinned (`EMBED_DIM`), never inferred (catalogue says 2560, `:8b` is natively 4096); embeddings are citation-retrieval only, never chat/scoring | Endpoint owner-confirmed; the model card describes an instruction-aware, non-chat embedding model; measuring once prevents a corrupted Chroma collection and makes re-embedding caches invalidate deterministically | R8 | owner (endpoint/model id) / plan (dimension policy) |
+| AD-021 | 2026-11-22 | Historical odds prefer CFBD `/lines` `spreadOpen`, then ESPN `open`, then strength proxy; CFBD `/venues` replaces the seeded stadium CSV (CSV kept as fallback); `favorite_source`, `line_provider`, `market_prob_source` recorded per game (D4/D17) | CFBD is the only free source with open lines and stadium coordinates across 2021–2025; ESPN alone has 2021 gaps; one favourite definition across seasons avoids feature drift | R10, R24, R25 | plan (owner to obtain academic key) |
+| AD-022 | 2026-11-22 | Historical weather uses Open-Meteo Historical Forecast (GFS, 2021+) and records the **actual** effective lead (≤6 h), not a nominal 24 h; live weather uses the forecast API at fetch time; ERA5/reanalysis and CFBD observed weather are never admitted (D3) | The stitched archive has no 24 h lead; labelling it 24 h would be false provenance, while ERA5/observed data leaks post-kickoff conditions | R10, R24 | plan |
 
 ---
 
@@ -100,9 +112,15 @@ scorer (D1), research provider (D2), weather (D3), embeddings (D8), and MCP tran
 | ESPN core odds | spread + providers; `open` missing in sampled 2021 | D4 |
 | ESPN summary | boxscore/venue/header; no weather | indoor/venue only from ESPN |
 | ESPN groups | `80`=FBS, `81`=FCS | FBS filter is deterministic |
-| ESPN venue geo | no lat/lon | seeded stadium CSV required |
-| Open-Meteo forecast archive | keyless, hourly, past dates | D3 viable |
-| VT ARC model list | 4 chat models, no d3-mini/embedding | D1/D8 risk |
+| ESPN venue geo | no lat/lon | CFBD `/venues` supplies them (CSV fallback) |
+| Open-Meteo forecast archive | keyless, hourly, past dates; GFS from 2021-03-23; stitched lead ≤6 h; Previous Runs full variables only 2024+ | D3 revised: record actual lead |
+| CFBD lines | `/lines` exposes `spreadOpen`/`overUnderOpen`/moneylines/provider; academic 3,000 calls/mo | D4/D17 primary odds; probe 2021 |
+| CFBD venues | `/venues` exposes lat/lon/elevation/dome/timezone | replaces seeded stadium CSV |
+| VT ARC model list | 4 chat models, no decision/embedding model listed (both served outside `/v1/models`) | D8 risk removed; probe the contract |
+| VT ARC embeddings | owner-confirmed 2026-11-22: `POST /api/v1/embeddings`, model id `qwen3-embedding:8b`, same key/base as chat; catalogue says 2560-d, 8,192-token inputs, instruction-aware, not chat-capable | D8 primary path; measure `EMBED_DIM` in P0.1 |
+| VT ARC decision models | `POST /api/v1/systemone` (API only; owner-confirmed); schema pending P0 probe | D1 primary path; capture contract |
+| `systemone` limits | 4 concurrent/user, 30 s queue, 8,192 input tokens, 8 MiB body, ≤8 images; 429/502/503 + `retry_after_s` | hard concurrency cap; D14 evaluation; budget fallback |
+| `systemone` semantics | `decision.vllm-sr/d3-mini`; `noul`→P(yes), `choice`→option probabilities, `score`→0..n−1 weighted level; confidence; 400 malformed; cost ∝ input × questions | scorer `probability`; monitor confirm/drop; thresholds from audits |
 | MCP config | none | D2/D9 |
 | chromadb | not installed; PyPI reachable | add dependency in P1 |
 | quarto/npx/pandoc | present; no LaTeX/Graphviz | UML PDF via Quarto/Typst |
@@ -112,28 +130,28 @@ scorer (D1), research provider (D2), weather (D3), embeddings (D8), and MCP tran
 ## 6. Phase checklists
 
 ### P0 — Probe, scaffold, walking skeleton
-- [ ] P0.1 `scripts/probe.py` + `docs/CAPABILITIES.md` (ESPN, VT ARC models/chat, d3-mini candidates, embeddings, Brave/Fetch/Deep Research, chromadb, disk)
+- [ ] P0.1 `scripts/probe.py` + `docs/CAPABILITIES.md` (ESPN, VT ARC models/chat, **`POST /api/v1/systemone` field names + `noul`/`choice`/`score` golden fixtures, 400/429/413/503 probes, determinism/latency**, **`POST /api/v1/embeddings`: auth, request/response fixture, measured `EMBED_DIM`, batch cap, 8,192-token overflow, L2 norm, instruction-prefix effect, 429/latency**, **CFBD `/lines` 2021 `spreadOpen` null rate + `/venues` fields**, **Open-Meteo historical lead/coverage**, Brave/Fetch/Deep Research, chromadb, disk)
 - [ ] P0.2 Repo scaffold: package tree, `requirements*.txt`, `.env.example`, `Makefile`, lint/test config, `.gitignore` additions
 - [ ] P0.3 `Settings`, logging, `Clock`, hashing, error taxonomy
 - [ ] P0.4 `adapters/http.py` (timeout, retry+jitter, circuit breaker) + unit tests
 - [ ] P0.5 Core contracts (`SlateGame`, `RuleSpec`, `PreconditionSpec`, `ScreenMatch`, `UpsetScore`, `RankedAlert`) + JSON Schema export
 - [ ] P0.6 Walking skeleton: fixture slate+specs → screen → stub score → Streamlit ranked table + in-memory timeline
 - [ ] P0.7 `AppTest` e2e for the skeleton
-- [ ] P0.8 Record chosen backends for D1/D2/D3/D8/D9 in AD log
+- [ ] P0.8 Record chosen backends for D1/D2/D3/D8/D9 in AD log, including the measured `EMBED_DIM`
 - [ ] P0 GATE: capability matrix complete; `make test` green; no secrets; reproducibility check
 
 ### P1 — Foundations
 - [ ] P1.1 Full Pydantic contract catalogue, `extra="forbid"`, enums, timezone validators
 - [ ] P1.2 SQLite migrations implementing §4.7 (all tables + indexes)
 - [ ] P1.3 Repositories per aggregate; no raw SQL outside `store/`
-- [ ] P1.4 `teams`/`venues` seed including lat/lon/altitude/tz CSV
+- [ ] P1.4 `teams`/`venues` seed from CFBD `/venues` (lat/lon/altitude/dome/tz) with a checked-in CSV fallback
 - [ ] P1.5 Evidence snapshot store (gzip + sha256) and `evidence_links`
-- [ ] P1.6 ESPN adapter (scoreboard, summary, core odds, rankings, groups) with fixtures
-- [ ] P1.7 Weather + geocode adapters with fixtures
+- [ ] P1.6 ESPN adapter (scoreboard, summary, core odds, rankings, groups) + CFBD adapter (`/lines`, `/venues`) with fixtures
+- [ ] P1.7 Weather + geocode adapters with fixtures (record actual forecast lead)
 - [ ] P1.8 Search + Fetch adapters: whitelist, text extraction, snapshot, mock transport
 - [ ] P1.9 Deep Research adapter (MCP JSON-RPC + seeded provider)
 - [ ] P1.10 LLM adapter: JSON-only, retries, token ledger, redaction
-- [ ] P1.11 Embeddings + Chroma adapters with fallback embedder
+- [ ] P1.11 Embeddings + Chroma adapters with fallback embedder; assert width == `EMBED_DIM`; tag collection metadata `{model, dim, instruction_template, normalized}`; never mix embedding spaces
 - [ ] P1.12 `trace.py` (JSONL + `agent_events`) and `budget.py`
 - [ ] P1.13 `domain/leakage.py` admission policy as data + violation logging
 - [ ] P1.14 Contract rejection + adapter parity tests
@@ -152,7 +170,7 @@ scorer (D1), research provider (D2), weather (D3), embeddings (D8), and MCP tran
 
 ### P3 — Features, favourite, splits
 - [ ] P3.1 Rolling pre-game features (form, rest, travel, altitude, rank, look-ahead, pace…)
-- [ ] P3.2 Odds → implied probability with vig removal; strength proxy fallback + `favorite_source`
+- [ ] P3.2 Odds: CFBD `spreadOpen` → ESPN `open` → strength proxy; implied probability (moneyline or fixed spread map); record `favorite_source`, `line_provider`, `market_prob_source`
 - [ ] P3.3 Upset label + margin (evaluation only)
 - [ ] P3.4 Chronological splits + hard assertions
 - [ ] P3.5 `game_features` + `data/features_v1.parquet`
@@ -189,13 +207,13 @@ scorer (D1), research provider (D2), weather (D3), embeddings (D8), and MCP tran
 - [ ] P6.6 Blinded `Adjudicator` (HOLD/NOT_HOLD/UNKNOWN + quote)
 - [ ] P6.7 Precision/recall + Wilson CIs; precision<0.80 blocks validation
 - [ ] P6.8 Single tuning round with `--approve` and before/after record
-- [ ] P6.9 Embed accepted citations → Chroma; top-3 retrieval check
+- [ ] P6.9 Embed accepted citations with the real embedder → Chroma (hashing fallback only on endpoint failure, disclosed); top-3 retrieval check
 - [ ] P6 GATE: BH parity; null simulation controls FDP; planted effect promoted; report written
 
 ### P7 — Monitor pipeline
-- [ ] P7.1 Slate reader (date, FBS filter, odds, weather, explicit `unavailable`)
+- [ ] P7.1 Slate reader (date, FBS filter, ESPN live odds, Open-Meteo live weather, explicit `unavailable`)
 - [ ] P7.2 `Monitor-Orchestrator` load specs → screen → empty branch → partition → aggregate
-- [ ] P7.3 `Monitor Worker` search/fetch/snapshot/anonymise/3-sample adjudication + dissent
+- [ ] P7.3 `Monitor Worker` search/fetch/snapshot/anonymise + d3-mini `choice` confirm/drop with calibrated thresholds + dissent
 - [ ] P7.4 Deterministic fallback with `LLM_MODE=off`
 - [ ] P7.5 Rationale builder + citation verification
 - [ ] P7.6 `analysis_cache` with versioned keys + replay
@@ -205,10 +223,11 @@ scorer (D1), research provider (D2), weather (D3), embeddings (D8), and MCP tran
 
 ### P8 — Scorer + backtest harness
 - [ ] P8.1 `Upset-Scorer` agent + strict `UpsetScore` validation
-- [ ] P8.2 `d3_mini` backend (3 samples, median, dispersion, fallback)
+- [ ] P8.2 `d3_mini` backend via `adapters/systemone.py` (captured contract, semaphore 4, local request validation, `noul`/`choice`/`score` builders, payload budgeter ≤8,192 tokens/8 MiB, raw+calibrated probability, retry matrix, snapshots, fallback)
+- [ ] P8.2b Limit/contract tests: >4 in-flight → 429 path, 413 shrink-once, 503 retry-then-degrade, golden fixture parse
 - [ ] P8.3 `calibrated_rules` backend (fit 2021–23, calibrate 2024, artifact + SHA)
 - [ ] P8.4 Total-order ranking with tie-breaks
-- [ ] P8.5 `pipelines/backtest.py`: 5 baselines, Brier, log loss, ECE, AUC, precision@k, bootstrap CIs, calibration plot
+- [ ] P8.5 `pipelines/backtest.py`: 5 baselines, Brier, log loss, ECE, AUC, precision@k, bootstrap CIs, calibration plot; full replay on `calibrated_rules`; `d3_mini` on all 2024 (calibration) + 2025 (test) candidates, reduced-n fallback if saturated (D14)
 - [ ] P8.6 `pipelines/repeatability.py`: Jaccard, Kendall τ, probability spread
 - [ ] P8.7 Wire scorer into `RunResult`
 - [ ] P8 GATE: ranks contiguous; backend recorded; baselines all present; no test-season leakage in fit
@@ -263,6 +282,8 @@ scorer (D1), research provider (D2), weather (D3), embeddings (D8), and MCP tran
 | # | Date | Phase | What was done | Commands / evidence | Next |
 | --- | --- | --- | --- | --- | --- |
 | 1 | 2026-11-22 | planning | Read all reference docs; probed ESPN, Open-Meteo, VT ARC models, MCP/embedding availability, toolchain; wrote plan | see `IMPLEMENTATION_PLAN.md` App. A | start P0.1 |
+| 2 | 2026-11-22 | planning | Owner supplied VT ARC embedding capability; updated D8/D16, §4.9.2 envelope, probe scope, Chroma/cache versioning, and `EMBED_*` env schema; no code written | plan v1.1; provider-catalogue + model-card review | start P0.1 probe |
+| 3 | 2026-11-22 | planning | Selected CFBD `/lines` + `/venues` for odds/geodata (D4/D17) and corrected weather provenance (D3: stitched archive, actual lead ≤6 h); updated probes, risk register, env schema, blockers | plan v1.2; CFBD tier docs + Open-Meteo coverage docs 2026-11-22 | obtain CFBD key; start P0.1 |
 
 **Template**
 ```
@@ -282,9 +303,12 @@ Next:
 
 - [ ] P0–P12 gates all pass
 - [ ] `make check` green (lint, tests, leakage, repeatability)
+- [ ] `systemone` concurrency never exceeds 4 (enforced + tested); 400/413/429/503 paths verified
+- [ ] `noul`/`choice`/`score` golden fixtures parse; malformed criteria rejected before a network call
 - [ ] `make eval` reproducible; `reports/eval_*/report.md` complete
 - [ ] `make demo-offline` < 60s with ≥2 citations
-- [ ] Four mandated SQLite tables populated; Chroma retrieval verified
+- [ ] Four mandated SQLite tables populated; Chroma collection tagged with model/dim/instruction version; `EMBED_DIM` asserted on every response; retrieval verified
+- [ ] Every scored game records `favorite_source`, `line_provider`, `market_prob_source`; weather rows record the actual forecast lead
 - [ ] Real slate → ranked alerts in UI with visible agent activity; rerun consistent + cached
 - [ ] UML class + sequence PDF consistent with code (test-enforced)
 - [ ] README reproducible on clean venv; `.env` absent; `.env.example` complete
