@@ -109,6 +109,31 @@ class EvidenceLink:
     created_at: datetime
 
 
+@dataclass(frozen=True)
+class CoverageGameRow:
+    """Minimal game projection used by the P2 coverage report."""
+
+    game_id: str
+    season: int
+    week: int | None
+    season_type: int
+    kickoff_utc: datetime
+    home_team_id: str
+    away_team_id: str
+    is_fbs_vs_fbs: bool
+
+
+@dataclass(frozen=True)
+class CoverageFieldRow:
+    """One stored ``game_fields`` row with its decoded value."""
+
+    game_id: str
+    field_name: str
+    source: str
+    value: Any
+    known_at_utc: datetime
+
+
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
@@ -1247,6 +1272,133 @@ class QuarantineRepository:
             return int(connection.execute("SELECT COUNT(*) FROM quarantine").fetchone()[0])
 
 
+class CoverageRepository:
+    """Read-only projections for the P2 coverage report (R32)."""
+
+    def __init__(self, database: Database) -> None:
+        self.database = database
+
+    def games(
+        self,
+        *,
+        seasons: list[int] | None = None,
+        season_types: list[int] | None = None,
+    ) -> list[CoverageGameRow]:
+        clauses: list[str] = []
+        params: list[Any] = []
+        if seasons:
+            clauses.append(f"season IN ({','.join('?' * len(seasons))})")
+            params.extend(seasons)
+        if season_types:
+            clauses.append(f"season_type IN ({','.join('?' * len(season_types))})")
+            params.extend(season_types)
+        sql = "SELECT * FROM games"
+        if clauses:
+            sql += " WHERE " + " AND ".join(clauses)
+        sql += " ORDER BY kickoff_utc, game_id"
+        with self.database.session() as connection:
+            rows = connection.execute(sql, params).fetchall()
+        return [
+            CoverageGameRow(
+                game_id=row["game_id"],
+                season=row["season"],
+                week=row["week"],
+                season_type=row["season_type"],
+                kickoff_utc=parse_utc(row["kickoff_utc"]),
+                home_team_id=row["home_team_id"],
+                away_team_id=row["away_team_id"],
+                is_fbs_vs_fbs=_row_bool(row["is_fbs_vs_fbs"]),
+            )
+            for row in rows
+        ]
+
+    def fields(
+        self,
+        *,
+        seasons: list[int] | None = None,
+        season_types: list[int] | None = None,
+    ) -> list[CoverageFieldRow]:
+        clauses: list[str] = []
+        params: list[Any] = []
+        if seasons:
+            clauses.append(f"g.season IN ({','.join('?' * len(seasons))})")
+            params.extend(seasons)
+        if season_types:
+            clauses.append(f"g.season_type IN ({','.join('?' * len(season_types))})")
+            params.extend(season_types)
+        sql = """
+            SELECT f.game_id, f.field_name, f.source, f.value_json, f.known_at_utc
+            FROM game_fields f JOIN games g ON g.game_id = f.game_id
+        """
+        if clauses:
+            sql += " WHERE " + " AND ".join(clauses)
+        sql += " ORDER BY f.game_id, f.field_name, f.source"
+        with self.database.session() as connection:
+            rows = connection.execute(sql, params).fetchall()
+        return [
+            CoverageFieldRow(
+                game_id=row["game_id"],
+                field_name=row["field_name"],
+                source=row["source"],
+                value=json.loads(row["value_json"]),
+                known_at_utc=parse_utc(row["known_at_utc"]),
+            )
+            for row in rows
+        ]
+
+    def game_id_counts(
+        self,
+        *,
+        seasons: list[int] | None = None,
+        season_types: list[int] | None = None,
+    ) -> tuple[int, int]:
+        """Return ``(rows, distinct_game_ids)`` for the P2 dedupe assertion."""
+
+        clauses: list[str] = []
+        params: list[Any] = []
+        if seasons:
+            clauses.append(f"season IN ({','.join('?' * len(seasons))})")
+            params.extend(seasons)
+        if season_types:
+            clauses.append(f"season_type IN ({','.join('?' * len(season_types))})")
+            params.extend(season_types)
+        sql = "SELECT COUNT(*), COUNT(DISTINCT game_id) FROM games"
+        if clauses:
+            sql += " WHERE " + " AND ".join(clauses)
+        with self.database.session() as connection:
+            rows, distinct = connection.execute(sql, params).fetchone()
+        return int(rows), int(distinct)
+
+    def provenance_gaps(
+        self,
+        *,
+        seasons: list[int] | None = None,
+        season_types: list[int] | None = None,
+    ) -> int:
+        """Count stored fields missing ``source``, ``known_at``, or ``fetched_at``."""
+
+        clauses = [
+            "(f.source IS NULL OR f.source = '')",
+            "f.known_at_utc IS NULL",
+            "f.fetched_at_utc IS NULL",
+        ]
+        params: list[Any] = []
+        scope: list[str] = []
+        if seasons:
+            scope.append(f"g.season IN ({','.join('?' * len(seasons))})")
+            params.extend(seasons)
+        if season_types:
+            scope.append(f"g.season_type IN ({','.join('?' * len(season_types))})")
+            params.extend(season_types)
+        sql = "SELECT COUNT(*) FROM game_fields f JOIN games g ON g.game_id = f.game_id"
+        where = ["(" + " OR ".join(clauses) + ")"]
+        if scope:
+            where.append("(" + " AND ".join(scope) + ")")
+        sql += " WHERE " + " AND ".join(where)
+        with self.database.session() as connection:
+            return int(connection.execute(sql, params).fetchone()[0])
+
+
 class Repositories:
     """Facade exposing one repository per aggregate."""
 
@@ -1266,10 +1418,13 @@ class Repositories:
         self.runs = RunsRepository(database)
         self.events = EventsRepository(database)
         self.quarantine = QuarantineRepository(database)
+        self.coverage = CoverageRepository(database)
 
 
 __all__ = [
     "AnalysisRun",
+    "CoverageFieldRow",
+    "CoverageGameRow",
     "EvidenceLink",
     "Repositories",
     "StoredFeature",

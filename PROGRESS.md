@@ -3,11 +3,13 @@
 **Persistent state for implementation.** Read `IMPLEMENTATION_PLAN.md` first; this file records
 what is actually done, what is next, what is blocked, and why decisions were made.
 **Plan version:** 1.3 (2026-11-22)
-**Status:** `P1 COMPLETE` (2026-11-22) — the full contract catalogue, SQLite schema +
-repositories, evidence snapshots, fixture-backed adapters, trace/budget, leakage policy, and
-verification tests are implemented. `P0 COMPLETE` (2026-11-22) remains the baseline.
-P1 gate: **301 passed · 9 skipped** in the canonical `ads_5984` env (Python 3.12.13,
-`chromadb==1.1.1`); `ruff` + `black --check` clean; `store.db --init/--verify` → `status: OK`.
+**Status:** `P2 COMPLETE` (2026-11-22) — Pipeline 1 is implemented and gated: a **3,730-game**
+2021–2025 regular-season FBS-vs-FBS corpus (732/734/750/752/762 per season) with dedupe, zero
+leaked admissible fields, complete provenance, coverage reports, fault isolation, and a measured
+2-worker speedup of **0.54×** one worker (R6 limit 1.5×). `P1 COMPLETE` and `P0 COMPLETE` remain
+the baseline. P1 gate was **301 passed · 9 skipped** in the canonical `ads_5984` env
+(Python 3.12.13, `chromadb==1.1.1`); current suite: **316 passed · 11 skipped** (live tests skip
+unless `RUN_LIVE=1`); `ruff` + `black --check` clean; `store.db --verify` → `status: OK`.
 Capability matrix: **36 PASS · 1 PARTIAL · 5 SKIP · 0 FAIL**, regenerated during P0 in the same
 env. Pre-flight and live capability capture are recorded in §5; generated evidence is in
 `docs/CAPABILITIES.md`.
@@ -40,7 +42,7 @@ env. Pre-flight and live capability capture are recorded in §5; generated evide
 | --- | --- | --- | --- |
 | P0 | Probe, scaffold, walking skeleton | `[x]` | capability matrix + fixture e2e |
 | P1 | Contracts, SQLite, adapters, provenance | `[x]` | 0001 schema init/verify + 301 tests + adapter parity |
-| P2 | Historical corpus ingestion | `[ ]` | ≥3k games (~700/season), 0 leaked fields, coverage report |
+| P2 | Historical corpus ingestion | `[x]` | 3,730 games (732–762/season), 0 leaked fields, dedupe PASS, coverage reports, fault isolation + R6 timing |
 | P3 | Leakage-safe features, favourite, splits | `[ ]` | leakage audit + availability report |
 | P4 | Precondition research + spec store | `[ ]` | ≥12 operational specs, 1 call/candidate |
 | P5 | Deterministic labeler + screen | `[ ]` | full label table, identical hashes ×3 |
@@ -70,9 +72,31 @@ env. Pre-flight and live capability capture are recorded in §5; generated evide
 
 ## 3. Resume here
 
-**Next action:** start **P2.1** — build the `Data-Orchestrator` season/week enumeration and
-`Historical-Stats Worker` summary path on the existing ESPN/CFBD adapters, repositories, and
-leakage policy. Do not start P3 until the P2 corpus gate passes.
+**Next action:** start **P3.1** — implement `cfb_upset/domain/features.py` rolling, strictly
+pre-game features from the committed 3,730-game corpus. The P2 gate passes, so P3 is unblocked.
+Compute features from prior games only (`known_at < kickoff`), then P3.2 favourite/strength proxy
+and P3.3 chronological splits. Do not start P4 until the P3 leakage audit and availability report
+are recorded.
+
+**P2 close-out facts to carry forward:**
+- Enumeration is `GET site.api.espn.com/.../scoreboard?dates={season}&week={n}&seasontype={t}&groups=80`;
+  FBS membership comes from the core group-80 season endpoint and week numbers from core weeks
+  refs (AD-034). Site `/rankings`/`/scoreboard` ignore `season`, so historical polls use core
+  `/weeks/{n}/rankings/{poll}`.
+- Default corpus is regular season (`season_type=2`) and `FINAL` only; `--include-postseason` opts in.
+  Rebuild with `make ingest` / `python -m cfb_upset.pipelines.ingest_corpus --seasons 2021 2022 2023 2024 2025 --db ./data/cfb.db --report-dir reports --resume`.
+  Gate with `make verify-corpus` / `python scripts/verify_corpus.py`.
+- Corpus: **3,730 games** (2021–2025 = 732/734/750/752/762), dedupe `3730/3730`, 0 quarantined,
+  0 leaked admissible fields, 0 provenance gaps; independent per-season recount matches exactly.
+- Coverage: `reports/coverage_20261122T212903Z.md`/`.json`. Odds 99.7–100%, venue 100%,
+  favourite `espn_open` 3,728 + 2 unavailable, moneyline 2,557 / unavailable 1,173 (spread-only
+  games), `weather` explicitly unsupported until P7. 2025 week 1 AP poll is a provider 404; rank
+  provenance falls back to identity.
+- Box scores are provenance-marked post-game (`source="espn_postgame"`, `known_at=kickoff`) and are
+  never policy-admissible; the leakage gate therefore counts only admissible fields (AD-035).
+- R6 timing evidence: 40-game batch, `one_worker=1.233s`, `two_workers=0.669s`, ratio **0.54** (<1.5).
+- Missing/404 odds are coverage gaps, not quarantine; a game-summary failure quarantines only that
+  game, so one bad game cannot abort a batch.
 
 **P1 close-out facts to carry forward:**
 - `python -m cfb_upset.store.db --init` applies `0001`; `--verify` prints every §4.7 table count
@@ -104,11 +128,11 @@ leakage policy. Do not start P3 until the P2 corpus gate passes.
 - `docs/CAPABILITIES.md` is the generated matrix; `docs/capabilities.json` is its machine view.
 - `.env` is populated and git-ignored. Never print or commit it.
 
-**Working state:** P1 code and tests are complete but not yet committed; P0 remains the last
-committed baseline (`64de1e2` plus the environment-correction follow-up). `docs/contracts/` holds
-34 exported schemas. `data/cfb.db` is created on demand; no corpus, real specs, or live research
-provider exists yet. B3 (no MCP endpoint) still applies to live Deep Research; the seeded provider
-is the offline path.
+**Working state:** P2 code, tests, fixtures, and docs are complete in the working tree (committed
+with this log entry); P1 is the committed baseline at `f3f2554` and P0 before it. The corpus lives
+in git-ignored `data/cfb.db` and coverage evidence in git-ignored `reports/`. `docs/contracts/`
+holds 34 exported schemas. No real specs or live research provider exist yet, so P4 still depends
+on the B3 decision (seeded fallback vs MCP endpoint).
 
 ---
 
@@ -149,6 +173,9 @@ is the offline path.
 | AD-031 | 2026-11-22 | **Additive `precondition_spec.rationale` column.** The §4.7 table list is preserved; one nullable/defaulted text column is added so a `PreconditionSpec` stored and reloaded by `SpecsRepository` keeps its rationale. | `PreconditionSpec.rationale` is required by the P1 contract but absent from the §4.7 column list; dropping it on write would make the repository lossy and break a contract round-trip. | R8, R9, R27 | plan |
 | AD-032 | 2026-11-22 | **Historical weather lead is recorded as an upper bound.** `WeatherAdapter.fetch_historical` sets `known_at = kickoff − lead_hours` with `lead_hours = min(requested, WEATHER_LEAD_HOURS_MAX, 6)`. The stitched Open-Meteo historical-forecast archive exposes no forecast issue time, so the adapter never claims a smaller lead than it can prove. Indoor venues short-circuit with `unavailable_reason` instead of inventing weather. | Preserves the AD-022 decision while making the provenance conservative: any admitted historical weather was knowable no later than the recorded `known_at`, and observed/reanalysis weather is never fetched. | R10, R24 | plan |
 | AD-033 | 2026-11-22 | **Adapters depend on a tiny `Transport` protocol.** `HttpTransport` wraps the P0 `HttpClient` (timeouts, retries, breaker); `FixtureTransport` replays captured JSON/HTML and records calls, returning a synthetic 404 for unmatched routes. Tests never touch the network; `tests/live/` is opt-in via `RUN_LIVE=1`. | Fixture parity is an explicit P1 acceptance criterion. One transport seam keeps retry logic in one place and makes an adapter test fail at the parse boundary rather than hang. | R1, R22, R25 | plan |
+| AD-034 | 2026-11-22 | **P2 enumeration paths.** FBS membership comes from the core season group endpoint (`/seasons/{s}/types/2/groups/80/teams`, team id parsed from each `$ref`); week numbers from `/seasons/{s}/types/{t}/weeks` (the items are `$ref`s, so the number is parsed from the URL); week fixtures from the site scoreboard with `dates={season}&week={n}&seasontype={t}&groups=80`; historical polls from the core `/seasons/{s}/types/2/weeks/{n}/rankings/{poll}` path. The site `/scoreboard` and `/rankings` endpoints **ignore** `season`, so any code path that trusted them would silently serve the current season. | Live probes on 2026-11-22 showed site `rankings?season=2024&week=5` returning `requestedSeason 2026 week 13`, and site `scoreboard?season=2024` returning 2026. The core endpoints pin the season and return the same event shape the P1 scoreboard parser already handles. `groups=80` is required: without it the week payload is a small top-events subset. | R4, R8, R10 | plan |
+| AD-035 | 2026-11-22 | **Post-game fields are marked at the provenance layer, not by a schema migration.** Box scores (`home_score`, `away_score`, `winner_team_id`, `team_stats`) are written with `source="espn_postgame"` and `known_at = kickoff`; `domain.leakage.policy_for` already declares them `admissible=False`. The P2 leakage gate counts **policy-admissible** fields with `known_at >= kickoff` (expected 0) and reports the post-game rows separately as label-only evidence. | The P2 task requires box scores to be "explicitly marked post-game so they can never be admitted", while the acceptance line "zero fields with `known_at >= kickoff`" cannot literally include label fields stored at kickoff. Marking at the source plus the existing policy table satisfies both readings without adding a column and invalidating the P1 `applied == ["0001"]` migration evidence. | R10, R24 | plan |
+| AD-036 | 2026-11-22 | **Default corpus = regular season, completed games.** `ingest_corpus` defaults to `season_type=2` and stores only `FINAL` games; `--include-postseason` appends type 3, and `--include-unplayed` is deliberately not offered (a corpus for labels needs results). | Keeps the per-season count near the ≈700 FBS-vs-FBS gate and prevents 2025 in-progress weeks from inflating `games` with unlabelled rows. Postseason remains available for the P8 backtest without changing the default. | R4, R8, R24 | plan |
 
 ---
 
@@ -221,15 +248,20 @@ user_concurrent` in two of three probes; the live 503 hold is still intentionall
 - [x] P1 GATE: migrations verified; adapters pass offline tests; leakage unit test raises — `301 passed, 9 skipped`; `ruff`/`black` clean; `0001` init/verify OK
 
 ### P2 — Historical corpus ingestion
-- [ ] P2.1 FBS-vs-FBS enumeration via scoreboard + group 80
-- [ ] P2.2 `Data-Orchestrator` batching/dedupe/aggregate/validate/store
-- [ ] P2.3 `Historical-Stats Worker` per-game fetch → `HistoricalGameRecord` with `known_at`
-- [ ] P2.4 Quarantine path (alt branch) with error details
-- [ ] P2.5 Store `games`, `game_fields`, box scores marked post-game (never admitted)
-- [ ] P2.6 Coverage report (season/week/team/field non-null %, favourite sources, unsupported fields)
-- [ ] P2.7 Idempotent CLI with `--resume`; dedupe assertion
-- [ ] P2.8 Parallelism timing check (1 vs 2 workers)
-- [ ] P2 GATE: ≥3k games (≈700/season), dedupe, 0 leaked fields, coverage report, fault isolation test
+- [x] P2.1 FBS-vs-FBS enumeration via scoreboard + group 80
+- [x] P2.2 `Data-Orchestrator` batching/dedupe/aggregate/validate/store
+- [x] P2.3 `Historical-Stats Worker` per-game fetch → `HistoricalGameRecord` with `known_at`
+- [x] P2.4 Quarantine path (alt branch) with error details
+- [x] P2.5 Store `games`, `game_fields`, box scores marked post-game (never admitted)
+- [x] P2.6 Coverage report (season/week/team/field non-null %, favourite sources, unsupported fields)
+- [x] P2.7 Idempotent CLI with `--resume`; dedupe assertion
+- [x] P2.8 Parallelism timing check (1 vs 2 workers)
+- [x] P2 GATE: **3,730 games** (732/734/750/752/762; all ≥700), `COUNT(*) = COUNT(DISTINCT game_id)`,
+  **0** admissible fields with `known_at >= kickoff`, **0** provenance gaps, coverage report
+  `reports/coverage_20261122T212903Z.md`/`.json`, fault-isolation and resume tests green.
+  Known data gaps: 2 games without an ESPN market (odds 99.7–100% per season), 2025 week 1 has no
+  published AP poll (rankings 404 → rank falls back to identity provenance), moneyline market
+  probability 2,557/3,730 (68.6%; the rest are spread-only). `weather` remains P7.
 
 ### P3 — Features, favourite, splits
 - [ ] P3.1 Rolling pre-game features (form, rest, travel, altitude, rank, look-ahead, pace…)
@@ -351,6 +383,7 @@ user_concurrent` in two of three probes; the live 503 hold is still intentionall
 | 5 | 2026-11-22 | P0 | **Phase 0 implemented and gated.** Scaffold, settings/logging/ids/errors, tolerant HTTP adapter, Pydantic contracts + 11 schemas, deterministic rule DSL/screen, explicit stub scorer + total ranking, in-memory trace, fixture slate, Streamlit skeleton, probe and docs. Fixed probe redaction (`input_tokens` preserved), ESPN rankings (site endpoint → 2 polls), ARC chat (`content=None` + 256-token reasoning budget). Added golden `systemone`/embedding/ESPN/CFBD/weather fixtures and a contract README. Wrote 152 offline tests incl. AppTest e2e. | `python scripts/probe.py --write` → **34 PASS / 2 PARTIAL / 5 SKIP / 1 FAIL (chromadb, P1.11)**; `make test-cov` → **152 passed**, `rules.py` 97%, `screen.py` 100%; `make lint` / `make schemas` green; AppTest → 2 alerts + 3 agents; 3-run deterministic payload hash `c2981f97…`; `git check-ignore .env` exit 0; credential scan clean | **start P1.1**, then P1.2 migrations; no P1 code yet |
 | 6 | 2026-11-22 | P0 correction | **Environment correction.** `chromadb` was reported missing only because the probe ran in base Anaconda Python 3.13.5. The canonical `ads_5984` conda env already has `chromadb==1.1.1` (Python 3.12.13, Streamlit 1.60). Installed the missing dev formatter (`black 25.12`) in that env, regenerated the matrix there, and synced docs/requirements/AD-030. | `/opt/anaconda3/envs/ads_5984/bin/python scripts/probe.py --write` → **36 PASS / 1 PARTIAL / 5 SKIP / 0 FAIL**, incl. `chromadb import PASS` and a reproduced `429`; env pytest → **160 passed**; env ruff/black clean; env coverage `rules.py` 97%, `screen.py` 100% | commit correction; start P1.1 |
 | 7 | 2026-11-22 | P1 | **Phase 1 implemented and gated.** Added the full contract catalogue (history/research/labels/tools + monitor/scoring extensions; 34 exported schemas); `0001_init.sql` for every §4.7 table/index plus `precondition_spec.rationale`; typed repositories; content-addressed gzip/SHA-256 evidence store; CFBD/ESPN venue and team seed with checked-in fallback CSV; leakage policy as data; fixture-backed ESPN/CFBD/weather/geocode/search/fetch/Deep Research/LLM/embeddings/Chroma adapters behind a `Transport` seam; JSONL + SQLite trace sinks and run budgets; contract-rejection, leakage, trace/budget, adapter, parity, and live-skipped tests. Fixed CFBD provider matching so `ESPN_BET` matches `ESPN Bet`. | `python -m pytest` → **301 passed, 9 skipped** (live suite); `ruff check` clean; `black --check` → 83 files unchanged; `python -m cfb_upset.store.db --init` → `applied migrations: 0001`, `--verify` → all table counts + `status: OK`; `python -m cfb_upset.contracts.export` → **34 schemas**; Chroma round-trip passes with the 256-d hashing embedder in `ads_5984` | commit P1; start P2.1 |
+| 8 | 2026-11-22 | P2 | **Phase 2 implemented and gated.** Added `Data-Orchestrator` (core group-80/week enumeration, dedupe, week contexts, batching, `IngestOptions`) and `Historical-Stats Worker` (summary+odds+poll merge, `known_at`, validation, per-game quarantine); extended the ESPN adapter with historical scoreboard/group/weeks/rankings paths and postgame provenance; added `CoverageRepository`, `domain/coverage.py`, the idempotent `ingest_corpus` CLI, `scripts/verify_corpus.py`, P2 fixtures (2024 week 5), fault-isolation/resume/dedupe/leakage/timing tests, and live smoke tests. Logged AD-034–AD-036. | Live ingest `--seasons 2021 2022 2023 2024 2025 --db ./data/cfb.db --report-dir reports --resume` → **3,730 games** (732/734/750/752/762), 0 quarantined; `python scripts/verify_corpus.py` → per-season recount exact (+0.0%), dedupe PASS, 0 leaked admissible fields, 0 provenance gaps; `reports/coverage_20261122T212903Z.md/.json` (odds 99.7–100%, venue 100%, moneyline 2,557/3,730); timing test 40 games **1.233s vs 0.669s, ratio 0.54**; `store.db --verify` → `status: OK` (3,730 games / 136 teams / 167 venues); offline suite **316 passed, 11 skipped**; ruff + black clean | commit P2; start P3.1 |
 
 **Template**
 ```

@@ -1,7 +1,7 @@
 PYTHON ?= python
 STREAMLIT ?= streamlit
 
-.PHONY: help setup doctor test test-cov lint format check schemas probe app clean
+.PHONY: help setup doctor test test-cov lint format check schemas probe app ingest verify-corpus clean
 
 help:
 	@echo "Targets:"
@@ -15,6 +15,8 @@ help:
 	@echo "  schemas    export Pydantic JSON Schemas to docs/contracts/"
 	@echo "  probe      run the live capability probe and write docs/CAPABILITIES.md"
 	@echo "  app        run the Streamlit walking skeleton"
+	@echo "  ingest     build the 2021-2025 FBS-vs-FBS corpus (resume-safe)"
+	@echo "  verify-corpus  check dedupe, leakage, and +/-5% per-season counts"
 	@echo "  clean      remove local caches"
 	@echo ""
 	@echo "Use the canonical env first: conda activate ads_5984"
@@ -49,6 +51,12 @@ probe:
 
 app:
 	$(STREAMLIT) run app.py
+
+ingest:
+	$(PYTHON) -m cfb_upset.pipelines.ingest_corpus --seasons 2021 2022 2023 2024 2025 --resume
+
+verify-corpus:
+	$(PYTHON) scripts/verify_corpus.py --db data/cfb.db --seasons 2021 2022 2023 2024 2025
 
 clean:
 	rm -rf .pytest_cache .ruff_cache .mypy_cache htmlcov .coverage

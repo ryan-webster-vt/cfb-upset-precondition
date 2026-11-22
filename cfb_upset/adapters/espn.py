@@ -87,16 +87,24 @@ class EspnAdapter:
         *,
         dates: date | str | None = None,
         week: int | None = None,
+        season: int | None = None,
         season_type: int | None = None,
+        groups: str | None = None,
         limit: int = 200,
     ) -> list[HistoricalGameRecord]:
         params: dict[str, Any] = {"limit": limit}
+        # The site scoreboard ignores ``season``; ``dates=<year>`` is the only
+        # way to pin a historical season when ``week`` is supplied (AD-034).
         if dates is not None:
             params["dates"] = dates.strftime("%Y%m%d") if isinstance(dates, date) else dates
+        elif season is not None and week is not None:
+            params["dates"] = str(season)
         if week is not None:
             params["week"] = week
         if season_type is not None:
             params["seasontype"] = season_type
+        if groups is not None:
+            params["groups"] = groups
         response = await self._transport_or_default().get("/scoreboard", params=params)
         response.raise_for_status()
         return self.parse_scoreboard(response.json(), fetched_at=self.clock.now())
@@ -132,6 +140,58 @@ class EspnAdapter:
         response = await self._transport_or_default().get("/groups", params=params)
         response.raise_for_status()
         return self.parse_groups(response.json())
+
+    async def fetch_group_team_ids(
+        self,
+        *,
+        season: int,
+        season_type: int = 2,
+        group_id: str = FBS_GROUP_ID,
+    ) -> list[str]:
+        """Return the FBS (group 80) membership for one season (AD-034)."""
+
+        url = (
+            f"{self.core_base_url}/seasons/{season}/types/{season_type}" f"/groups/{group_id}/teams"
+        )
+        response = await self._transport_or_default().get(url, params={"limit": 1000})
+        response.raise_for_status()
+        return self.parse_group_team_ids(response.json())
+
+    async def fetch_week_numbers(self, *, season: int, season_type: int = 2) -> list[int]:
+        """Return the week numbers ESPN declares for a season/type (AD-034)."""
+
+        url = f"{self.core_base_url}/seasons/{season}/types/{season_type}/weeks"
+        response = await self._transport_or_default().get(url, params={"limit": 100})
+        response.raise_for_status()
+        return self.parse_week_numbers(response.json())
+
+    async def fetch_core_rankings(
+        self,
+        *,
+        season: int,
+        week: int,
+        season_type: int = 2,
+        poll_id: str = "1",
+    ) -> Rankings:
+        """Fetch a historical weekly poll from the core API (AD-034).
+
+        The site ``/rankings`` endpoint ignores ``season`` and would silently
+        return the current poll for every historical week.
+        """
+
+        collection = (
+            f"{self.core_base_url}/seasons/{season}/types/{season_type}" f"/weeks/{week}/rankings"
+        )
+        listing = await self._transport_or_default().get(collection, params={"limit": 50})
+        listing.raise_for_status()
+        poll_ids = [
+            _ref_id(item.get("$ref"), "rankings") or str(item.get("id") or "")
+            for item in listing.json().get("items", [])
+        ]
+        chosen_id = poll_id if poll_id in poll_ids else (poll_ids[0] if poll_ids else poll_id)
+        response = await self._transport_or_default().get(f"{collection}/{chosen_id}")
+        response.raise_for_status()
+        return self.parse_core_rankings(response.json(), season=season, week=week)
 
     # ------------------------------------------------------------------ parsers
     def parse_scoreboard(
@@ -422,6 +482,63 @@ class EspnAdapter:
             )
         return groups
 
+    def parse_group_team_ids(self, payload: dict[str, Any] | list[Any]) -> list[str]:
+        """Parse the core group-teams payload into a sorted team-id list."""
+
+        items = payload.get("items", []) if isinstance(payload, dict) else payload
+        team_ids: list[str] = []
+        for item in items:
+            if isinstance(item, dict):
+                team_id = _ref_id(item.get("$ref"), "teams") or str(item.get("id") or "")
+            else:
+                team_id = str(item)
+            if team_id:
+                team_ids.append(team_id)
+        return sorted(set(team_ids), key=_numeric_key)
+
+    def parse_week_numbers(self, payload: dict[str, Any] | list[Any]) -> list[int]:
+        """Parse the core weeks payload (items are ``$ref`` links) into numbers."""
+
+        items = payload.get("items", []) if isinstance(payload, dict) else payload
+        weeks: list[int] = []
+        for item in items:
+            if isinstance(item, dict):
+                raw = _ref_id(item.get("$ref"), "weeks") or item.get("number") or item.get("id")
+            else:
+                raw = item
+            try:
+                weeks.append(int(raw))
+            except (TypeError, ValueError):
+                continue
+        return sorted(set(weeks))
+
+    def parse_core_rankings(
+        self,
+        payload: dict[str, Any],
+        *,
+        season: int | None = None,
+        week: int | None = None,
+    ) -> Rankings:
+        """Parse a core poll payload (rank entries reference ``/teams/{id}``)."""
+
+        ranks: dict[str, int] = {}
+        for entry in payload.get("ranks", []):
+            rank = entry.get("current")
+            team = entry.get("team") or {}
+            if not isinstance(team, dict):
+                continue
+            team_id = _ref_id(team.get("$ref"), "teams") or str(team.get("id") or "")
+            if team_id and isinstance(rank, int) and 1 <= rank <= 25:
+                ranks[team_id] = rank
+        payload_season = payload.get("season") or {}
+        return Rankings(
+            season=int(payload_season.get("year") or season or 0),
+            week=week,
+            poll=payload.get("shortName") or payload.get("name") or "AP Poll",
+            ranks=ranks,
+            published_at=_parse_datetime(payload.get("date")),
+        )
+
 
 # ---------------------------------------------------------------------------
 # Pure helpers (also used by fixture parity tests)
@@ -652,10 +769,12 @@ def _provenance(
     for field_name, group in fields.items():
         if group is None:
             known_at = kickoff  # post-game: strictly excluded by admit()
+            source_name = f"{source}_postgame"
         else:
             known_at = derive_known_at(field_name, kickoff)
+            source_name = source
         provenance[field_name] = Provenance(
-            source=source,
+            source=source_name,
             source_url=source_url,
             fetched_at=fetched_at,
             known_at=known_at,
@@ -701,6 +820,22 @@ def _first(items: Any) -> dict[str, Any] | None:
     if isinstance(items, list) and items and isinstance(items[0], dict):
         return items[0]
     return None
+
+
+def _ref_id(ref: Any, kind: str) -> str | None:
+    """Extract the trailing id from a core ``$ref`` such as ``.../teams/194``."""
+
+    if not isinstance(ref, str):
+        return None
+    marker = f"/{kind}/"
+    if marker not in ref:
+        return None
+    tail = ref.rsplit(marker, 1)[1].split("?", 1)[0].strip("/")
+    return tail or None
+
+
+def _numeric_key(value: str) -> tuple[int, str]:
+    return (int(value), value) if value.isdigit() else (10**9, value)
 
 
 __all__ = ["EspnAdapter", "FBS_GROUP_ID", "GroupInfo", "Rankings", "american_to_probability"]

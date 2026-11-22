@@ -131,3 +131,50 @@ async def test_fetch_scoreboard_uses_fixture_transport() -> None:
     records = await adapter.fetch_scoreboard(dates="20251115")
     assert len(records) == 3
     assert transport.calls[0].url.startswith("/scoreboard")
+
+
+P2 = FIXTURES / "espn" / "p2"
+
+
+def test_group_team_ids_parse_core_refs() -> None:
+    adapter = EspnAdapter(FixtureTransport())
+    payload = json.loads((P2 / "membership_2024_g80.json").read_text())
+    team_ids = adapter.parse_group_team_ids(payload)
+    assert len(team_ids) == 144
+    assert team_ids[:3] == ["2", "5", "6"]
+    assert len(set(team_ids)) == len(team_ids)
+
+
+def test_week_numbers_parse_core_refs() -> None:
+    adapter = EspnAdapter(FixtureTransport())
+    payload = json.loads((P2 / "weeks_2024_type2.json").read_text())
+    assert adapter.parse_week_numbers(payload) == list(range(1, 17))
+
+
+def test_core_rankings_parse_team_refs_and_publish_time() -> None:
+    adapter = EspnAdapter(FixtureTransport())
+    payload = json.loads((P2 / "rankings_2024_w05_ap.json").read_text())
+    rankings = adapter.parse_core_rankings(payload, season=2024, week=5)
+    assert rankings.poll == "AP Poll"
+    assert rankings.season == 2024
+    assert rankings.week == 5
+    assert rankings.ranks["251"] == 1
+    assert len(rankings.ranks) == 25
+    assert rankings.published_at is not None
+    assert rankings.published_at < datetime(2024, 9, 28, 23, 30, tzinfo=UTC)
+
+
+async def test_fetch_group_and_rankings_use_core_paths() -> None:
+    transport = (
+        FixtureTransport()
+        .add_json_file("/groups/80/teams", P2 / "membership_2024_g80.json")
+        .add_json_file("/weeks/5/rankings?limit=50", P2 / "rankings_2024_w05_list.json")
+        .add_json_file("/weeks/5/rankings/1", P2 / "rankings_2024_w05_ap.json")
+    )
+    adapter = EspnAdapter(transport)
+    team_ids = await adapter.fetch_group_team_ids(season=2024)
+    rankings = await adapter.fetch_core_rankings(season=2024, week=5)
+    assert len(team_ids) == 144
+    assert rankings.ranks["61"] == 2
+    assert any("/groups/80/teams" in call.url for call in transport.calls)
+    assert any("/weeks/5/rankings/1" in call.url for call in transport.calls)

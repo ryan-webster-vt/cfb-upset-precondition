@@ -43,6 +43,51 @@ async def test_espn_scoreboard_live() -> None:
     assert all(record.source == "espn" for record in records)
 
 
+async def test_espn_p2_enumeration_live() -> None:
+    from cfb_upset.adapters.espn import FBS_GROUP_ID
+
+    adapter = EspnAdapter()
+    try:
+        team_ids = await adapter.fetch_group_team_ids(season=2024)
+        weeks = await adapter.fetch_week_numbers(season=2024)
+        records = await adapter.fetch_scoreboard(
+            season=2024, week=5, season_type=2, groups=FBS_GROUP_ID, limit=500
+        )
+        rankings = await adapter.fetch_core_rankings(season=2024, week=5)
+    finally:
+        await adapter.aclose()
+    assert len(team_ids) >= 130
+    assert 5 in weeks
+    assert records
+    assert rankings.ranks
+
+
+async def test_p2_one_week_ingest_live(tmp_path) -> None:
+    from cfb_upset.agents import AgentContext, DataOrchestrator, IngestOptions
+    from cfb_upset.ids import SystemClock
+    from cfb_upset.observability.budget import Budget
+    from cfb_upset.observability.trace import InMemoryTrace
+    from cfb_upset.store.db import Database
+    from cfb_upset.store.repositories import Repositories
+
+    database = Database(tmp_path / "live.db")
+    database.initialize()
+    repositories = Repositories(database)
+    clock = SystemClock()
+    context = AgentContext.create(
+        repositories,
+        trace=InMemoryTrace(clock=clock),
+        budget=Budget(name="live"),
+        clock=clock,
+    )
+    async with EspnAdapter(clock=clock) as adapter:
+        orchestrator = DataOrchestrator(context, adapter)
+        outcome = await orchestrator.run(IngestOptions(seasons=[2024], weeks=[5], limit_games=3))
+    assert outcome.report.games_stored > 0
+    assert repositories.games.count() > 0
+    assert outcome.coverage.leaked_admissible_fields == 0
+
+
 async def test_cfbd_venues_live() -> None:
     settings = get_settings()
     if not settings.has_cfbd:

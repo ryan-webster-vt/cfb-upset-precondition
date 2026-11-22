@@ -554,7 +554,10 @@ cp .env.example .env    # then fill in your credentials
 
 ```bash
 # Phase 1 — one-time structured corpus ingestion (not user-initiated)
-python -m cfb_upset.ingest.corpus --seasons 2021 2022 2023 2024 2025
+python -m cfb_upset.pipelines.ingest_corpus --seasons 2021 2022 2023 2024 2025
+
+# Gate check: dedupe, zero leaked fields, and an independent +/-5% count per season
+python scripts/verify_corpus.py --db data/cfb.db --seasons 2021 2022 2023 2024 2025
 
 # Phase 2 — one-time precondition discovery, labeling, and validation
 python -m cfb_upset.research.build_preconditions
@@ -562,6 +565,9 @@ python -m cfb_upset.research.build_preconditions
 # Phase 3 — daily monitoring UI
 streamlit run app.py
 ```
+
+The ingest command writes `reports/coverage_<timestamp>.md`/`.json` and is idempotent;
+add `--resume` to skip already-stored games without re-fetching their summaries.
 
 Phases 1 and 2 build the corpus, the spec store, `labeled_games`, `validated_preconditions`, and the ChromaDB citation index. Phase 3 is the analyst-facing app: pick a slate, click **Analyze**, and watch the agents work.
 
